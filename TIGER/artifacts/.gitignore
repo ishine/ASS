@@ -1,4 +1,3 @@
-*.onnx
 *.data
 *.mlir
 *.mlir.*
