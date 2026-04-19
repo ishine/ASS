@@ -58,7 +58,7 @@ except ImportError:
         band_width += [bandwidth_100] * 10
         band_width += [bandwidth_250] * 8
         band_width += [bandwidth_500] * 8
-        band_width.append(enc_dim - np.sum(band_width))
+        band_width.append(int(enc_dim - int(np.sum(band_width))))
         return band_width
 
 

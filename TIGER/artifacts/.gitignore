@@ -1,0 +1,5 @@
+*.onnx
+*.data
+*.mlir
+*.mlir.*
+*.tmp

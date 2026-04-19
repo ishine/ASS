@@ -1,0 +1,4 @@
+_base_: ../online-soft-band-query-sfc2d.causal96dim.12l.musical64/config.yaml
+
+online_d_model: 16
+online_n_layers: 6

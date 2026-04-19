@@ -1,0 +1,9 @@
+_base_: ../online-soft-band-sfc2d.causal96dim.12l.musical64/config.yaml
+
+online_gru_band_kernel_size: 3
+
+task:
+  model:
+    _target_: spectral_feature_compression.core.model.online_soft_band_gru_sfc_2d.build_online_soft_band_gru_sfc_system
+    gru_band_kernel_size: ${online_gru_band_kernel_size}
+

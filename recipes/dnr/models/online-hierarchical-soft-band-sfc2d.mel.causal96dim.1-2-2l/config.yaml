@@ -1,0 +1,3 @@
+_base_: ../online-hierarchical-soft-band-sfc2d.causal96dim.1-2-2l.musical128/config.yaml
+
+online_band_config: mel

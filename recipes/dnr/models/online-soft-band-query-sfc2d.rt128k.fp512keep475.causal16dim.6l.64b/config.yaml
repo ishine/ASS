@@ -1,0 +1,8 @@
+_base_: ../online-soft-band-query-sfc2d.causal96dim.12l.musical64/config.yaml
+
+online_d_model: 16
+online_n_layers: 6
+online_freq_preprocess_enabled: true
+online_freq_preprocess_keep_bins: 475
+online_freq_preprocess_target_bins: 512
+online_freq_preprocess_mode: triangular

@@ -1,0 +1,6 @@
+_base_: ../online-sfc2d.causal96dim.12l.musical64/config.yaml
+
+task:
+  model:
+    _target_: spectral_feature_compression.core.model.online_hard_band_sfc_2d.build_online_hard_band_sfc_system
+

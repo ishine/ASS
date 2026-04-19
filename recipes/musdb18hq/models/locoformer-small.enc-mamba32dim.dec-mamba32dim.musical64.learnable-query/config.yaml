@@ -1,0 +1,14 @@
+_base_: ../locoformer-small.enc-mamba32dim.dec-mamba32dim.musical64.adaptive-query/config.yaml
+
+task:
+  model:
+    model:
+      encoder:
+        _target_: spectral_feature_compression.core.model.mamba_enc_dec.MambaEncoder
+        # general SFC config
+        query_type: &query_type learnable
+        
+
+      decoder:
+        _target_: spectral_feature_compression.core.model.mamba_enc_dec.MambaDecoder
+        query_type: *query_type

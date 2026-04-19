@@ -1,0 +1,72 @@
+_base_: ../locoformer-small.enc-crossattn64dim.dec-crossattn64dim.musical64.learnable-query/config.yaml
+
+
+emb_dim: 128
+
+task:
+  model:
+    model:
+      _target_: spectral_feature_compression.core.model.bslocoformer.BSLocoformer
+      n_src: ${n_src}
+      n_chan: &n_chan 2
+
+      n_layers: 6
+      # general setup
+      emb_dim: ${emb_dim}
+      norm_type: rmsgroupnorm
+      num_groups: 8  # used only in RMSGroupNorm
+      tf_order: ft
+      # self-attention related
+      n_heads: 8
+      flash_attention: true  # available when using mixed precision
+      attention_dim: 128
+      # ffn related
+      ffn_type: 
+        - swiglu_conv1d
+        - swiglu_conv1d
+      ffn_hidden_dim: 
+        - 192
+        - 192
+      conv1d_kernel: 8
+      conv1d_shift: 1
+      dropout: 0.1
+      # others
+      eps: 1.0e-5
+
+      encoder:
+        _target_: spectral_feature_compression.core.model.crossattn_enc_dec.CrossAttnEncoder
+        # general SFC config
+        d_inner: &d_inner 96
+        d_model: ${emb_dim}
+        n_chan: ${n_chan}
+        sample_rate: ${sr}
+        n_fft: ${n_fft}
+        n_bands: &n_bands 64
+        band_config: &band_config musical
+        query_type: &query_type learnable
+        # cross-attention related
+        n_heads: &n_heads 4
+        slope: &slope  [1, 1, 1, 1]
+        learnable_slope: &learnable_slope false
+        learnable_pos_bias: &learnable_pos_bias true
+        mask_outside_bands: &mask_outside_bands false
+        
+
+      decoder:
+        _target_: spectral_feature_compression.core.model.crossattn_enc_dec.CrossAttnDecoder
+        # general SFC config
+        d_inner: *d_inner
+        d_model: ${emb_dim}
+        n_src: ${n_src}
+        n_chan: ${n_chan}
+        sample_rate: ${sr}
+        n_fft: ${n_fft}
+        n_bands: *n_bands
+        band_config: *band_config
+        query_type: *query_type
+        # cross-attention related
+        n_heads: *n_heads
+        slope: *slope
+        learnable_slope: *learnable_slope
+        learnable_pos_bias: *learnable_pos_bias
+        mask_outside_bands: *mask_outside_bands

@@ -9,13 +9,12 @@ singularity/
 bak*
 *token.txt
 
-recipes/**
-!recipes/
-!recipes/**/scripts/
-!recipes/**/scripts/**
-!recipes/**/Makefile
-!recipes/**/*.md
-!recipes/**/config.yaml
+# Local dataset archives (large; never commit)
+data/
+
+# Full Hydra source tree (use pip package; do not vendor)
+hydra/
+
 tmp*/
 hdf5/
 aiaccel/

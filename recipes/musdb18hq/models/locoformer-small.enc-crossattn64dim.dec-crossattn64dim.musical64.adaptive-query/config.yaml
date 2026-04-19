@@ -1,0 +1,15 @@
+_base_: ../locoformer-small.enc-crossattn64dim.dec-crossattn64dim.musical64.learnable-query/config.yaml
+
+task:
+  model:
+    model:
+      encoder:
+        _target_: spectral_feature_compression.core.model.crossattn_enc_dec.CrossAttnEncoder
+        # general SFC config
+        query_type: &query_type adaptive
+        
+
+      decoder:
+        _target_: spectral_feature_compression.core.model.crossattn_enc_dec.CrossAttnDecoder
+        # general SFC config
+        query_type: *query_type

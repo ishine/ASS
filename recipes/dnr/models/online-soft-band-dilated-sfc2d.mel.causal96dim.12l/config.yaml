@@ -1,0 +1,4 @@
+_base_: ../online-soft-band-dilated-sfc2d.causal96dim.12l.musical64/config.yaml
+
+online_band_config: mel
+

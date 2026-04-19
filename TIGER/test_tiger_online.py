@@ -14,6 +14,7 @@ from TIGER import (
     TIGERCtxDeployable,
     TIGERNPULargeCtx,
     TIGERNPULargeDeployable,
+    TIGERNPUEdgeV1,
     TIGERCtxStreamingTrainingWrapper,
     TIGERCtxTigerLikeApprox,
     TIGERDeployable,
@@ -142,6 +143,8 @@ def export_streaming_onnx(model: torch.nn.Module, export_path: Path) -> None:
                     "new_valid_mask",
                     "new_time_ctx",
                 ],
+                dynamo=False,
+                external_data=False,
             )
         else:
             past_kvs, past_valid_mask, s0, s1, s2, sg = model.init_streaming_state(batch_size=1)
@@ -170,6 +173,8 @@ def export_streaming_onnx(model: torch.nn.Module, export_path: Path) -> None:
                     "new_states_2",
                     "new_global_states",
                 ],
+                dynamo=False,
+                external_data=False,
             )
         print(f"[onnx] exported to {export_path}")
 
@@ -189,7 +194,11 @@ def print_state_budget(model: torch.nn.Module, state_tuple) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Smoke tests for the refactored online TIGER models")
-    parser.add_argument("--variant", choices=["deployable", "tiger_like", "ctx_deployable", "ctx_tiger_like", "npu_large"], default="deployable")
+    parser.add_argument(
+        "--variant",
+        choices=["deployable", "tiger_like", "ctx_deployable", "ctx_tiger_like", "npu_large", "npu_edge"],
+        default="deployable",
+    )
     parser.add_argument("--frames", type=int, default=6, help="Number of RI frames for the sequence test")
     parser.add_argument("--window", choices=["none", "hann", "sqrt_hann"], default="none")
     parser.add_argument("--roundtrip", action="store_true", help="Run waveform -> RI -> waveform sanity check")
@@ -203,6 +212,7 @@ def main() -> int:
         "ctx_deployable": (TIGERCtxDeployable, TIGERCtxStreamingTrainingWrapper),
         "ctx_tiger_like": (TIGERCtxTigerLikeApprox, TIGERCtxStreamingTrainingWrapper),
         "npu_large": (TIGERNPULargeDeployable, TIGERCtxStreamingTrainingWrapper),
+        "npu_edge": (TIGERNPUEdgeV1, TIGERCtxStreamingTrainingWrapper),
     }
     model_cls, wrapper_cls = model_map[args.variant]
     common_kwargs = dict(
@@ -222,6 +232,8 @@ def main() -> int:
             num_stages=2,
             **common_kwargs,
         )
+    elif args.variant == "npu_edge":
+        model = model_cls(**common_kwargs)
     else:
         model = model_cls(
             out_channels=132,

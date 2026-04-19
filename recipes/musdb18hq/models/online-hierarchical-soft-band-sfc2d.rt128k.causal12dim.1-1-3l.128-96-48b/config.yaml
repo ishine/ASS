@@ -1,0 +1,121 @@
+_base_: ${base_config_path}/train_base.yaml
+
+seed: 2026
+
+sr: 44100
+n_fft: 2048
+hop_length: 512
+
+n_src: 4
+n_chan: 2
+
+online_d_model: 12
+online_pre_bands: 128
+online_mid_bands: 96
+online_bottleneck_bands: 48
+online_pre_layers: 1
+online_mid_layers: 1
+online_bottleneck_layers: 3
+online_kernel_t: 3
+online_kernel_f: 3
+online_causal: true
+online_masking: true
+online_band_config: musical
+online_routing_normalization: softmax
+online_dilation_cycle: [1, 2, 4, 6]
+
+trainer:
+  max_epochs: 900
+  check_val_every_n_epoch: 5
+  gradient_clip_val: 5.0
+  sync_batchnorm: True
+  deterministic: false
+  limit_train_batches: 110
+  benchmark: True
+  use_distributed_sampler: False
+  precision: bf16-mixed
+  callbacks:
+    - _target_: lightning.pytorch.callbacks.ModelCheckpoint
+      filename: "{epoch:04d}"
+      save_top_k: 5
+      monitor: validation/loss
+      mode: min
+      save_last: True
+    - _target_: lightning.pytorch.callbacks.RichProgressBar
+      refresh_rate: 5
+    - _target_: lightning.pytorch.callbacks.RichModelSummary
+      max_depth: 3
+
+datamodule:
+  _target_: spectral_feature_compression.common.datamodules.hdf5_wav_datamodule.DataModule
+  train_dataset_path:
+    - ./recipes/musdb18hq/hdf5/train_bass_seg8sec_sad.hdf5
+    - ./recipes/musdb18hq/hdf5/train_drums_seg8sec_sad.hdf5
+    - ./recipes/musdb18hq/hdf5/train_vocals_seg8sec_sad.hdf5
+    - ./recipes/musdb18hq/hdf5/train_other_seg8sec_sad.hdf5
+  val_dataset_path: ./recipes/musdb18hq/hdf5/dev_unsegmented.hdf5
+  batch_size: 4
+  val_batch_size: 1
+  sr: ${sr}
+  duration: 6
+  val_duration: null
+  num_workers: 4
+  return_ref: true
+  use_scatter_dataset: false
+  use_dm_dataset: true
+  p_source_dropout: 0.1
+  val_drop_last: false
+
+task:
+  _target_: spectral_feature_compression.core.tasks.sup_task.SupTask
+  n_fft: ${n_fft}
+  hop_length: ${hop_length}
+  css_validation: true
+  ema_weight: 0.999
+  ema_update_freq: 1
+  model:
+    _target_: spectral_feature_compression.core.model.online_hierarchical_soft_band_sfc_2d.build_online_hierarchical_soft_band_sfc_system
+    n_fft: ${n_fft}
+    hop_length: ${hop_length}
+    fs: ${sr}
+    scaling: false
+    css_segment_size: 12
+    css_shift_size: 6
+    n_src: ${n_src}
+    n_chan: ${n_chan}
+    pre_bands: ${online_pre_bands}
+    mid_bands: ${online_mid_bands}
+    bottleneck_bands: ${online_bottleneck_bands}
+    band_config: ${online_band_config}
+    d_model: ${online_d_model}
+    pre_layers: ${online_pre_layers}
+    mid_layers: ${online_mid_layers}
+    bottleneck_layers: ${online_bottleneck_layers}
+    kernel_size: [${online_kernel_t}, ${online_kernel_f}]
+    causal: ${online_causal}
+    masking: ${online_masking}
+    routing_normalization: ${online_routing_normalization}
+    dilation_cycle: ${online_dilation_cycle}
+  loss:
+    _target_: spectral_feature_compression.core.loss.snr.ThresSNRLossWithInactiveSource
+    solve_perm: false
+    n_src: ${n_src}
+    zeroref_weight: 0.1
+    only_denominator: false
+  optimizer_config:
+    _target_: aiaccel.torch.lightning.OptimizerConfig
+    optimizer_generator:
+      _partial_: True
+      _target_: torch.optim.AdamW
+      lr: 1.e-3
+      weight_decay: 1.e-2
+      betas: [0.9, 0.999]
+    scheduler_generator:
+      _partial_: True
+      _target_: spectral_feature_compression.common.lr_schedulers.warmup.WarmUpStepLR
+      warmup_steps: 5000
+      decay_start_step: 60500
+      decay_stop_step: 99000
+      step_size: 220
+      decay: 0.98
+    scheduler_interval: step

@@ -1,0 +1,66 @@
+_base_: ../locoformer-small.enc-mamba32dim.dec-mamba32dim.musical64.adaptive-query/config.yaml
+
+emb_dim: 128
+
+task:
+  model:
+    model:
+      _target_: spectral_feature_compression.core.model.bslocoformer.BSLocoformer
+      n_src: ${n_src}
+      n_chan: ${n_chan}
+
+      n_layers: 6
+      # general setup
+      emb_dim: ${emb_dim}
+      norm_type: rmsgroupnorm
+      num_groups: 8  # used only in RMSGroupNorm
+      tf_order: ft
+      # self-attention related
+      n_heads: 8
+      flash_attention: true  # available when using mixed precision
+      attention_dim: 128
+      # ffn related
+      ffn_type: 
+        - swiglu_conv1d
+        - swiglu_conv1d
+      ffn_hidden_dim: 
+        - 192
+        - 192
+      conv1d_kernel: 8
+      conv1d_shift: 1
+      dropout: 0.1
+      # others
+      eps: 1.0e-5
+
+      encoder:
+        _target_: spectral_feature_compression.core.model.mamba_enc_dec.MambaEncoder
+        # general SFC config
+        d_inner: &d_inner 48
+        d_model: ${emb_dim}
+        n_chan: ${n_chan}
+        sample_rate: ${sr}
+        n_fft: ${n_fft}
+        n_bands: &n_bands 64
+        band_config: &band_config musical
+        query_type: &query_type adaptive
+        # mamba related
+        d_state: &d_state 8
+        expand: &expand 1
+        bidirectional: &bidirectional true
+        
+
+      decoder:
+        _target_: spectral_feature_compression.core.model.mamba_enc_dec.MambaDecoder
+        d_inner: *d_inner
+        d_model: ${emb_dim}
+        n_src: ${n_src}
+        n_chan: ${n_chan}
+        sample_rate: ${sr}
+        n_fft: ${n_fft}
+        n_bands: *n_bands
+        band_config: *band_config
+        query_type: *query_type
+        # mamba related
+        d_state: *d_state
+        expand: *expand
+        bidirectional: *bidirectional
