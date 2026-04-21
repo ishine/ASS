@@ -3,11 +3,12 @@
 pyrightconfig.json
 
 local/
-src/
+# src/
 3rd/
 singularity/
 bak*
 *token.txt
+.venv/
 
 # Local dataset archives (large; never commit)
 data/
