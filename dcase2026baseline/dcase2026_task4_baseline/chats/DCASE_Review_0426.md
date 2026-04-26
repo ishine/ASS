@@ -1,6 +1,6 @@
 # Extracted Chat History
 
-<div style="border:1px solid #d7deea;border-left:6px solid #5b8def;background:#f8fbff;border-radius:16px;padding:20px 22px;margin:8px 0 24px 0;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:28px;font-weight:800;color:#172033;margin-bottom:10px;">Timeline View</span></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source folder</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">/home/cmj/.codex/sessions/2026/04/26</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">JSONL files scanned</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">2</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time range</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">2026-04-26 11:08:18 CST -&gt; 2026-04-26 15:45:25 CST</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Fork-history duplicates removed</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">0</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Messages written after merge</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">34</div></div></div>
+<div style="border:1px solid #d7deea;border-left:6px solid #5b8def;background:#f8fbff;border-radius:16px;padding:20px 22px;margin:8px 0 24px 0;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:28px;font-weight:800;color:#172033;margin-bottom:10px;">Timeline View</span></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source folder</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">/home/cmj/.codex/sessions/2026/04/26</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">JSONL files scanned</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">2</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time range</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">2026-04-26 11:08:18 CST -&gt; 2026-04-26 22:51:15 CST</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Fork-history duplicates removed</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">0</div></div><div style="margin:8px 0;"><div style="font-size:12px;font-weight:700;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Messages written after merge</div><div style="font-size:16px;font-weight:600;color:#172033;margin-top:2px;">54</div></div></div>
 
 
 <meta class="nav-message" data-anchor="msg-user-1-2026-04-26-11-08-18-cst" data-role="user" data-label="1. User" data-session="timeline">
@@ -2867,3 +2867,1674 @@ SC confusion/silence stats if SC
 energy calibration output if SC
 S5 validation score if promoted
 short result row in one experiment table</code></pre></div><p style="margin:0 0 14px 0;">If a run cannot be compared within 24-48 hours, it is too big for this campaign.</p><p style="margin:0 0 14px 0;">My bias: spend the first half making the **non-temporal Kwon-like S5 brutally reliable**, then use BEATs/gated/robust SC and temporal S5 as promoted upgrades. That gives us a strong fallback and still leaves room for top-1-risk ideas.</p><p style="margin:0 0 14px 0;">&lt;oai-mem-citation&gt;<br>&lt;citation_entries&gt;<br>MEMORY.md:117-129|note=[used DCASE workspace, metric contract, S5 entrypoints, temporal status, and validation caveats]<br>&lt;/citation_entries&gt;<br>&lt;rollout_ids&gt;<br>&lt;/rollout_ids&gt;<br>&lt;/oai-mem-citation&gt;</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-35-2026-04-26-21-19-48-cst" data-role="user" data-label="35. User" data-session="timeline">
+<details id="msg-user-35-2026-04-26-21-19-48-cst" class="message-card" data-role="user" data-search="User But the TSE need the outputs from USS and M2D SC, I mean there are dependencies on these systems 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">35. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 21:19:48 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">But the TSE need the outputs from USS and M2D SC, I mean there are dependencies on these systems</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-36-2026-04-26-21-20-30-cst" data-role="assistant" data-label="36. Assistant" data-session="timeline">
+<details id="msg-assistant-36-2026-04-26-21-20-30-cst" class="message-card" data-role="assistant" data-search="Assistant You’re right. The dependency is not linear “train USS, train TSE, train SC independently.” Final S5 TSE is conditioned by:
+
+```text
+mixture
++ USS estimated source slot as enrollment
++ SC predicted class vector
+```
+
+So the correct campaign is a **bootstrap loop**:
+
+```text
+USS₀ + SC₀ -&gt; estimated source cache -&gt; SC₁ -&gt; TSE₁ -&gt; S5₁
+                         ↑                         ↓
+                   better estimates/cache &lt;- improved S5
+```
+
+**Important Distinction**
+
+TSE has two modes in our plan:
+
+```text
+1. Bootstrap TSE:
+   train with oracle/clean enrollment + ground-truth label
+   purpose: get a usable TSE checkpoint early
+
+2. Final S5-matched TSE:
+   fine-tune with USS-estimated enrollment + SC-style label input
+   purpose: match real inference conditions
+```
+
+So yes: the **final TSE must wait for a usable USS and SC**, but we can still train a bootstrap TSE in parallel to avoid wasting week 1.
+
+**Rearranged Dependency-Aware Order**
+
+**Stage 0: Smoke And Assets**
+Do this first, before burning GPU days:
+
+```text
+check M2D checkpoint
+check BEATs/fPaSST assets
+check dataset paths
+run tiny constructor/smoke tests
+confirm eval metric path
+```
+
+**Stage 1: Independent Bootstrap**
+Run these in parallel:
+
+| Job | GPU | Dependency | Purpose |
+|---|---:|---|---|
+| USS₀ non-temporal lite | 0 | none | produce estimated source slots |
+| SC₀ M2D strong stage1/stage2 | 1 | clean/dry sources | produce reliable labeler |
+| TSE₀ oracle-enrollment bootstrap | 0/1 when free | clean/oracle enrollment | early usable TSE |
+
+At this point TSE₀ is not final, but it gives us an S5 bootstrap.
+
+**Stage 2: First Real S5 Cache**
+Now use:
+
+```text
+USS₀ + SC₀ + TSE₀ -&gt; S5₀
+```
+
+Then export estimated-source cache:
+
+```text
+soundscape
+-&gt; USS₀ estimated slots
+-&gt; maybe TSE₀ refined slots
+-&gt; labels from ground truth or SC₀ depending dataset purpose
+```
+
+This cache is the bridge into realistic SC/TSE training.
+
+**Stage 3: Estimated-Source SC**
+Train:
+
+```text
+SC₁ = M2D strong fine-tuned on estimated sources
+```
+
+Then calibrate energy thresholds.
+
+This is high priority because final TSE and final S5 both depend on SC quality. Bad SC labels poison the TSE conditioning and S5 slot decisions.
+
+**Stage 4: S5-Matched TSE**
+Now train/fine-tune:
+
+```text
+TSE₁ using:
+  mixture
+  USS₀ estimated enrollment
+  class label vector compatible with SC₁
+```
+
+I would do this in two sub-stages:
+
+```text
+TSE₁a: USS enrollment + ground-truth class label
+TSE₁b: USS enrollment + SC₁ predicted/filtered class label
+```
+
+Use `TSE₁a` as the safer candidate. Use `TSE₁b` only if SC₁ is strong and calibrated, because predicted-label noise can damage TSE.
+
+**Stage 5: First Serious System**
+Evaluate:
+
+```text
+S5₁ = USS₀ + SC₁ + TSE₁a
+S5₂ = USS₀ + SC₁ + TSE₁b
+S5₃ = USS₀ + SC₁ + TSE₁a + duplicate recall
+```
+
+Promote the best one.
+
+**Stage 6: Fusion SC Only After Baseline Works**
+Now test:
+
+```text
+SC₂ = BEATs concat
+SC₃ = BEATs gated
+SC₄ = best BEATs + robust truncation
+```
+
+Then rerun only the TSE/S5 pieces that depend on SC:
+
+```text
+calibrate SC₂/SC₃/SC₄
+evaluate S5 with fixed USS₀ + fixed TSE₁a
+if one SC clearly wins, optionally fine-tune TSE again with that SC label distribution
+```
+
+**Stage 7: Temporal Upgrade**
+Only after the above:
+
+```text
+USS_temporal
+SC_temporal
+TSE_temporal with USS estimated enrollment
+Kwon2025TemporalS5
+```
+
+Temporal TSE should also respect the dependency:
+
+```text
+USS_temporal estimates + temporal SC activity -&gt; temporal TSE conditioning/fine-tune
+```
+
+**Correct Month Plan**
+
+```text
+Week 1:
+  USS₀
+  SC₀
+  TSE₀ bootstrap
+  first S5₀
+
+Week 2:
+  estimated-source cache
+  SC₁ estimated-source fine-tune
+  energy calibration
+  TSE₁ with USS-estimated enrollment
+  serious S5₁/S5₂
+
+Week 3:
+  BEATs concat/gated SC
+  robust SC
+  recalibration
+  rerun S5
+  optionally TSE fine-tune with best SC labels
+
+Week 4:
+  temporal USS/SC/TSE only for best path
+  final duplicate recall tuning
+  seeds/checkpoint averaging if possible
+  final candidate selection
+```
+
+So the revised priority is:
+
+```text
+1. USS first, because it creates the enrollment distribution.
+2. SC clean bootstrap in parallel.
+3. Bootstrap TSE only to get a runnable S5.
+4. Estimated-source SC.
+5. USS-estimated-enrollment TSE.
+6. Fusion/robust SC.
+7. Temporal S5.
+```
+
+That dependency ordering is much safer for top-1 than treating TSE as independent. 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">36. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 21:20:30 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">You’re right. The dependency is not linear “train USS, train TSE, train SC independently.” Final S5 TSE is conditioned by:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>mixture
++ USS estimated source slot as enrollment
++ SC predicted class vector</code></pre></div><p style="margin:0 0 14px 0;">So the correct campaign is a **bootstrap loop**:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS₀ + SC₀ -&gt; estimated source cache -&gt; SC₁ -&gt; TSE₁ -&gt; S5₁
+                         ↑                         ↓
+                   better estimates/cache &lt;- improved S5</code></pre></div><p style="margin:0 0 14px 0;">**Important Distinction**</p><p style="margin:0 0 14px 0;">TSE has two modes in our plan:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. Bootstrap TSE:
+   train with oracle/clean enrollment + ground-truth label
+   purpose: get a usable TSE checkpoint early
+
+2. Final S5-matched TSE:
+   fine-tune with USS-estimated enrollment + SC-style label input
+   purpose: match real inference conditions</code></pre></div><p style="margin:0 0 14px 0;">So yes: the **final TSE must wait for a usable USS and SC**, but we can still train a bootstrap TSE in parallel to avoid wasting week 1.</p><p style="margin:0 0 14px 0;">**Rearranged Dependency-Aware Order**</p><p style="margin:0 0 14px 0;">**Stage 0: Smoke And Assets**<br>Do this first, before burning GPU days:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>check M2D checkpoint
+check BEATs/fPaSST assets
+check dataset paths
+run tiny constructor/smoke tests
+confirm eval metric path</code></pre></div><p style="margin:0 0 14px 0;">**Stage 1: Independent Bootstrap**<br>Run these in parallel:</p><div style="margin:10px 0 18px 0;overflow:auto;"><table style="border-collapse:collapse;min-width:420px;width:100%;border:1px solid #d6dce8;"><thead><tr><th style="border:1px solid #d6dce8;padding:10px 12px;background:#edf4ff;color:#1d355f;font-size:14px;text-align:left;">Job</th><th style="border:1px solid #d6dce8;padding:10px 12px;background:#edf4ff;color:#1d355f;font-size:14px;text-align:left;">GPU</th><th style="border:1px solid #d6dce8;padding:10px 12px;background:#edf4ff;color:#1d355f;font-size:14px;text-align:left;">Dependency</th><th style="border:1px solid #d6dce8;padding:10px 12px;background:#edf4ff;color:#1d355f;font-size:14px;text-align:left;">Purpose</th></tr></thead><tbody><tr><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">USS₀ non-temporal lite</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">0</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">none</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">produce estimated source slots</td></tr><tr><td style="border:1px solid #d6dce8;padding:10px 12px;background:#ffffff;font-size:14px;vertical-align:top;">SC₀ M2D strong stage1/stage2</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#ffffff;font-size:14px;vertical-align:top;">1</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#ffffff;font-size:14px;vertical-align:top;">clean/dry sources</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#ffffff;font-size:14px;vertical-align:top;">produce reliable labeler</td></tr><tr><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">TSE₀ oracle-enrollment bootstrap</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">0/1 when free</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">clean/oracle enrollment</td><td style="border:1px solid #d6dce8;padding:10px 12px;background:#fafcff;font-size:14px;vertical-align:top;">early usable TSE</td></tr></tbody></table></div><p style="margin:0 0 14px 0;">At this point TSE₀ is not final, but it gives us an S5 bootstrap.</p><p style="margin:0 0 14px 0;">**Stage 2: First Real S5 Cache**<br>Now use:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS₀ + SC₀ + TSE₀ -&gt; S5₀</code></pre></div><p style="margin:0 0 14px 0;">Then export estimated-source cache:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>soundscape
+-&gt; USS₀ estimated slots
+-&gt; maybe TSE₀ refined slots
+-&gt; labels from ground truth or SC₀ depending dataset purpose</code></pre></div><p style="margin:0 0 14px 0;">This cache is the bridge into realistic SC/TSE training.</p><p style="margin:0 0 14px 0;">**Stage 3: Estimated-Source SC**<br>Train:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>SC₁ = M2D strong fine-tuned on estimated sources</code></pre></div><p style="margin:0 0 14px 0;">Then calibrate energy thresholds.</p><p style="margin:0 0 14px 0;">This is high priority because final TSE and final S5 both depend on SC quality. Bad SC labels poison the TSE conditioning and S5 slot decisions.</p><p style="margin:0 0 14px 0;">**Stage 4: S5-Matched TSE**<br>Now train/fine-tune:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>TSE₁ using:
+  mixture
+  USS₀ estimated enrollment
+  class label vector compatible with SC₁</code></pre></div><p style="margin:0 0 14px 0;">I would do this in two sub-stages:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>TSE₁a: USS enrollment + ground-truth class label
+TSE₁b: USS enrollment + SC₁ predicted/filtered class label</code></pre></div><p style="margin:0 0 14px 0;">Use <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">TSE₁a</code> as the safer candidate. Use <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">TSE₁b</code> only if SC₁ is strong and calibrated, because predicted-label noise can damage TSE.</p><p style="margin:0 0 14px 0;">**Stage 5: First Serious System**<br>Evaluate:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>S5₁ = USS₀ + SC₁ + TSE₁a
+S5₂ = USS₀ + SC₁ + TSE₁b
+S5₃ = USS₀ + SC₁ + TSE₁a + duplicate recall</code></pre></div><p style="margin:0 0 14px 0;">Promote the best one.</p><p style="margin:0 0 14px 0;">**Stage 6: Fusion SC Only After Baseline Works**<br>Now test:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>SC₂ = BEATs concat
+SC₃ = BEATs gated
+SC₄ = best BEATs + robust truncation</code></pre></div><p style="margin:0 0 14px 0;">Then rerun only the TSE/S5 pieces that depend on SC:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>calibrate SC₂/SC₃/SC₄
+evaluate S5 with fixed USS₀ + fixed TSE₁a
+if one SC clearly wins, optionally fine-tune TSE again with that SC label distribution</code></pre></div><p style="margin:0 0 14px 0;">**Stage 7: Temporal Upgrade**<br>Only after the above:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS_temporal
+SC_temporal
+TSE_temporal with USS estimated enrollment
+Kwon2025TemporalS5</code></pre></div><p style="margin:0 0 14px 0;">Temporal TSE should also respect the dependency:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS_temporal estimates + temporal SC activity -&gt; temporal TSE conditioning/fine-tune</code></pre></div><p style="margin:0 0 14px 0;">**Correct Month Plan**</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Week 1:
+  USS₀
+  SC₀
+  TSE₀ bootstrap
+  first S5₀
+
+Week 2:
+  estimated-source cache
+  SC₁ estimated-source fine-tune
+  energy calibration
+  TSE₁ with USS-estimated enrollment
+  serious S5₁/S5₂
+
+Week 3:
+  BEATs concat/gated SC
+  robust SC
+  recalibration
+  rerun S5
+  optionally TSE fine-tune with best SC labels
+
+Week 4:
+  temporal USS/SC/TSE only for best path
+  final duplicate recall tuning
+  seeds/checkpoint averaging if possible
+  final candidate selection</code></pre></div><p style="margin:0 0 14px 0;">So the revised priority is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. USS first, because it creates the enrollment distribution.
+2. SC clean bootstrap in parallel.
+3. Bootstrap TSE only to get a runnable S5.
+4. Estimated-source SC.
+5. USS-estimated-enrollment TSE.
+6. Fusion/robust SC.
+7. Temporal S5.</code></pre></div><p style="margin:0 0 14px 0;">That dependency ordering is much safer for top-1 than treating TSE as independent.</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-37-2026-04-26-21-34-54-cst" data-role="user" data-label="37. User" data-session="timeline">
+<details id="msg-user-37-2026-04-26-21-34-54-cst" class="message-card" data-role="user" data-search="User explain  duplicate recall more detailly 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">37. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 21:34:54 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">explain  duplicate recall more detailly</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-38-2026-04-26-21-35-11-cst-" data-role="assistant" data-label="38. Assistant" data-session="timeline">
+<details id="msg-assistant-38-2026-04-26-21-35-11-cst-" class="message-card" data-role="assistant" data-search="Assistant I’ll ground this in the actual `Kwon2025S5` and SC loss code, because “duplicate recall” is easy to misunderstand: it is not creating new sources, it is preventing a same-class slot from being wrongly suppressed as silence.
+
+Duplicate recall is a targeted fix for this failure:
+
+```text
+mixture has:
+  Dog slot 0
+  Dog slot 1
+  Blender slot 2
+
+USS produces 3 foreground estimates.
+
+SC predicts:
+  slot 0 -&gt; Dog, active
+  slot 1 -&gt; raw Dog, but energy gate suppresses it to silence
+  slot 2 -&gt; Blender, active
+```
+
+Without duplicate recall, S5 sees only one `Dog`, so **one same-class source is missed**. That is your “CASE 2: one missing same-class estimate.”
+
+**Key Idea**
+The SC model has two label vectors during prediction:
+
+```text
+raw_label_vector:
+  class predicted before silence/energy thresholding
+
+label_vector:
+  final class after silence/energy thresholding
+```
+
+Duplicate recall says:
+
+```text
+If a slot was suppressed as silence,
+but its raw class matches a class already active in another slot,
+and its confidence/RMS are high enough,
+then recover that slot as the same class.
+```
+
+So it does **not** create a new source. It only prevents a likely duplicate same-class source from being killed by over-aggressive silence gating.
+
+**Where It Happens**
+In [kwo2025.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/s5/kwo2025.py:60), SC prediction returns `label_vector`. If duplicate recall is enabled, it also reads `raw_label_vector`:
+
+```python
+if duplicate_recall_enabled:
+    raw_label_vector = out.get(&quot;raw_label_vector&quot;)
+    label_vector = self._recover_silenced_duplicates(...)
+```
+
+The recovery logic is in [kwo2025.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/s5/kwo2025.py:74).
+
+A silenced slot is recovered only if:
+
+```text
+1. final label_vector says silence
+2. raw_label_vector is non-silence
+3. raw predicted class appears in another active slot
+4. SC probability &gt;= duplicate_recall_min_probability
+5. waveform RMS &gt;= duplicate_recall_min_waveform_rms
+```
+
+Default config values:
+
+```yaml
+duplicate_recall_enabled: true
+duplicate_recall_min_probability: 0.35
+duplicate_recall_min_waveform_rms: 0.0001
+```
+
+**Concrete Example**
+
+Before duplicate recall:
+
+```text
+slot 0:
+  raw = Dog
+  final = Dog
+
+slot 1:
+  raw = Dog
+  final = silence   # energy threshold suppressed it
+
+slot 2:
+  raw = Blender
+  final = Blender
+```
+
+Duplicate recall checks slot 1:
+
+```text
+Is slot 1 raw class Dog? yes
+Is Dog already active in slot 0? yes
+Is probability high enough? yes
+Is waveform non-empty? yes
+```
+
+After duplicate recall:
+
+```text
+slot 0 -&gt; Dog
+slot 1 -&gt; Dog
+slot 2 -&gt; Blender
+```
+
+That gives TSE a real class condition for the second Dog slot instead of a zero-vector silence condition.
+
+**Why This Helps Task 4**
+Task 4 scoring is class-aware. If the reference contains two same-class events but the system outputs only one, the metric can penalize the missing duplicate even if the one output sounds good.
+
+Duplicate same-class cases are especially dangerous because a normal classifier tends to think:
+
+```text
+“I already found Dog once; the weaker Dog-like estimate may be leakage/noise.”
+```
+
+But in this task, two Dog/Alarm/Speech/etc. sources can genuinely coexist.
+
+**Training-Side Support**
+There is also a training loss helper for SC. `SourceClassifierDataset` marks whether each source belongs to a duplicate class in the same mixture:
+
+```python
+duplicate_class_count = sum(1 for x in labels if x == label)
+is_duplicate_class = duplicate_class_count &gt; 1
+```
+
+See [source_classifier_dataset.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/datamodules/source_classifier_dataset.py:82).
+
+Then [m2d_sc_arcface.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/training/loss/m2d_sc_arcface.py:41) has:
+
+```yaml
+lambda_duplicate_recall
+duplicate_m_in
+```
+
+This encourages duplicate-class active sources to have stronger active energy, so they are less likely to be suppressed as silence.
+
+Conceptually:
+
+```text
+normal SC loss:
+  classify active sources correctly
+  separate silence from active by energy
+
+duplicate recall loss:
+  for sources whose class appears multiple times,
+  push their active energy lower/stronger,
+  so the energy gate does not kill the weaker duplicate
+```
+
+**Temporal Version**
+In `Kwon2025TemporalS5`, duplicate recall is stricter. It also requires temporal support:
+
+```text
+raw same-class prediction is not enough;
+the slot must have activity over time.
+```
+
+That logic is in [kwo2025_temporal.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/s5/kwo2025_temporal.py:89).
+
+This prevents duplicate recall from reviving a slot that only has class-like leakage but no real active span.
+
+**Risk**
+Duplicate recall can hurt if it revives false positives:
+
+```text
+slot 0 -&gt; Dog real
+slot 1 -&gt; raw Dog leakage from slot 0
+```
+
+That is why we need gates:
+
+```text
+probability threshold
+waveform RMS threshold
+energy calibration
+temporal activity support
+```
+
+For final experiments, I would compare:
+
+```text
+S5 without duplicate recall
+S5 with duplicate recall
+Temporal S5 with duplicate recall
+```
+
+and track specifically:
+
+```text
+duplicate same-class recall
+false positive active slots
+silence false positives
+CAPI-SDRi
+```
+
+The good version is not “recall everything.” The good version is: **recover real missed duplicate same-class slots without reviving leakage.** 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">38. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 21:35:11 CST -&gt; 2026-04-26 21:35:43 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I’ll ground this in the actual <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">Kwon2025S5</code> and SC loss code, because “duplicate recall” is easy to misunderstand: it is not creating new sources, it is preventing a same-class slot from being wrongly suppressed as silence.</p><p style="margin:0 0 14px 0;">Duplicate recall is a targeted fix for this failure:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>mixture has:
+  Dog slot 0
+  Dog slot 1
+  Blender slot 2
+
+USS produces 3 foreground estimates.
+
+SC predicts:
+  slot 0 -&gt; Dog, active
+  slot 1 -&gt; raw Dog, but energy gate suppresses it to silence
+  slot 2 -&gt; Blender, active</code></pre></div><p style="margin:0 0 14px 0;">Without duplicate recall, S5 sees only one <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">Dog</code>, so **one same-class source is missed**. That is your “CASE 2: one missing same-class estimate.”</p><p style="margin:0 0 14px 0;">**Key Idea**<br>The SC model has two label vectors during prediction:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>raw_label_vector:
+  class predicted before silence/energy thresholding
+
+label_vector:
+  final class after silence/energy thresholding</code></pre></div><p style="margin:0 0 14px 0;">Duplicate recall says:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>If a slot was suppressed as silence,
+but its raw class matches a class already active in another slot,
+and its confidence/RMS are high enough,
+then recover that slot as the same class.</code></pre></div><p style="margin:0 0 14px 0;">So it does **not** create a new source. It only prevents a likely duplicate same-class source from being killed by over-aggressive silence gating.</p><p style="margin:0 0 14px 0;">**Where It Happens**<br>In [kwo2025.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/s5/kwo2025.py:60), SC prediction returns <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">label_vector</code>. If duplicate recall is enabled, it also reads <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">raw_label_vector</code>:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>python</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>if duplicate_recall_enabled:
+    raw_label_vector = out.get(&quot;raw_label_vector&quot;)
+    label_vector = self._recover_silenced_duplicates(...)</code></pre></div><p style="margin:0 0 14px 0;">The recovery logic is in [kwo2025.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/s5/kwo2025.py:74).</p><p style="margin:0 0 14px 0;">A silenced slot is recovered only if:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. final label_vector says silence
+2. raw_label_vector is non-silence
+3. raw predicted class appears in another active slot
+4. SC probability &gt;= duplicate_recall_min_probability
+5. waveform RMS &gt;= duplicate_recall_min_waveform_rms</code></pre></div><p style="margin:0 0 14px 0;">Default config values:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>duplicate_recall_enabled: true
+duplicate_recall_min_probability: 0.35
+duplicate_recall_min_waveform_rms: 0.0001</code></pre></div><p style="margin:0 0 14px 0;">**Concrete Example**</p><p style="margin:0 0 14px 0;">Before duplicate recall:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0:
+  raw = Dog
+  final = Dog
+
+slot 1:
+  raw = Dog
+  final = silence   # energy threshold suppressed it
+
+slot 2:
+  raw = Blender
+  final = Blender</code></pre></div><p style="margin:0 0 14px 0;">Duplicate recall checks slot 1:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Is slot 1 raw class Dog? yes
+Is Dog already active in slot 0? yes
+Is probability high enough? yes
+Is waveform non-empty? yes</code></pre></div><p style="margin:0 0 14px 0;">After duplicate recall:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0 -&gt; Dog
+slot 1 -&gt; Dog
+slot 2 -&gt; Blender</code></pre></div><p style="margin:0 0 14px 0;">That gives TSE a real class condition for the second Dog slot instead of a zero-vector silence condition.</p><p style="margin:0 0 14px 0;">**Why This Helps Task 4**<br>Task 4 scoring is class-aware. If the reference contains two same-class events but the system outputs only one, the metric can penalize the missing duplicate even if the one output sounds good.</p><p style="margin:0 0 14px 0;">Duplicate same-class cases are especially dangerous because a normal classifier tends to think:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>“I already found Dog once; the weaker Dog-like estimate may be leakage/noise.”</code></pre></div><p style="margin:0 0 14px 0;">But in this task, two Dog/Alarm/Speech/etc. sources can genuinely coexist.</p><p style="margin:0 0 14px 0;">**Training-Side Support**<br>There is also a training loss helper for SC. <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">SourceClassifierDataset</code> marks whether each source belongs to a duplicate class in the same mixture:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>python</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>duplicate_class_count = sum(1 for x in labels if x == label)
+is_duplicate_class = duplicate_class_count &gt; 1</code></pre></div><p style="margin:0 0 14px 0;">See [source_classifier_dataset.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/datamodules/source_classifier_dataset.py:82).</p><p style="margin:0 0 14px 0;">Then [m2d_sc_arcface.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/training/loss/m2d_sc_arcface.py:41) has:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>lambda_duplicate_recall
+duplicate_m_in</code></pre></div><p style="margin:0 0 14px 0;">This encourages duplicate-class active sources to have stronger active energy, so they are less likely to be suppressed as silence.</p><p style="margin:0 0 14px 0;">Conceptually:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>normal SC loss:
+  classify active sources correctly
+  separate silence from active by energy
+
+duplicate recall loss:
+  for sources whose class appears multiple times,
+  push their active energy lower/stronger,
+  so the energy gate does not kill the weaker duplicate</code></pre></div><p style="margin:0 0 14px 0;">**Temporal Version**<br>In <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">Kwon2025TemporalS5</code>, duplicate recall is stricter. It also requires temporal support:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>raw same-class prediction is not enough;
+the slot must have activity over time.</code></pre></div><p style="margin:0 0 14px 0;">That logic is in [kwo2025_temporal.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/s5/kwo2025_temporal.py:89).</p><p style="margin:0 0 14px 0;">This prevents duplicate recall from reviving a slot that only has class-like leakage but no real active span.</p><p style="margin:0 0 14px 0;">**Risk**<br>Duplicate recall can hurt if it revives false positives:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0 -&gt; Dog real
+slot 1 -&gt; raw Dog leakage from slot 0</code></pre></div><p style="margin:0 0 14px 0;">That is why we need gates:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>probability threshold
+waveform RMS threshold
+energy calibration
+temporal activity support</code></pre></div><p style="margin:0 0 14px 0;">For final experiments, I would compare:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>S5 without duplicate recall
+S5 with duplicate recall
+Temporal S5 with duplicate recall</code></pre></div><p style="margin:0 0 14px 0;">and track specifically:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>duplicate same-class recall
+false positive active slots
+silence false positives
+CAPI-SDRi</code></pre></div><p style="margin:0 0 14px 0;">The good version is not “recall everything.” The good version is: **recover real missed duplicate same-class slots without reviving leakage.**</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-39-2026-04-26-21-52-35-cst" data-role="user" data-label="39. User" data-session="timeline">
+<details id="msg-user-39-2026-04-26-21-52-35-cst" class="message-card" data-role="user" data-search="User You said: For  USS₀ , use the non-temporal lite version, why the lite variant, not a bigger version, it would be used from begin to end 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">39. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 21:52:35 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">You said: For  USS₀ , use the non-temporal lite version, why the lite variant, not a bigger version, it would be used from begin to end</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-40-2026-04-26-21-52-48-cst-" data-role="assistant" data-label="40. Assistant" data-session="timeline">
+<details id="msg-assistant-40-2026-04-26-21-52-48-cst-" class="message-card" data-role="assistant" data-search="Assistant Good catch. “Lite first” was meant as a bootstrap strategy, not as a declaration that lite should be the final USS. I’ll quickly check the available USS configs so I can separate bootstrap, candidate-final, and expensive-final runs accurately.
+
+You are right to challenge that. If USS output is used to train/adapt SC and TSE, then choosing `USS0` is not a throwaway decision. If we later replace USS, the estimated-source distribution changes, so we should regenerate cache and re-adapt SC/TSE.
+
+My earlier “use lite first” should be understood as:
+
+```text
+lite USS = fast bootstrap / safety baseline
+not necessarily final USS
+```
+
+**Important Detail**
+In this repo, `modified_deft_uss_lite_6s.yaml` is not “tiny” in the usual sense. It still uses:
+
+```yaml
+hidden_channels: 96
+n_deft_blocks: 6
+n_heads: 4
+```
+
+The key difference is that it uses:
+
+```yaml
+main: ModifiedDeFTUSSMemoryEfficient
+time_window_size: 128
+freq_group_size: 64
+```
+
+So “lite” here mostly means **memory-efficient/local attention**, not drastically lower model width/depth. The non-lite configs use `ModifiedDeFTUSSSpatial`, likely more expensive because attention is less memory constrained.
+
+**Why Start With Lite Anyway**
+I would start a lite/memory-efficient USS because it gives us:
+
+```text
+1. a runnable S5 baseline quickly
+2. first estimated-source cache for SC adaptation
+3. lower OOM/training-risk
+4. a comparison floor for bigger USS
+```
+
+But I agree: for top-1, we should not assume lite is the final USS.
+
+**Corrected Strategy**
+We should run two USS tracks early:
+
+```text
+Track A: USS_lite_bootstrap
+  modified_deft_uss_lite_6s.yaml
+  purpose: fast cache, first S5, dependency unblocker
+
+Track B: USS_final_candidate
+  modified_deft_uss_5s.yaml or modified_deft_uss.yaml
+  purpose: likely stronger final separation backbone
+```
+
+With two Pro A6000s, I would do:
+
+```text
+GPU 0:
+  train bigger/non-lite USS candidate from day 1
+
+GPU 1:
+  train SC bootstrap / TSE bootstrap / cache jobs
+  and train lite USS only if bigger USS is too slow or unstable
+```
+
+If the bigger USS is feasible, it should be promoted early.
+
+**Dependency-Aware Rule**
+Any time we change the USS used in final S5, we must consider these downstream items stale:
+
+```text
+estimated-source SC cache
+SC stage3 estimated-source fine-tuning
+TSE training with USS enrollment
+energy calibration
+S5 validation result
+```
+
+So the real pipeline should be:
+
+```text
+USS_lite -&gt; cache_lite -&gt; SC_lite_adapted -&gt; TSE_lite_enroll -&gt; S5_lite
+USS_big  -&gt; cache_big  -&gt; SC_big_adapted  -&gt; TSE_big_enroll  -&gt; S5_big
+```
+
+Not:
+
+```text
+train SC/TSE on lite estimates
+then silently swap in big USS
+```
+
+That would create a distribution mismatch.
+
+**Recommended Revised Month Plan**
+First 7-10 days:
+
+```text
+1. Train USS_lite only enough to get a bootstrap cache.
+2. Train bigger USS in parallel as the real candidate.
+3. Train SC clean bootstrap.
+4. Train TSE oracle/bootstrap.
+5. Evaluate first S5_lite quickly.
+```
+
+Days 8-16:
+
+```text
+6. If bigger USS beats lite on validation separation, regenerate cache with bigger USS.
+7. Fine-tune SC on bigger-USS estimated sources.
+8. Fine-tune TSE using bigger-USS enrollment.
+9. Evaluate S5_big.
+```
+
+Days 17-24:
+
+```text
+10. Run BEATs/gated/robust SC only against the promoted USS cache.
+11. If temporal USS looks promising, treat it as a third USS distribution:
+    USS_temporal -&gt; cache_temporal -&gt; SC_temporal/adapted -&gt; TSE_temporal -&gt; TemporalS5
+```
+
+Final week:
+
+```text
+12. Do not change USS family unless the gain is obvious.
+13. Recalibrate SC thresholds for final USS/SC pair.
+14. Tune duplicate recall.
+15. Choose final S5 candidates.
+```
+
+**Decision Gate**
+Use lite from begin to end only if:
+
+```text
+bigger USS is unstable / too slow / OOM
+or
+bigger USS does not improve validation S5 after downstream adaptation
+```
+
+Use bigger USS as final if:
+
+```text
+it improves source quality enough
+and
+SC/TSE can be re-adapted to its estimates within the month
+```
+
+So yes: for a top-1 target, the safer wording is:
+
+```text
+Use lite USS to unblock the pipeline.
+Train bigger USS immediately as a final candidate.
+Once final USS is chosen, regenerate cache and re-adapt SC/TSE on that exact USS output distribution.
+```
+
+That keeps the pipeline honest instead of building the final system on bootstrap estimates.
+
+&lt;oai-mem-citation&gt;
+&lt;citation_entries&gt;
+MEMORY.md:117-129|note=[used DCASE workspace, S5 dependency, temporal status, and validation caveats]
+&lt;/citation_entries&gt;
+&lt;rollout_ids&gt;
+&lt;/rollout_ids&gt;
+&lt;/oai-mem-citation&gt; 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">40. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 21:52:48 CST -&gt; 2026-04-26 21:53:21 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">Good catch. “Lite first” was meant as a bootstrap strategy, not as a declaration that lite should be the final USS. I’ll quickly check the available USS configs so I can separate bootstrap, candidate-final, and expensive-final runs accurately.</p><p style="margin:0 0 14px 0;">You are right to challenge that. If USS output is used to train/adapt SC and TSE, then choosing <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">USS0</code> is not a throwaway decision. If we later replace USS, the estimated-source distribution changes, so we should regenerate cache and re-adapt SC/TSE.</p><p style="margin:0 0 14px 0;">My earlier “use lite first” should be understood as:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>lite USS = fast bootstrap / safety baseline
+not necessarily final USS</code></pre></div><p style="margin:0 0 14px 0;">**Important Detail**<br>In this repo, <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">modified_deft_uss_lite_6s.yaml</code> is not “tiny” in the usual sense. It still uses:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>hidden_channels: 96
+n_deft_blocks: 6
+n_heads: 4</code></pre></div><p style="margin:0 0 14px 0;">The key difference is that it uses:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>main: ModifiedDeFTUSSMemoryEfficient
+time_window_size: 128
+freq_group_size: 64</code></pre></div><p style="margin:0 0 14px 0;">So “lite” here mostly means **memory-efficient/local attention**, not drastically lower model width/depth. The non-lite configs use <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">ModifiedDeFTUSSSpatial</code>, likely more expensive because attention is less memory constrained.</p><p style="margin:0 0 14px 0;">**Why Start With Lite Anyway**<br>I would start a lite/memory-efficient USS because it gives us:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. a runnable S5 baseline quickly
+2. first estimated-source cache for SC adaptation
+3. lower OOM/training-risk
+4. a comparison floor for bigger USS</code></pre></div><p style="margin:0 0 14px 0;">But I agree: for top-1, we should not assume lite is the final USS.</p><p style="margin:0 0 14px 0;">**Corrected Strategy**<br>We should run two USS tracks early:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Track A: USS_lite_bootstrap
+  modified_deft_uss_lite_6s.yaml
+  purpose: fast cache, first S5, dependency unblocker
+
+Track B: USS_final_candidate
+  modified_deft_uss_5s.yaml or modified_deft_uss.yaml
+  purpose: likely stronger final separation backbone</code></pre></div><p style="margin:0 0 14px 0;">With two Pro A6000s, I would do:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>GPU 0:
+  train bigger/non-lite USS candidate from day 1
+
+GPU 1:
+  train SC bootstrap / TSE bootstrap / cache jobs
+  and train lite USS only if bigger USS is too slow or unstable</code></pre></div><p style="margin:0 0 14px 0;">If the bigger USS is feasible, it should be promoted early.</p><p style="margin:0 0 14px 0;">**Dependency-Aware Rule**<br>Any time we change the USS used in final S5, we must consider these downstream items stale:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>estimated-source SC cache
+SC stage3 estimated-source fine-tuning
+TSE training with USS enrollment
+energy calibration
+S5 validation result</code></pre></div><p style="margin:0 0 14px 0;">So the real pipeline should be:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS_lite -&gt; cache_lite -&gt; SC_lite_adapted -&gt; TSE_lite_enroll -&gt; S5_lite
+USS_big  -&gt; cache_big  -&gt; SC_big_adapted  -&gt; TSE_big_enroll  -&gt; S5_big</code></pre></div><p style="margin:0 0 14px 0;">Not:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>train SC/TSE on lite estimates
+then silently swap in big USS</code></pre></div><p style="margin:0 0 14px 0;">That would create a distribution mismatch.</p><p style="margin:0 0 14px 0;">**Recommended Revised Month Plan**<br>First 7-10 days:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. Train USS_lite only enough to get a bootstrap cache.
+2. Train bigger USS in parallel as the real candidate.
+3. Train SC clean bootstrap.
+4. Train TSE oracle/bootstrap.
+5. Evaluate first S5_lite quickly.</code></pre></div><p style="margin:0 0 14px 0;">Days 8-16:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>6. If bigger USS beats lite on validation separation, regenerate cache with bigger USS.
+7. Fine-tune SC on bigger-USS estimated sources.
+8. Fine-tune TSE using bigger-USS enrollment.
+9. Evaluate S5_big.</code></pre></div><p style="margin:0 0 14px 0;">Days 17-24:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>10. Run BEATs/gated/robust SC only against the promoted USS cache.
+11. If temporal USS looks promising, treat it as a third USS distribution:
+    USS_temporal -&gt; cache_temporal -&gt; SC_temporal/adapted -&gt; TSE_temporal -&gt; TemporalS5</code></pre></div><p style="margin:0 0 14px 0;">Final week:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>12. Do not change USS family unless the gain is obvious.
+13. Recalibrate SC thresholds for final USS/SC pair.
+14. Tune duplicate recall.
+15. Choose final S5 candidates.</code></pre></div><p style="margin:0 0 14px 0;">**Decision Gate**<br>Use lite from begin to end only if:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>bigger USS is unstable / too slow / OOM
+or
+bigger USS does not improve validation S5 after downstream adaptation</code></pre></div><p style="margin:0 0 14px 0;">Use bigger USS as final if:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>it improves source quality enough
+and
+SC/TSE can be re-adapted to its estimates within the month</code></pre></div><p style="margin:0 0 14px 0;">So yes: for a top-1 target, the safer wording is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Use lite USS to unblock the pipeline.
+Train bigger USS immediately as a final candidate.
+Once final USS is chosen, regenerate cache and re-adapt SC/TSE on that exact USS output distribution.</code></pre></div><p style="margin:0 0 14px 0;">That keeps the pipeline honest instead of building the final system on bootstrap estimates.</p><p style="margin:0 0 14px 0;">&lt;oai-mem-citation&gt;<br>&lt;citation_entries&gt;<br>MEMORY.md:117-129|note=[used DCASE workspace, S5 dependency, temporal status, and validation caveats]<br>&lt;/citation_entries&gt;<br>&lt;rollout_ids&gt;<br>&lt;/rollout_ids&gt;<br>&lt;/oai-mem-citation&gt;</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-41-2026-04-26-22-00-15-cst" data-role="user" data-label="41. User" data-session="timeline">
+<details id="msg-user-41-2026-04-26-22-00-15-cst" class="message-card" data-role="user" data-search="User Does the model in modified_deft_uss_lite_6s.yaml use the Spatial information? 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">41. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:00:15 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">Does the model in modified_deft_uss_lite_6s.yaml use the Spatial information?</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-42-2026-04-26-22-00-33-cst-" data-role="assistant" data-label="42. Assistant" data-session="timeline">
+<details id="msg-assistant-42-2026-04-26-22-00-33-cst-" class="message-card" data-role="assistant" data-search="Assistant I’ll verify the exact inheritance chain and tensor shapes, because “spatial” here can mean two different things: multi-channel spatial input, and an explicit spatial/DOA module.
+
+Yes. `modified_deft_uss_lite_6s.yaml` **does use spatial/multi-channel information**.
+
+The config uses:
+
+```yaml
+main: ModifiedDeFTUSSMemoryEfficient
+input_channels: 4
+output_channels: 1
+```
+
+See [modified_deft_uss_lite_6s.yaml](/home/cmj/works/dcase2026/dcase2026_task4_baseline/config/separation/modified_deft_uss_lite_6s.yaml:91).
+
+The inheritance chain is:
+
+```text
+ModifiedDeFTUSSMemoryEfficient
+  -&gt; ModifiedDeFTUSSSpatialLite
+    -&gt; ChunkedModifiedDeFTUSSSpatial
+      -&gt; ModifiedDeFTUSSSpatial
+```
+
+And `ModifiedDeFTUSSSpatial` is explicitly described as:
+
+```text
+USS variant with spatial multi-channel masking and phase-aware synthesis
+```
+
+in [modified_deft.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/deft/modified_deft.py:343).
+
+What it does spatially:
+
+```text
+4-channel input waveform
+-&gt; STFT per channel
+-&gt; model predicts per-object, per-channel masks
+-&gt; mask has magnitude + phase rotation components
+-&gt; estimated multi-channel complex output
+-&gt; 1x1 conv projects 4 channels to 1 output channel
+-&gt; inverse STFT
+```
+
+The key code is here:
+
+So the answer is:
+
+```text
+Yes, it is spatial.
+```
+
+But with one nuance: it does **not** use an explicit DOA/geometry feature like angle, microphone coordinates, GCC-PHAT, etc. It learns spatial cues implicitly from the 4-channel complex STFT and per-channel phase-aware masking. 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">42. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:00:33 CST -&gt; 2026-04-26 22:00:54 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I’ll verify the exact inheritance chain and tensor shapes, because “spatial” here can mean two different things: multi-channel spatial input, and an explicit spatial/DOA module.</p><p style="margin:0 0 14px 0;">Yes. <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">modified_deft_uss_lite_6s.yaml</code> **does use spatial/multi-channel information**.</p><p style="margin:0 0 14px 0;">The config uses:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>main: ModifiedDeFTUSSMemoryEfficient
+input_channels: 4
+output_channels: 1</code></pre></div><p style="margin:0 0 14px 0;">See [modified_deft_uss_lite_6s.yaml](/home/cmj/works/dcase2026/dcase2026_task4_baseline/config/separation/modified_deft_uss_lite_6s.yaml:91).</p><p style="margin:0 0 14px 0;">The inheritance chain is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>ModifiedDeFTUSSMemoryEfficient
+  -&gt; ModifiedDeFTUSSSpatialLite
+    -&gt; ChunkedModifiedDeFTUSSSpatial
+      -&gt; ModifiedDeFTUSSSpatial</code></pre></div><p style="margin:0 0 14px 0;">And <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">ModifiedDeFTUSSSpatial</code> is explicitly described as:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS variant with spatial multi-channel masking and phase-aware synthesis</code></pre></div><p style="margin:0 0 14px 0;">in [modified_deft.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/deft/modified_deft.py:343).</p><p style="margin:0 0 14px 0;">What it does spatially:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>4-channel input waveform
+-&gt; STFT per channel
+-&gt; model predicts per-object, per-channel masks
+-&gt; mask has magnitude + phase rotation components
+-&gt; estimated multi-channel complex output
+-&gt; 1x1 conv projects 4 channels to 1 output channel
+-&gt; inverse STFT</code></pre></div><p style="margin:0 0 14px 0;">The key code is here:</p><p style="margin:0 0 14px 0;">So the answer is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Yes, it is spatial.</code></pre></div><p style="margin:0 0 14px 0;">But with one nuance: it does **not** use an explicit DOA/geometry feature like angle, microphone coordinates, GCC-PHAT, etc. It learns spatial cues implicitly from the 4-channel complex STFT and per-channel phase-aware masking.</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-43-2026-04-26-22-07-48-cst" data-role="user" data-label="43. User" data-session="timeline">
+<details id="msg-user-43-2026-04-26-22-07-48-cst" class="message-card" data-role="user" data-search="User USS lite use 5s/6s clip for training, how to integrate the generated slots/enrollment for SC, and  TSE,  do the SC and TSE have the varient that handle the 5s/6s clips? 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">43. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:07:48 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">USS lite use 5s/6s clip for training, how to integrate the generated slots/enrollment for SC, and  TSE,  do the SC and TSE have the varient that handle the 5s/6s clips?</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-44-2026-04-26-22-07-59-cst-" data-role="assistant" data-label="44. Assistant" data-session="timeline">
+<details id="msg-assistant-44-2026-04-26-22-07-59-cst-" class="message-card" data-role="assistant" data-search="Assistant I’ll trace the actual data handoff: USS training clip length, how estimated slots are exported into `workspace/sc_finetune`, and whether SC/TSE configs crop or chunk to match 5s/6s estimates. This is exactly where hidden mismatch can sneak in.
+
+The repo already has the intended bridge: short/lite USS trains on short synthesized clips, but its inference path chunks longer soundscapes and exports full-length estimated slots for SC. I’m checking whether TSE training uses oracle enrollment only or already has a USS-estimated enrollment variant.
+
+Yes, but the answer is different for **SC** and **TSE**.
+
+**Short Version**
+`USS_lite_6s` trains on 6s generated mixtures, but at S5/export time it produces **full-length estimated slots** for each soundscape. Those full-length slots are then used as:
+
+```text
+SC input:
+  each estimated slot waveform -&gt; class prediction
+
+TSE input:
+  mixture + estimated slot waveform as enrollment + SC label vector -&gt; refined target
+```
+
+So the system does **not** require SC/TSE to be trained only on 6s clips, but they must be able to handle full-length estimated slots at inference/eval.
+
+**USS Lite Output Shape**
+`modified_deft_uss_lite_6s.yaml` trains with:
+
+```yaml
+spatial_sound_scene:
+  duration: 6.0
+  max_event_dur: 6.0
+```
+
+But the model has eval-time long-input handling. The recipe says fixed evaluation waveforms are 10s, and the lite USS/TSE models keep evaluation at 10s by chunking or memory-efficient processing rather than shortening the audio.
+
+For S5, USS outputs:
+
+```text
+foreground_waveform: [B, 3, 1, T]
+```
+
+where `T` is the evaluation soundscape length, usually 10s.
+
+Then `Kwon2025S5` does:
+
+```text
+stage1_waveform = USS(mixture)[&quot;foreground_waveform&quot;]
+SC(stage1_waveform slots)
+TSE(mixture, enrollment=stage1_waveform, label_vector=SC labels)
+```
+
+**SC Integration**
+SC stage-3 estimated-source training uses the exported USS/TSE estimated slots from:
+
+```text
+workspace/sc_finetune/soundscape
+workspace/sc_finetune/oracle_target
+workspace/sc_finetune/estimate_target
+```
+
+The export script writes estimates like:
+
+```text
+workspace/sc_finetune/estimate_target/&lt;soundscape&gt;_&lt;slot&gt;_&lt;label&gt;.wav
+```
+
+See [export_sc_finetune_cache.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/evaluation/export_sc_finetune_cache.py:62).
+
+Then `EstimatedSourceClassifierDataset` loads each estimated slot as one SC training sample:
+
+```text
+estimated slot waveform -&gt; class_index / silence / duplicate metadata
+```
+
+See [source_classifier_dataset.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/datamodules/source_classifier_dataset.py:82).
+
+So SC does not need a special “6s USS slot” variant. It can train on the cached estimated waveform length. At prediction time, strong SC handles long source estimates by cropping:
+
+```yaml
+eval_crop_seconds: 5.0
+eval_crop_hop_seconds: 2.5
+```
+
+The code averages logits over crops: [m2d_sc.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/m2dat/m2d_sc.py:663).
+
+So for SC:
+
+```text
+Training:
+  cached estimated slot waveform, likely full 10s
+
+Prediction:
+  split into 5s crops with 2.5s hop, average logits
+```
+
+That is fine for USS_lite outputs.
+
+**TSE Integration**
+TSE lite does have a matching 6s training config:
+
+```text
+config/separation/modified_deft_tse_lite_6s.yaml
+```
+
+It trains on 6s generated mixtures using `TSEDataset`: [modified_deft_tse_lite_6s.yaml](/home/cmj/works/dcase2026/dcase2026_task4_baseline/config/separation/modified_deft_tse_lite_6s.yaml:21).
+
+But current `TSEDataset` uses **oracle dry sources as enrollment**:
+
+```python
+item[&quot;enrollment&quot;] = item[&quot;dry_sources&quot;].clone()
+item[&quot;waveform&quot;] = item[&quot;dry_sources&quot;]
+```
+
+See [tse_dataset.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/datamodules/tse_dataset.py:29).
+
+At S5 inference, however, TSE receives **USS estimated slots** as enrollment, not oracle dry sources:
+
+```text
+mixture: original 4ch soundscape
+enrollment: USS estimated foreground slots
+label_vector: SC predicted class labels
+```
+
+The TSE lite model can handle long/full inputs during eval. It chunks both mixture and enrollment together:
+
+```text
+mixture_chunk = mixture[..., start:start+valid]
+enrollment_chunk = enrollment[..., start:start+valid]
+```
+
+See [modified_deft.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/deft/modified_deft.py:1216).
+
+So for TSE:
+
+```text
+Training now:
+  6s generated mixture + oracle enrollment
+
+S5 inference:
+  10s mixture + USS estimated enrollment, internally chunked/handled
+```
+
+This works mechanically, but there is a distribution mismatch.
+
+**The Important Gap**
+For top-score work, the current TSE training path is not fully S5-matched.
+
+Current:
+
+```text
+TSE training enrollment = clean/oracle dry target
+TSE inference enrollment = noisy USS estimated slot
+```
+
+That means the TSE model may learn to rely on cleaner enrollments than it will see in the final S5 pipeline.
+
+So we should add or use a **TSE estimated-enrollment fine-tuning stage**:
+
+```text
+soundscape
+-&gt; USS_lite or USS_big estimated slots
+-&gt; pair estimated slot with oracle target
+-&gt; train/fine-tune TSE:
+     mixture = original 4ch soundscape
+     enrollment = USS estimated slot
+     label_vector = oracle label first, then maybe SC label
+     target waveform = oracle source
+```
+
+This is different from the current SC cache. The SC cache is enough for classifier adaptation, but not ideal for TSE adaptation unless we add a dataset that reads:
+
+```text
+soundscape/
+estimate_target/   # enrollment
+oracle_target/     # target waveform
+label              # oracle or predicted
+```
+
+**Best Practice For Our Plan**
+Use the existing pieces like this:
+
+```text
+Step 1:
+  Train USS_lite_6s.
+
+Step 2:
+  Train TSE_lite_6s bootstrap with oracle enrollment.
+
+Step 3:
+  Run S5/export to create full-length estimated slots.
+
+Step 4:
+  Train SC stage3 on exported estimated slots.
+
+Step 5:
+  Add/fine-tune TSE on USS-estimated enrollments.
+  This is the missing important improvement.
+```
+
+For the final system, do not assume:
+
+```text
+TSE_lite_6s oracle-enrollment training == final optimal TSE
+```
+
+It is a good bootstrap, but final TSE should see the same kind of USS estimates it will receive at inference.
+
+**Answer To Your Exact Question**
+Does SC have a variant for 5s/6s USS clips?
+
+```text
+Not exactly as a separate “6s SC” model.
+But strong SC handles long estimated slots with 5s eval crops,
+and stage3 estimated-source configs train on cached estimated slot waveforms.
+```
+
+Does TSE have a variant for 5s/6s clips?
+
+```text
+Yes: modified_deft_tse_lite_6s.yaml trains on 6s generated clips,
+and the memory-efficient TSE handles longer eval inputs by chunking.
+```
+
+But does TSE currently have a variant specifically trained on USS-generated enrollments?
+
+```text
+No, not from the current TSEDataset path.
+That should be added for the serious final system.
+```
+
+That missing TSE estimated-enrollment fine-tune is probably one of the most important next engineering pieces, because it aligns training with real S5 inference.
+
+&lt;oai-mem-citation&gt;
+&lt;citation_entries&gt;
+MEMORY.md:117-129|note=[used DCASE workspace, S5 pipeline, temporal status, and validation caveats]
+&lt;/citation_entries&gt;
+&lt;rollout_ids&gt;
+&lt;/rollout_ids&gt;
+&lt;/oai-mem-citation&gt; 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">44. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:07:59 CST -&gt; 2026-04-26 22:09:13 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I’ll trace the actual data handoff: USS training clip length, how estimated slots are exported into <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">workspace/sc_finetune</code>, and whether SC/TSE configs crop or chunk to match 5s/6s estimates. This is exactly where hidden mismatch can sneak in.</p><p style="margin:0 0 14px 0;">The repo already has the intended bridge: short/lite USS trains on short synthesized clips, but its inference path chunks longer soundscapes and exports full-length estimated slots for SC. I’m checking whether TSE training uses oracle enrollment only or already has a USS-estimated enrollment variant.</p><p style="margin:0 0 14px 0;">Yes, but the answer is different for **SC** and **TSE**.</p><p style="margin:0 0 14px 0;">**Short Version**<br><code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">USS_lite_6s</code> trains on 6s generated mixtures, but at S5/export time it produces **full-length estimated slots** for each soundscape. Those full-length slots are then used as:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>SC input:
+  each estimated slot waveform -&gt; class prediction
+
+TSE input:
+  mixture + estimated slot waveform as enrollment + SC label vector -&gt; refined target</code></pre></div><p style="margin:0 0 14px 0;">So the system does **not** require SC/TSE to be trained only on 6s clips, but they must be able to handle full-length estimated slots at inference/eval.</p><p style="margin:0 0 14px 0;">**USS Lite Output Shape**<br><code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">modified_deft_uss_lite_6s.yaml</code> trains with:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>spatial_sound_scene:
+  duration: 6.0
+  max_event_dur: 6.0</code></pre></div><p style="margin:0 0 14px 0;">But the model has eval-time long-input handling. The recipe says fixed evaluation waveforms are 10s, and the lite USS/TSE models keep evaluation at 10s by chunking or memory-efficient processing rather than shortening the audio.</p><p style="margin:0 0 14px 0;">For S5, USS outputs:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>foreground_waveform: [B, 3, 1, T]</code></pre></div><p style="margin:0 0 14px 0;">where <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">T</code> is the evaluation soundscape length, usually 10s.</p><p style="margin:0 0 14px 0;">Then <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">Kwon2025S5</code> does:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>stage1_waveform = USS(mixture)[&quot;foreground_waveform&quot;]
+SC(stage1_waveform slots)
+TSE(mixture, enrollment=stage1_waveform, label_vector=SC labels)</code></pre></div><p style="margin:0 0 14px 0;">**SC Integration**<br>SC stage-3 estimated-source training uses the exported USS/TSE estimated slots from:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>workspace/sc_finetune/soundscape
+workspace/sc_finetune/oracle_target
+workspace/sc_finetune/estimate_target</code></pre></div><p style="margin:0 0 14px 0;">The export script writes estimates like:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>workspace/sc_finetune/estimate_target/&lt;soundscape&gt;_&lt;slot&gt;_&lt;label&gt;.wav</code></pre></div><p style="margin:0 0 14px 0;">See [export_sc_finetune_cache.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/evaluation/export_sc_finetune_cache.py:62).</p><p style="margin:0 0 14px 0;">Then <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">EstimatedSourceClassifierDataset</code> loads each estimated slot as one SC training sample:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>estimated slot waveform -&gt; class_index / silence / duplicate metadata</code></pre></div><p style="margin:0 0 14px 0;">See [source_classifier_dataset.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/datamodules/source_classifier_dataset.py:82).</p><p style="margin:0 0 14px 0;">So SC does not need a special “6s USS slot” variant. It can train on the cached estimated waveform length. At prediction time, strong SC handles long source estimates by cropping:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>eval_crop_seconds: 5.0
+eval_crop_hop_seconds: 2.5</code></pre></div><p style="margin:0 0 14px 0;">The code averages logits over crops: [m2d_sc.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/m2dat/m2d_sc.py:663).</p><p style="margin:0 0 14px 0;">So for SC:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Training:
+  cached estimated slot waveform, likely full 10s
+
+Prediction:
+  split into 5s crops with 2.5s hop, average logits</code></pre></div><p style="margin:0 0 14px 0;">That is fine for USS_lite outputs.</p><p style="margin:0 0 14px 0;">**TSE Integration**<br>TSE lite does have a matching 6s training config:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>config/separation/modified_deft_tse_lite_6s.yaml</code></pre></div><p style="margin:0 0 14px 0;">It trains on 6s generated mixtures using <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">TSEDataset</code>: [modified_deft_tse_lite_6s.yaml](/home/cmj/works/dcase2026/dcase2026_task4_baseline/config/separation/modified_deft_tse_lite_6s.yaml:21).</p><p style="margin:0 0 14px 0;">But current <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">TSEDataset</code> uses **oracle dry sources as enrollment**:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>python</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>item[&quot;enrollment&quot;] = item[&quot;dry_sources&quot;].clone()
+item[&quot;waveform&quot;] = item[&quot;dry_sources&quot;]</code></pre></div><p style="margin:0 0 14px 0;">See [tse_dataset.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/datamodules/tse_dataset.py:29).</p><p style="margin:0 0 14px 0;">At S5 inference, however, TSE receives **USS estimated slots** as enrollment, not oracle dry sources:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>mixture: original 4ch soundscape
+enrollment: USS estimated foreground slots
+label_vector: SC predicted class labels</code></pre></div><p style="margin:0 0 14px 0;">The TSE lite model can handle long/full inputs during eval. It chunks both mixture and enrollment together:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>mixture_chunk = mixture[..., start:start+valid]
+enrollment_chunk = enrollment[..., start:start+valid]</code></pre></div><p style="margin:0 0 14px 0;">See [modified_deft.py](/home/cmj/works/dcase2026/dcase2026_task4_baseline/src/models/deft/modified_deft.py:1216).</p><p style="margin:0 0 14px 0;">So for TSE:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Training now:
+  6s generated mixture + oracle enrollment
+
+S5 inference:
+  10s mixture + USS estimated enrollment, internally chunked/handled</code></pre></div><p style="margin:0 0 14px 0;">This works mechanically, but there is a distribution mismatch.</p><p style="margin:0 0 14px 0;">**The Important Gap**<br>For top-score work, the current TSE training path is not fully S5-matched.</p><p style="margin:0 0 14px 0;">Current:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>TSE training enrollment = clean/oracle dry target
+TSE inference enrollment = noisy USS estimated slot</code></pre></div><p style="margin:0 0 14px 0;">That means the TSE model may learn to rely on cleaner enrollments than it will see in the final S5 pipeline.</p><p style="margin:0 0 14px 0;">So we should add or use a **TSE estimated-enrollment fine-tuning stage**:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>soundscape
+-&gt; USS_lite or USS_big estimated slots
+-&gt; pair estimated slot with oracle target
+-&gt; train/fine-tune TSE:
+     mixture = original 4ch soundscape
+     enrollment = USS estimated slot
+     label_vector = oracle label first, then maybe SC label
+     target waveform = oracle source</code></pre></div><p style="margin:0 0 14px 0;">This is different from the current SC cache. The SC cache is enough for classifier adaptation, but not ideal for TSE adaptation unless we add a dataset that reads:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>soundscape/
+estimate_target/   # enrollment
+oracle_target/     # target waveform
+label              # oracle or predicted</code></pre></div><p style="margin:0 0 14px 0;">**Best Practice For Our Plan**<br>Use the existing pieces like this:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Step 1:
+  Train USS_lite_6s.
+
+Step 2:
+  Train TSE_lite_6s bootstrap with oracle enrollment.
+
+Step 3:
+  Run S5/export to create full-length estimated slots.
+
+Step 4:
+  Train SC stage3 on exported estimated slots.
+
+Step 5:
+  Add/fine-tune TSE on USS-estimated enrollments.
+  This is the missing important improvement.</code></pre></div><p style="margin:0 0 14px 0;">For the final system, do not assume:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>TSE_lite_6s oracle-enrollment training == final optimal TSE</code></pre></div><p style="margin:0 0 14px 0;">It is a good bootstrap, but final TSE should see the same kind of USS estimates it will receive at inference.</p><p style="margin:0 0 14px 0;">**Answer To Your Exact Question**<br>Does SC have a variant for 5s/6s USS clips?</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Not exactly as a separate “6s SC” model.
+But strong SC handles long estimated slots with 5s eval crops,
+and stage3 estimated-source configs train on cached estimated slot waveforms.</code></pre></div><p style="margin:0 0 14px 0;">Does TSE have a variant for 5s/6s clips?</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Yes: modified_deft_tse_lite_6s.yaml trains on 6s generated clips,
+and the memory-efficient TSE handles longer eval inputs by chunking.</code></pre></div><p style="margin:0 0 14px 0;">But does TSE currently have a variant specifically trained on USS-generated enrollments?</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>No, not from the current TSEDataset path.
+That should be added for the serious final system.</code></pre></div><p style="margin:0 0 14px 0;">That missing TSE estimated-enrollment fine-tune is probably one of the most important next engineering pieces, because it aligns training with real S5 inference.</p><p style="margin:0 0 14px 0;">&lt;oai-mem-citation&gt;<br>&lt;citation_entries&gt;<br>MEMORY.md:117-129|note=[used DCASE workspace, S5 pipeline, temporal status, and validation caveats]<br>&lt;/citation_entries&gt;<br>&lt;rollout_ids&gt;<br>&lt;/rollout_ids&gt;<br>&lt;/oai-mem-citation&gt;</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-45-2026-04-26-22-14-49-cst" data-role="user" data-label="45. User" data-session="timeline">
+<details id="msg-user-45-2026-04-26-22-14-49-cst" class="message-card" data-role="user" data-search="User Please fix the  missing TSE  estimated-enrollment fine-tune 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">45. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:14:49 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">Please fix the  missing TSE  estimated-enrollment fine-tune</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-46-2026-04-26-22-15-02-cst-" data-role="assistant" data-label="46. Assistant" data-session="timeline">
+<details id="msg-assistant-46-2026-04-26-22-15-02-cst-" class="message-card" data-role="assistant" data-search="Assistant I’ll add this as an opt-in TSE fine-tune path: a dataset that reads `soundscape/`, `oracle_target/`, and `estimate_target/`, uses the estimate as enrollment, and keeps the oracle source as the target waveform. Then I’ll add matching configs and smoke tests so it does not disturb the current oracle-enrollment TSE path.
+
+I found the critical detail: existing TSE training always uses oracle dry sources as enrollment. I’m going to add an estimated-enrollment dataset with optional 6s cropping, because cached S5 estimates are full 10s and training full 10s TSE would be unnecessarily heavy and less aligned with the lite training recipe.
+
+The estimated-enrollment dataset will use the same cache layout already produced for SC fine-tuning, so we don’t invent a second export format. For the first config I’ll keep validation on the existing oracle-validation path so the config is runnable without requiring a separate validation cache; the train side is the important S5-matched part.
+
+I’m editing the dataset layer now. The new class will preserve the old `TSEDataset` untouched, and add `EstimatedEnrollmentTSEDataset` for the final fine-tune stage.
+
+The dataset class is added. I’m adding targeted tests for the two behaviors that matter: estimated slots become enrollment, and missing estimates for active oracle targets do not teach TSE to hallucinate.
+
+I’m adding two opt-in training configs: one for the normal memory-efficient TSE and one for the temporal TSE. Both train from cached estimated enrollments but keep the old oracle-validation dataloader for now.
+
+The training configs are in. I’m updating the recipe notes so the intended order is clear: export cache first, then fine-tune TSE from the oracle-enrollment checkpoint with `-r`.
+
+Now I’m running the focused checks. I expect the new test to catch any span-crop or active-mask mistake in the estimated-enrollment dataset.
+
+One important snag surfaced while reviewing the recipe: `train.py -r` resumes the full Lightning trainer state, which is not ideal for fine-tuning from a completed bootstrap run. I’m checking the Lightning wrapper so we can give the estimated-enrollment config a proper “load model weights only” path if it already exists, or avoid documenting a bad command.
+
+To make this a real fine-tune path, I’m adding model-weight loading to the Lightning base module. That avoids abusing `train.py -r`, which resumes the whole trainer state and can accidentally skip training if the old epoch is already beyond the new `max_epochs`.
+
+The fine-tune configs now load bootstrap model weights directly via the Lightning module, so training starts a fresh optimizer/schedule on the estimated-enrollment data. I’m rerunning compile, YAML checks, and the test suite.
+
+The checks pass. I’m doing one final diff/status pass so I can summarize exactly what changed and call out the command sequence cleanly.
+
+Implemented the missing estimated-enrollment TSE fine-tune path.
+
+What changed:
+- Added configs:
+
+Run flow:
+
+```bash
+python -m src.evaluation.export_sc_finetune_cache \
+  -c src/evaluation/eval_configs/kwo2025_top1_like_lite_strong_sc.yaml \
+  --output_root workspace/sc_finetune \
+  --mode pseudo_s5 \
+  --batchsize 1
+```
+
+Then fine-tune TSE:
+
+```bash
+python -m src.train \
+  -c config/separation/modified_deft_tse_lite_6s_estimated_enrollment.yaml \
+  -w workspace/separation
+```
+
+The config expects bootstrap weights at:
+
+```text
+checkpoint/modified_deft_tse_lite_6s.ckpt
+```
+
+After training, update the S5 eval config’s `tse_ckpt` to the new estimated-enrollment checkpoint.
+
+Validation passed:
+- `py_compile` on changed Python files
+- YAML checks for both new configs
+- Result: `24 passed, 2 warnings`
+
+&lt;oai-mem-citation&gt;
+&lt;citation_entries&gt;
+MEMORY.md:117-129|note=[used DCASE workspace, S5 pipeline, temporal status, and validation caveats]
+&lt;/citation_entries&gt;
+&lt;rollout_ids&gt;
+&lt;/rollout_ids&gt;
+&lt;/oai-mem-citation&gt; 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">46. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:15:02 CST -&gt; 2026-04-26 22:22:13 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I’ll add this as an opt-in TSE fine-tune path: a dataset that reads <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">soundscape/</code>, <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">oracle_target/</code>, and <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">estimate_target/</code>, uses the estimate as enrollment, and keeps the oracle source as the target waveform. Then I’ll add matching configs and smoke tests so it does not disturb the current oracle-enrollment TSE path.</p><p style="margin:0 0 14px 0;">I found the critical detail: existing TSE training always uses oracle dry sources as enrollment. I’m going to add an estimated-enrollment dataset with optional 6s cropping, because cached S5 estimates are full 10s and training full 10s TSE would be unnecessarily heavy and less aligned with the lite training recipe.</p><p style="margin:0 0 14px 0;">The estimated-enrollment dataset will use the same cache layout already produced for SC fine-tuning, so we don’t invent a second export format. For the first config I’ll keep validation on the existing oracle-validation path so the config is runnable without requiring a separate validation cache; the train side is the important S5-matched part.</p><p style="margin:0 0 14px 0;">I’m editing the dataset layer now. The new class will preserve the old <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">TSEDataset</code> untouched, and add <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">EstimatedEnrollmentTSEDataset</code> for the final fine-tune stage.</p><p style="margin:0 0 14px 0;">The dataset class is added. I’m adding targeted tests for the two behaviors that matter: estimated slots become enrollment, and missing estimates for active oracle targets do not teach TSE to hallucinate.</p><p style="margin:0 0 14px 0;">I’m adding two opt-in training configs: one for the normal memory-efficient TSE and one for the temporal TSE. Both train from cached estimated enrollments but keep the old oracle-validation dataloader for now.</p><p style="margin:0 0 14px 0;">The training configs are in. I’m updating the recipe notes so the intended order is clear: export cache first, then fine-tune TSE from the oracle-enrollment checkpoint with <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">-r</code>.</p><p style="margin:0 0 14px 0;">Now I’m running the focused checks. I expect the new test to catch any span-crop or active-mask mistake in the estimated-enrollment dataset.</p><p style="margin:0 0 14px 0;">One important snag surfaced while reviewing the recipe: <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">train.py -r</code> resumes the full Lightning trainer state, which is not ideal for fine-tuning from a completed bootstrap run. I’m checking the Lightning wrapper so we can give the estimated-enrollment config a proper “load model weights only” path if it already exists, or avoid documenting a bad command.</p><p style="margin:0 0 14px 0;">To make this a real fine-tune path, I’m adding model-weight loading to the Lightning base module. That avoids abusing <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">train.py -r</code>, which resumes the whole trainer state and can accidentally skip training if the old epoch is already beyond the new <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">max_epochs</code>.</p><p style="margin:0 0 14px 0;">The fine-tune configs now load bootstrap model weights directly via the Lightning module, so training starts a fresh optimizer/schedule on the estimated-enrollment data. I’m rerunning compile, YAML checks, and the test suite.</p><p style="margin:0 0 14px 0;">The checks pass. I’m doing one final diff/status pass so I can summarize exactly what changed and call out the command sequence cleanly.</p><p style="margin:0 0 14px 0;">Implemented the missing estimated-enrollment TSE fine-tune path.</p><p style="margin:0 0 14px 0;">What changed:<br>- Added configs:</p><p style="margin:0 0 14px 0;">Run flow:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>bash</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>python -m src.evaluation.export_sc_finetune_cache \
+  -c src/evaluation/eval_configs/kwo2025_top1_like_lite_strong_sc.yaml \
+  --output_root workspace/sc_finetune \
+  --mode pseudo_s5 \
+  --batchsize 1</code></pre></div><p style="margin:0 0 14px 0;">Then fine-tune TSE:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>bash</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>python -m src.train \
+  -c config/separation/modified_deft_tse_lite_6s_estimated_enrollment.yaml \
+  -w workspace/separation</code></pre></div><p style="margin:0 0 14px 0;">The config expects bootstrap weights at:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>checkpoint/modified_deft_tse_lite_6s.ckpt</code></pre></div><p style="margin:0 0 14px 0;">After training, update the S5 eval config’s <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">tse_ckpt</code> to the new estimated-enrollment checkpoint.</p><p style="margin:0 0 14px 0;">Validation passed:<br>- <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">py_compile</code> on changed Python files<br>- YAML checks for both new configs<br>- Result: <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">24 passed, 2 warnings</code></p><p style="margin:0 0 14px 0;">&lt;oai-mem-citation&gt;<br>&lt;citation_entries&gt;<br>MEMORY.md:117-129|note=[used DCASE workspace, S5 pipeline, temporal status, and validation caveats]<br>&lt;/citation_entries&gt;<br>&lt;rollout_ids&gt;<br>&lt;/rollout_ids&gt;<br>&lt;/oai-mem-citation&gt;</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-47-2026-04-26-22-30-58-cst" data-role="user" data-label="47. User" data-session="timeline">
+<details id="msg-user-47-2026-04-26-22-30-58-cst" class="message-card" data-role="user" data-search="User I still have some questions about duplicate recall. You said when a same-class sound in a mixture was suppressed, it would hurt the final score, but it is also true for non-same-class sound, right? why only apply to same-class 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">47. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:30:58 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I still have some questions about duplicate recall. You said when a same-class sound in a mixture was suppressed, it would hurt the final score, but it is also true for non-same-class sound, right? why only apply to same-class</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-48-2026-04-26-22-31-26-cst" data-role="assistant" data-label="48. Assistant" data-session="timeline">
+<details id="msg-assistant-48-2026-04-26-22-31-26-cst" class="message-card" data-role="assistant" data-search="Assistant Yes, you’re right: **any missed active source hurts**, same-class or non-same-class.
+
+But duplicate recall is only for same-class because it is a **high-precision rescue rule**, not a general “unsuppress everything” rule.
+
+The core asymmetry is:
+
+```text
+same-class duplicate:
+  one active slot already confirms this class exists in the mixture
+
+non-same-class suppressed slot:
+  no other active slot confirms that suppressed class exists
+```
+
+So for same-class, the model has extra evidence:
+
+```text
+slot 0 final = Dog
+slot 1 raw = Dog, final = silence
+```
+
+This says:
+
+```text
+Dog is definitely present somewhere,
+and slot 1 also looks Dog-like before energy gating.
+```
+
+That makes it relatively safe to recover slot 1 as a second Dog, if probability/RMS/temporal support pass.
+
+For non-same-class:
+
+```text
+slot 0 final = Dog
+slot 1 raw = Blender, final = silence
+```
+
+If we recover slot 1, we are asserting:
+
+```text
+Blender is present
+```
+
+But no other active slot supports that. It may simply be leakage, interference, background, or classifier confusion. Recovering it is much more likely to create a false positive class.
+
+**Why Same-Class Is Special In S5**
+The SC energy/silence gate can be too harsh on weaker duplicate sources because two sources with the same class compete semantically:
+
+```text
+Dog strong slot -&gt; active Dog
+Dog weak slot -&gt; raw Dog but energy looks uncertain -&gt; silence
+```
+
+This is common because the weaker duplicate may look like leakage from the stronger one. The classifier can say “Dog-like,” but the energy/silence gate suppresses it.
+
+Duplicate recall says:
+
+```text
+If the class is already active, do not let the energy gate kill a plausible second copy too easily.
+```
+
+For non-same-class, we need a different mechanism:
+
+```text
+better SC recall
+better energy calibration
+temporal activity support
+lower silence false negative rate
+USS/TSE training improvements
+```
+
+not duplicate recall.
+
+**Risk Example**
+Suppose the true mixture is:
+
+```text
+Dog + Speech
+```
+
+USS produces:
+
+```text
+slot 0: Dog real
+slot 1: Dog leakage
+slot 2: Speech weak
+```
+
+SC predicts:
+
+```text
+slot 0: Dog active
+slot 1: raw Dog, final silence
+slot 2: raw Speech, final silence
+```
+
+Duplicate recall may recover slot 1 as Dog. That could be wrong if it is just leakage. That is why we require:
+
+```text
+probability threshold
+waveform RMS threshold
+temporal support in TemporalS5
+```
+
+But if we also recover slot 2 as Speech using the same logic, we risk reviving many one-off raw predictions with no confirmation. That becomes a false-positive factory. A little gate opens; the whole zoo tries to move in.
+
+**For Non-Same-Class Misses**
+The right fix is not “duplicate recall.” It is a broader **active-source recall** strategy:
+
+```text
+1. per-class energy-threshold calibration
+2. temporal SC activity head
+3. temporal S5 slot support
+4. robust estimated-source SC training
+5. lower threshold only for classes with low false-positive risk
+6. USS/TSE estimated-enrollment fine-tuning
+```
+
+We could design a separate rule later, something like:
+
+```text
+single-class recall:
+  recover suppressed raw class if:
+    probability very high
+    energy near threshold
+    temporal activity strong
+    waveform RMS strong
+    class-specific false-positive threshold passes
+```
+
+But that must be much stricter than duplicate recall, because it invents a class presence that no other slot confirms.
+
+So the short answer:
+
+```text
+Missing any source hurts.
+Duplicate recall only targets same-class misses because they have extra confirmation from another active same-class slot.
+Non-same-class recovery needs stricter calibration/temporal evidence, otherwise it creates too many false positives.
+``` 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">48. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:31:26 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">Yes, you’re right: **any missed active source hurts**, same-class or non-same-class.</p><p style="margin:0 0 14px 0;">But duplicate recall is only for same-class because it is a **high-precision rescue rule**, not a general “unsuppress everything” rule.</p><p style="margin:0 0 14px 0;">The core asymmetry is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>same-class duplicate:
+  one active slot already confirms this class exists in the mixture
+
+non-same-class suppressed slot:
+  no other active slot confirms that suppressed class exists</code></pre></div><p style="margin:0 0 14px 0;">So for same-class, the model has extra evidence:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0 final = Dog
+slot 1 raw = Dog, final = silence</code></pre></div><p style="margin:0 0 14px 0;">This says:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Dog is definitely present somewhere,
+and slot 1 also looks Dog-like before energy gating.</code></pre></div><p style="margin:0 0 14px 0;">That makes it relatively safe to recover slot 1 as a second Dog, if probability/RMS/temporal support pass.</p><p style="margin:0 0 14px 0;">For non-same-class:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0 final = Dog
+slot 1 raw = Blender, final = silence</code></pre></div><p style="margin:0 0 14px 0;">If we recover slot 1, we are asserting:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Blender is present</code></pre></div><p style="margin:0 0 14px 0;">But no other active slot supports that. It may simply be leakage, interference, background, or classifier confusion. Recovering it is much more likely to create a false positive class.</p><p style="margin:0 0 14px 0;">**Why Same-Class Is Special In S5**<br>The SC energy/silence gate can be too harsh on weaker duplicate sources because two sources with the same class compete semantically:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Dog strong slot -&gt; active Dog
+Dog weak slot -&gt; raw Dog but energy looks uncertain -&gt; silence</code></pre></div><p style="margin:0 0 14px 0;">This is common because the weaker duplicate may look like leakage from the stronger one. The classifier can say “Dog-like,” but the energy/silence gate suppresses it.</p><p style="margin:0 0 14px 0;">Duplicate recall says:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>If the class is already active, do not let the energy gate kill a plausible second copy too easily.</code></pre></div><p style="margin:0 0 14px 0;">For non-same-class, we need a different mechanism:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>better SC recall
+better energy calibration
+temporal activity support
+lower silence false negative rate
+USS/TSE training improvements</code></pre></div><p style="margin:0 0 14px 0;">not duplicate recall.</p><p style="margin:0 0 14px 0;">**Risk Example**<br>Suppose the true mixture is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Dog + Speech</code></pre></div><p style="margin:0 0 14px 0;">USS produces:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0: Dog real
+slot 1: Dog leakage
+slot 2: Speech weak</code></pre></div><p style="margin:0 0 14px 0;">SC predicts:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>slot 0: Dog active
+slot 1: raw Dog, final silence
+slot 2: raw Speech, final silence</code></pre></div><p style="margin:0 0 14px 0;">Duplicate recall may recover slot 1 as Dog. That could be wrong if it is just leakage. That is why we require:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>probability threshold
+waveform RMS threshold
+temporal support in TemporalS5</code></pre></div><p style="margin:0 0 14px 0;">But if we also recover slot 2 as Speech using the same logic, we risk reviving many one-off raw predictions with no confirmation. That becomes a false-positive factory. A little gate opens; the whole zoo tries to move in.</p><p style="margin:0 0 14px 0;">**For Non-Same-Class Misses**<br>The right fix is not “duplicate recall.” It is a broader **active-source recall** strategy:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. per-class energy-threshold calibration
+2. temporal SC activity head
+3. temporal S5 slot support
+4. robust estimated-source SC training
+5. lower threshold only for classes with low false-positive risk
+6. USS/TSE estimated-enrollment fine-tuning</code></pre></div><p style="margin:0 0 14px 0;">We could design a separate rule later, something like:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>single-class recall:
+  recover suppressed raw class if:
+    probability very high
+    energy near threshold
+    temporal activity strong
+    waveform RMS strong
+    class-specific false-positive threshold passes</code></pre></div><p style="margin:0 0 14px 0;">But that must be much stricter than duplicate recall, because it invents a class presence that no other slot confirms.</p><p style="margin:0 0 14px 0;">So the short answer:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Missing any source hurts.
+Duplicate recall only targets same-class misses because they have extra confirmation from another active same-class slot.
+Non-same-class recovery needs stricter calibration/temporal evidence, otherwise it creates too many false positives.</code></pre></div></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-49-2026-04-26-22-37-56-cst" data-role="user" data-label="49. User" data-session="timeline">
+<details id="msg-user-49-2026-04-26-22-37-56-cst" class="message-card" data-role="user" data-search="User OK. Let us back to: the missing TSE  estimated-enrollment fine-tune. You saied it supports random 6s crops from full cached 10s estimates. But if random cropped, it may loss some information, and when evaluate on the final officail test set, the clips are all 10 seconds, so how should it align the evaluation? 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">49. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:37:56 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">OK. Let us back to: the missing TSE  estimated-enrollment fine-tune. You saied it supports random 6s crops from full cached 10s estimates. But if random cropped, it may loss some information, and when evaluate on the final officail test set, the clips are all 10 seconds, so how should it align the evaluation?</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-50-2026-04-26-22-38-19-cst" data-role="assistant" data-label="50. Assistant" data-session="timeline">
+<details id="msg-assistant-50-2026-04-26-22-38-19-cst" class="message-card" data-role="assistant" data-search="Assistant Good question. The 6s random crop is only a **training memory / augmentation choice**, not the evaluation contract.
+
+For final evaluation, the model still receives the **full 10s mixture and full 10s USS enrollment**. The memory-efficient TSE handles that internally with chunked inference:
+
+```text
+10s mixture
+10s USS estimated enrollment
+10s label vector
+   ↓
+TSE chunks internally
+   ↓
+overlap-add back to 10s output
+```
+
+So evaluation alignment is:
+
+```text
+input length = 10s
+output length = 10s
+metric compares 10s output against 10s oracle target
+```
+
+The 6s crop does not change evaluation length.
+
+**Why Use 6s Crops For Training**
+The original lite TSE recipe already trains on generated 6s clips:
+
+```yaml
+spatial_sound_scene:
+  duration: 6.0
+```
+
+The estimated-enrollment fine-tune follows that shape because:
+
+```text
+1. it fits memory
+2. it matches bootstrap TSE training duration
+3. it gives many different local views from each 10s cached estimate
+4. random crop acts as augmentation
+```
+
+But yes, your concern is valid: a 6s crop can miss context from the full 10s clip.
+
+**What Happens To Alignment In Cropping**
+For each training sample, the dataset crops the same time window from:
+
+```text
+mixture
+estimated enrollment
+oracle target waveform
+span_sec
+```
+
+So inside the crop, alignment is still correct:
+
+```text
+mixture[t:t+6s]
+enrollment[t:t+6s]
+target[t:t+6s]
+span shifted to crop-local time
+```
+
+It does not crop enrollment and target independently. So no time mismatch is introduced.
+
+**But Should We Also Train On 10s?**
+For top score, yes, I would not rely only on 6s crops. I would use a two-stage fine-tune:
+
+```text
+Stage A: 6s random-crop estimated-enrollment fine-tune
+  purpose: stable adaptation, more samples, lower memory
+
+Stage B: 10s or long-chunk fine-tune / validation pass
+  purpose: match final official evaluation length
+```
+
+If memory allows on A6000, add a sibling config with:
+
+```yaml
+crop_seconds: null
+```
+
+or:
+
+```yaml
+crop_seconds: 10.0
+```
+
+Then train only a few epochs from the 6s estimated-enrollment checkpoint.
+
+**Recommended Final TSE Training Order**
+
+```text
+1. Bootstrap TSE:
+   modified_deft_tse_lite_6s.yaml
+   enrollment = oracle dry source
+   train length = 6s
+
+2. Estimated-enrollment adaptation:
+   modified_deft_tse_lite_6s_estimated_enrollment.yaml
+   enrollment = USS/S5 estimate
+   target = oracle
+   train crop = random 6s
+
+3. Final length alignment:
+   estimated-enrollment 10s fine-tune
+   enrollment = full USS/S5 estimate
+   target = full oracle
+   train crop = none or 10s
+   only a few epochs
+```
+
+**Evaluation**
+Final S5 evaluation should always use full 10s:
+
+```text
+USS full 10s/chunked
+SC 5s crops averaged over estimated slots
+TSE full 10s/chunked
+metric full 10s
+```
+
+So we should add one more config for final alignment:
+
+```text
+config/separation/modified_deft_tse_lite_10s_estimated_enrollment.yaml
+```
+
+or maybe better named:
+
+```text
+config/separation/modified_deft_tse_lite_estimated_enrollment_full10.yaml
+```
+
+It should be the same as the 6s estimated-enrollment config except:
+
+```yaml
+crop_seconds: null   # full cached waveform
+batch_size: 1
+lr: 0.00002
+max_epochs: 5-10
+```
+
+This gives us both benefits:
+
+```text
+6s random crops -&gt; robust adaptation
+10s final fine-tune -&gt; official-test-length alignment
+```
+
+Your instinct is right: for final submission, the model should at least see the full 10s estimated-enrollment distribution before we trust it. 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">50. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:38:19 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">Good question. The 6s random crop is only a **training memory / augmentation choice**, not the evaluation contract.</p><p style="margin:0 0 14px 0;">For final evaluation, the model still receives the **full 10s mixture and full 10s USS enrollment**. The memory-efficient TSE handles that internally with chunked inference:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>10s mixture
+10s USS estimated enrollment
+10s label vector
+   ↓
+TSE chunks internally
+   ↓
+overlap-add back to 10s output</code></pre></div><p style="margin:0 0 14px 0;">So evaluation alignment is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>input length = 10s
+output length = 10s
+metric compares 10s output against 10s oracle target</code></pre></div><p style="margin:0 0 14px 0;">The 6s crop does not change evaluation length.</p><p style="margin:0 0 14px 0;">**Why Use 6s Crops For Training**<br>The original lite TSE recipe already trains on generated 6s clips:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>spatial_sound_scene:
+  duration: 6.0</code></pre></div><p style="margin:0 0 14px 0;">The estimated-enrollment fine-tune follows that shape because:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. it fits memory
+2. it matches bootstrap TSE training duration
+3. it gives many different local views from each 10s cached estimate
+4. random crop acts as augmentation</code></pre></div><p style="margin:0 0 14px 0;">But yes, your concern is valid: a 6s crop can miss context from the full 10s clip.</p><p style="margin:0 0 14px 0;">**What Happens To Alignment In Cropping**<br>For each training sample, the dataset crops the same time window from:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>mixture
+estimated enrollment
+oracle target waveform
+span_sec</code></pre></div><p style="margin:0 0 14px 0;">So inside the crop, alignment is still correct:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>mixture[t:t+6s]
+enrollment[t:t+6s]
+target[t:t+6s]
+span shifted to crop-local time</code></pre></div><p style="margin:0 0 14px 0;">It does not crop enrollment and target independently. So no time mismatch is introduced.</p><p style="margin:0 0 14px 0;">**But Should We Also Train On 10s?**<br>For top score, yes, I would not rely only on 6s crops. I would use a two-stage fine-tune:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>Stage A: 6s random-crop estimated-enrollment fine-tune
+  purpose: stable adaptation, more samples, lower memory
+
+Stage B: 10s or long-chunk fine-tune / validation pass
+  purpose: match final official evaluation length</code></pre></div><p style="margin:0 0 14px 0;">If memory allows on A6000, add a sibling config with:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>crop_seconds: null</code></pre></div><p style="margin:0 0 14px 0;">or:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>crop_seconds: 10.0</code></pre></div><p style="margin:0 0 14px 0;">Then train only a few epochs from the 6s estimated-enrollment checkpoint.</p><p style="margin:0 0 14px 0;">**Recommended Final TSE Training Order**</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>1. Bootstrap TSE:
+   modified_deft_tse_lite_6s.yaml
+   enrollment = oracle dry source
+   train length = 6s
+
+2. Estimated-enrollment adaptation:
+   modified_deft_tse_lite_6s_estimated_enrollment.yaml
+   enrollment = USS/S5 estimate
+   target = oracle
+   train crop = random 6s
+
+3. Final length alignment:
+   estimated-enrollment 10s fine-tune
+   enrollment = full USS/S5 estimate
+   target = full oracle
+   train crop = none or 10s
+   only a few epochs</code></pre></div><p style="margin:0 0 14px 0;">**Evaluation**<br>Final S5 evaluation should always use full 10s:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>USS full 10s/chunked
+SC 5s crops averaged over estimated slots
+TSE full 10s/chunked
+metric full 10s</code></pre></div><p style="margin:0 0 14px 0;">So we should add one more config for final alignment:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>config/separation/modified_deft_tse_lite_10s_estimated_enrollment.yaml</code></pre></div><p style="margin:0 0 14px 0;">or maybe better named:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>config/separation/modified_deft_tse_lite_estimated_enrollment_full10.yaml</code></pre></div><p style="margin:0 0 14px 0;">It should be the same as the 6s estimated-enrollment config except:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>crop_seconds: null   # full cached waveform
+batch_size: 1
+lr: 0.00002
+max_epochs: 5-10</code></pre></div><p style="margin:0 0 14px 0;">This gives us both benefits:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>6s random crops -&gt; robust adaptation
+10s final fine-tune -&gt; official-test-length alignment</code></pre></div><p style="margin:0 0 14px 0;">Your instinct is right: for final submission, the model should at least see the full 10s estimated-enrollment distribution before we trust it.</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-51-2026-04-26-22-40-46-cst" data-role="user" data-label="51. User" data-session="timeline">
+<details id="msg-user-51-2026-04-26-22-40-46-cst" class="message-card" data-role="user" data-search="User Please fix it, add the config for final alignment 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">51. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:40:46 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">Please fix it, add the config for final alignment</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-52-2026-04-26-22-41-11-cst-" data-role="assistant" data-label="52. Assistant" data-session="timeline">
+<details id="msg-assistant-52-2026-04-26-22-41-11-cst-" class="message-card" data-role="assistant" data-search="Assistant I’ll add the final-alignment configs as a second fine-tune stage: full cached 10s estimated enrollments, batch size 1, lower LR, short training. I’ll include both normal and temporal TSE so the temporal path doesn’t get left behind.
+
+I’m going to name the final alignment configs `*_10s_estimated_enrollment.yaml`: these keep the full cached waveform (`crop_seconds: null`), lower the LR, and expect to initialize from the 6s estimated-enrollment fine-tune checkpoint rather than the oracle-enrollment bootstrap.
+
+The configs are added. I’m updating the guide to show the three-stage TSE path: oracle bootstrap, 6s estimated-enrollment adaptation, then short 10s alignment before final S5 evaluation.
+
+I’m checking that YAML parses as `None` for `crop_seconds`, and that the new configs point to the intended 6s estimated-enrollment checkpoints.
+
+Added the final 10s alignment configs.
+
+New configs:
+
+They use:
+```yaml
+crop_seconds: null
+batch_size: 1
+lr: 0.00002
+max_epochs: 10
+```
+
+So training sees the full cached 10s estimated enrollment and full 10s oracle target. The normal config initializes from:
+
+```text
+checkpoint/modified_deft_tse_lite_6s_estimated_enrollment.ckpt
+```
+
+Run after the 6s estimated-enrollment adaptation:
+
+```bash
+python -m src.train \
+  -c config/separation/modified_deft_tse_lite_10s_estimated_enrollment.yaml \
+  -w workspace/separation
+```
+
+I also updated [recipes.md](/home/cmj/works/dcase2026/dcase2026_task4_baseline/recipes.md:422) with the intended sequence and caveat: the validation dataloader is still the existing oracle-enrollment sanity check, so full S5 evaluation should be the real promotion gate for this final-aligned TSE checkpoint.
+
+Validation:
+- Result: `24 passed, 2 warnings`
+
+&lt;oai-mem-citation&gt;
+&lt;citation_entries&gt;
+MEMORY.md:117-129|note=[used DCASE workspace, S5 pipeline, temporal status, and validation caveats]
+&lt;/citation_entries&gt;
+&lt;rollout_ids&gt;
+&lt;/rollout_ids&gt;
+&lt;/oai-mem-citation&gt; 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">52. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:41:11 CST -&gt; 2026-04-26 22:43:51 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I’ll add the final-alignment configs as a second fine-tune stage: full cached 10s estimated enrollments, batch size 1, lower LR, short training. I’ll include both normal and temporal TSE so the temporal path doesn’t get left behind.</p><p style="margin:0 0 14px 0;">I’m going to name the final alignment configs <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">*_10s_estimated_enrollment.yaml</code>: these keep the full cached waveform (<code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">crop_seconds: null</code>), lower the LR, and expect to initialize from the 6s estimated-enrollment fine-tune checkpoint rather than the oracle-enrollment bootstrap.</p><p style="margin:0 0 14px 0;">The configs are added. I’m updating the guide to show the three-stage TSE path: oracle bootstrap, 6s estimated-enrollment adaptation, then short 10s alignment before final S5 evaluation.</p><p style="margin:0 0 14px 0;">I’m checking that YAML parses as <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">None</code> for <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">crop_seconds</code>, and that the new configs point to the intended 6s estimated-enrollment checkpoints.</p><p style="margin:0 0 14px 0;">Added the final 10s alignment configs.</p><p style="margin:0 0 14px 0;">New configs:</p><p style="margin:0 0 14px 0;">They use:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>yaml</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>crop_seconds: null
+batch_size: 1
+lr: 0.00002
+max_epochs: 10</code></pre></div><p style="margin:0 0 14px 0;">So training sees the full cached 10s estimated enrollment and full 10s oracle target. The normal config initializes from:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>checkpoint/modified_deft_tse_lite_6s_estimated_enrollment.ckpt</code></pre></div><p style="margin:0 0 14px 0;">Run after the 6s estimated-enrollment adaptation:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>bash</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>python -m src.train \
+  -c config/separation/modified_deft_tse_lite_10s_estimated_enrollment.yaml \
+  -w workspace/separation</code></pre></div><p style="margin:0 0 14px 0;">I also updated [recipes.md](/home/cmj/works/dcase2026/dcase2026_task4_baseline/recipes.md:422) with the intended sequence and caveat: the validation dataloader is still the existing oracle-enrollment sanity check, so full S5 evaluation should be the real promotion gate for this final-aligned TSE checkpoint.</p><p style="margin:0 0 14px 0;">Validation:<br>- Result: <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">24 passed, 2 warnings</code></p><p style="margin:0 0 14px 0;">&lt;oai-mem-citation&gt;<br>&lt;citation_entries&gt;<br>MEMORY.md:117-129|note=[used DCASE workspace, S5 pipeline, temporal status, and validation caveats]<br>&lt;/citation_entries&gt;<br>&lt;rollout_ids&gt;<br>&lt;/rollout_ids&gt;<br>&lt;/oai-mem-citation&gt;</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-user-53-2026-04-26-22-47-32-cst" data-role="user" data-label="53. User" data-session="timeline">
+<details id="msg-user-53-2026-04-26-22-47-32-cst" class="message-card" data-role="user" data-search="User I think we now have lots of variants, I need a clear table for these variants, it should list all the variants, the corresponding config, which variant it should work with in next stage, what&#x27;s the purpuse/feature of it, and any detailed information about it 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#e2ebff;color:#234ca8;">USER</span><span style="font-size:26px;font-weight:800;color:#172033;">53. User</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #dce5f3;border-left:8px solid #4f7cff;background:#f7faff;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(79,124,255,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:47:32 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:18px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I think we now have lots of variants, I need a clear table for these variants, it should list all the variants, the corresponding config, which variant it should work with in next stage, what&#x27;s the purpuse/feature of it, and any detailed information about it</p></div></div></details>
+
+
+<meta class="nav-message" data-anchor="msg-assistant-54-2026-04-26-22-47-52-cst-" data-role="assistant" data-label="54. Assistant" data-session="timeline">
+<details id="msg-assistant-54-2026-04-26-22-47-52-cst-" class="message-card" data-role="assistant" data-search="Assistant I’ll inventory the actual configs first, then organize them by pipeline stage instead of dumping filenames. The useful table should show the handoff chain: USS cache -&gt; SC stage -&gt; TSE fine-tune -&gt; S5 eval.
+
+I have the file inventory. I’ll extract the actual model classes/checkpoint references now, so the table can say what each config really builds instead of only naming the YAML.
+
+This is big enough that it deserves a tracked document, not just a chat table that vanishes. I’ll add a concise variant matrix markdown under `docs/` with stage tables and the recommended promotion path.
+
+The variant matrix is now in `docs/task4_variant_matrix.md`. I’ll run a quick sanity check on links/config names and then summarize the main table shape here.
+
+Created a full variant matrix here:
+
+[docs/task4_variant_matrix.md](/home/cmj/works/dcase2026/dcase2026_task4_baseline/docs/task4_variant_matrix.md)
+
+It includes:
+
+- Recommended promotion path from `USS -&gt; cache -&gt; SC -&gt; TSE -&gt; S5`
+- All USS variants
+- All TSE variants, including the new estimated-enrollment and 10s alignment configs
+- All SC variants, including strong, temporal, BEATs, fPaSST, robust, and legacy M2D-AT
+- All S5 evaluation variants, including duplicate recall and temporal S5
+- Notes about which variant should feed the next stage and when cache regeneration is required
+
+I also sanity-checked that every referenced YAML path in the table exists.
+
+The most important dependency rule in the table is:
+
+```text
+If final USS changes:
+  regenerate estimated-slot cache
+  redo SC stage3 adaptation
+  redo TSE estimated-enrollment fine-tune
+  redo S5 evaluation
+```
+
+So we avoid accidentally comparing a model trained on one estimate distribution with another USS/TSE system.
+
+&lt;oai-mem-citation&gt;
+&lt;citation_entries&gt;
+MEMORY.md:117-129|note=[used DCASE workspace structure, S5 pipeline, temporal status, and validation caveats]
+&lt;/citation_entries&gt;
+&lt;rollout_ids&gt;
+&lt;/rollout_ids&gt;
+&lt;/oai-mem-citation&gt; 019dc8a9-96cf-7302-980a-862c39cd611d" open><summary style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);padding-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:12px;font-weight:800;letter-spacing:0.08em;padding:4px 10px;border-radius:999px;background:#dff5e7;color:#1c6b41;">ASSISTANT</span><span style="font-size:26px;font-weight:800;color:#172033;">54. Assistant</span><span class="summary-chevron">&#8250;</span></div></summary><div style="border:1px solid #d7eadf;border-left:8px solid #3fa56b;background:#f5fcf7;border-radius:18px;padding:22px 24px;margin:14px 0 22px 0;box-shadow:0 6px 18px rgba(63,165,107,0.08);margin-top:-8px;"><div style="display:flex;flex-wrap:wrap;gap:10px;"><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Time</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">2026-04-26 22:47:52 CST -&gt; 2026-04-26 22:51:15 CST</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Source</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">rollout-2026-04-26T15-20-50-019dc8a9-96cf-7302-980a-862c39cd611d.jsonl</div></div><div style="min-width:180px;flex:1 1 220px;background:rgba(255,255,255,0.72);border-radius:12px;padding:10px 12px;"><div style="font-size:11px;font-weight:800;letter-spacing:0.08em;color:#5a6b85;text-transform:uppercase;">Session</div><div style="font-size:15px;font-weight:600;color:#223049;margin-top:4px;">019dc8a9-96cf-7302-980a-862c39cd611d</div></div></div><div class="message-body" style="margin-top:16px;font-size:17px;line-height:1.75;color:#1d2738;white-space:pre-wrap;"><p style="margin:0 0 14px 0;">I’ll inventory the actual configs first, then organize them by pipeline stage instead of dumping filenames. The useful table should show the handoff chain: USS cache -&gt; SC stage -&gt; TSE fine-tune -&gt; S5 eval.</p><p style="margin:0 0 14px 0;">I have the file inventory. I’ll extract the actual model classes/checkpoint references now, so the table can say what each config really builds instead of only naming the YAML.</p><p style="margin:0 0 14px 0;">This is big enough that it deserves a tracked document, not just a chat table that vanishes. I’ll add a concise variant matrix markdown under <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">docs/</code> with stage tables and the recommended promotion path.</p><p style="margin:0 0 14px 0;">The variant matrix is now in <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">docs/task4_variant_matrix.md</code>. I’ll run a quick sanity check on links/config names and then summarize the main table shape here.</p><p style="margin:0 0 14px 0;">Created a full variant matrix here:</p><p style="margin:0 0 14px 0;">[docs/task4_variant_matrix.md](/home/cmj/works/dcase2026/dcase2026_task4_baseline/docs/task4_variant_matrix.md)</p><p style="margin:0 0 14px 0;">It includes:</p><p style="margin:0 0 14px 0;">- Recommended promotion path from <code style="background:#eef3ff;color:#213b86;border:1px solid #cfdbff;border-radius:6px;padding:1px 6px;font-size:0.92em;font-family:SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;">USS -&gt; cache -&gt; SC -&gt; TSE -&gt; S5</code><br>- All USS variants<br>- All TSE variants, including the new estimated-enrollment and 10s alignment configs<br>- All SC variants, including strong, temporal, BEATs, fPaSST, robust, and legacy M2D-AT<br>- All S5 evaluation variants, including duplicate recall and temporal S5<br>- Notes about which variant should feed the next stage and when cache regeneration is required</p><p style="margin:0 0 14px 0;">I also sanity-checked that every referenced YAML path in the table exists.</p><p style="margin:0 0 14px 0;">The most important dependency rule in the table is:</p><div class="code-block" style="margin:10px 0 18px 0;border:1px solid #d6dce8;border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);"><div style="display:flex;align-items:center;gap:10px;background:#1f2937;color:#e5edf7;font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:9px 12px;"><span>text</span><button class="copy-btn" type="button" onclick="copyCode(this)">Copy</button></div><pre style="margin:0;background:#0f1720;color:#e8eef6;padding:16px 18px;overflow:auto;font-size:14px;line-height:1.6;"><code>If final USS changes:
+  regenerate estimated-slot cache
+  redo SC stage3 adaptation
+  redo TSE estimated-enrollment fine-tune
+  redo S5 evaluation</code></pre></div><p style="margin:0 0 14px 0;">So we avoid accidentally comparing a model trained on one estimate distribution with another USS/TSE system.</p><p style="margin:0 0 14px 0;">&lt;oai-mem-citation&gt;<br>&lt;citation_entries&gt;<br>MEMORY.md:117-129|note=[used DCASE workspace structure, S5 pipeline, temporal status, and validation caveats]<br>&lt;/citation_entries&gt;<br>&lt;rollout_ids&gt;<br>&lt;/rollout_ids&gt;<br>&lt;/oai-mem-citation&gt;</p></div></div></details>
