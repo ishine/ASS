@@ -8,6 +8,7 @@ import warnings
 import json
 
 from src.modules.spatial_audio_synthesizer.spatial_audio_synthesizer import SpAudSyn
+from src.temporal import event_to_span_sec, pad_spans, waveform_to_span_sec
 from src.utils import LABELS
 
 def collate_fn(list_data_dict):
@@ -166,6 +167,14 @@ class DatasetS3(torch.utils.data.Dataset):
 
         return torch.from_numpy(np.stack(dry_sources))[:, None, :].to(torch.float32) # [nevents, 1, wlen]
 
+    def _get_source_span_waveform(self, info, est_ref, wlen):
+        spans = []
+        for source_path in info[est_ref + '_source_paths']:
+            dry_source, sr = librosa.load(source_path, sr=None)
+            assert sr == self.sr, f'sr of {source_path} ({sr}) is different from the target sr ({self.sr})'
+            spans.append(waveform_to_span_sec(dry_source, self.sr))
+        return pad_spans(spans, self.n_sources)
+
     def _get_item_waveform(self, idx):
         info = self.data[idx]
         mixture, sr = librosa.load(info['mixture_path'], sr = None, mono=False)
@@ -177,11 +186,13 @@ class DatasetS3(torch.utils.data.Dataset):
         if self.oracle_target_dir is not None:
             item['label'] = self._get_label_waveform(info, 'ref')
             item['label_vector'] = self._get_label_vector(item['label'])
+            item['span_sec'] = self._get_source_span_waveform(info, 'ref', mixture.shape[-1])
             if self.return_source: item['dry_sources'] = self._get_source_waveform(info, 'ref', mixture.shape[-1]) # nsources, 1ch, wlen
 
         if self.estimate_target_dir is not None:
             item['est_label'] = self._get_label_waveform(info, 'est')
             item['est_label_vector'] = self._get_label_vector(item['est_label'])
+            item['est_span_sec'] = self._get_source_span_waveform(info, 'est', mixture.shape[-1])
             if self.return_source: item['est_dry_sources'] = self._get_source_waveform(info, 'est', mixture.shape[-1]) # nsources, 1ch, wlen
         if self.return_meta: item['metadata'] = info
         return item
@@ -213,12 +224,14 @@ class DatasetS3(torch.utils.data.Dataset):
             random.shuffle(output['fg_events'])
 
         label = [fge['metadata']['label'] for fge in output['fg_events']];
+        span_sec = [event_to_span_sec(fge) for fge in output['fg_events']]
         npad = self.n_sources - len(output['fg_events'])
         if npad > 0: label.extend(['silence'] * npad) # add silence to get n_sources
         return_obj = {
             'mixture': torch.from_numpy(mixture).to(torch.float32), # nchan, wlen
             'label': label, # [lb1, lb2,...]
             'label_vector': self._get_label_vector(label),
+            'span_sec': pad_spans(span_sec, self.n_sources),
         }
 
         if self.return_source:

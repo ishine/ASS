@@ -1,5 +1,6 @@
 import torch
 from src.datamodules.dataset import DatasetS3
+from src.temporal import SILENCE_SPAN_SEC, waveform_to_span_sec
 
 
 class SourceClassifierDataset(torch.utils.data.Dataset):
@@ -18,10 +19,21 @@ class SourceClassifierDataset(torch.utils.data.Dataset):
         label = item["label"][source_idx]
         is_silence = label == "silence"
         class_index = 0 if is_silence else self.labels.index(label)
+        duplicate_class_count = 0 if is_silence else sum(1 for x in item["label"] if x == label)
+        is_duplicate_class = duplicate_class_count > 1
+        span_sec = item.get("span_sec", None)
+        if span_sec is None:
+            span = SILENCE_SPAN_SEC if is_silence else waveform_to_span_sec(item["dry_sources"][source_idx], self.base_dataset.sr)
+            span_sec = torch.tensor(span, dtype=torch.float32)
+        else:
+            span_sec = span_sec[source_idx]
         return {
             "waveform": item["dry_sources"][source_idx],
             "class_index": torch.tensor(class_index, dtype=torch.long),
             "is_silence": torch.tensor(is_silence, dtype=torch.bool),
+            "duplicate_class_count": torch.tensor(duplicate_class_count, dtype=torch.long),
+            "is_duplicate_class": torch.tensor(is_duplicate_class, dtype=torch.bool),
+            "span_sec": span_sec.to(torch.float32),
         }
 
     def _collate_fn(self, items):
@@ -29,6 +41,9 @@ class SourceClassifierDataset(torch.utils.data.Dataset):
             "waveform": torch.stack([x["waveform"] for x in items], dim=0),
             "class_index": torch.stack([x["class_index"] for x in items], dim=0),
             "is_silence": torch.stack([x["is_silence"] for x in items], dim=0),
+            "duplicate_class_count": torch.stack([x["duplicate_class_count"] for x in items], dim=0),
+            "is_duplicate_class": torch.stack([x["is_duplicate_class"] for x in items], dim=0),
+            "span_sec": torch.stack([x["span_sec"] for x in items], dim=0),
         }
 
 
@@ -71,10 +86,25 @@ class EstimatedSourceClassifierDataset(torch.utils.data.Dataset):
         label = item[self.label_key][source_idx]
         is_silence = label == "silence"
         class_index = 0 if is_silence else self.labels.index(label)
+        labels = item[self.label_key]
+        duplicate_class_count = 0 if is_silence else sum(1 for x in labels if x == label)
+        is_duplicate_class = duplicate_class_count > 1
+        span_key = f"{self.source_prefix}_span_sec"
+        span_sec = item.get(span_key, None)
+        if span_sec is None and self.source_prefix == "ref":
+            span_sec = item.get("span_sec", None)
+        if span_sec is None:
+            span = SILENCE_SPAN_SEC if is_silence else waveform_to_span_sec(item[self.source_key][source_idx], self.base_dataset.sr)
+            span_sec = torch.tensor(span, dtype=torch.float32)
+        else:
+            span_sec = span_sec[source_idx]
         return {
             "waveform": item[self.source_key][source_idx],
             "class_index": torch.tensor(class_index, dtype=torch.long),
             "is_silence": torch.tensor(is_silence, dtype=torch.bool),
+            "duplicate_class_count": torch.tensor(duplicate_class_count, dtype=torch.long),
+            "is_duplicate_class": torch.tensor(is_duplicate_class, dtype=torch.bool),
+            "span_sec": span_sec.to(torch.float32),
         }
 
     def _collate_fn(self, items):
@@ -82,4 +112,7 @@ class EstimatedSourceClassifierDataset(torch.utils.data.Dataset):
             "waveform": torch.stack([x["waveform"] for x in items], dim=0),
             "class_index": torch.stack([x["class_index"] for x in items], dim=0),
             "is_silence": torch.stack([x["is_silence"] for x in items], dim=0),
+            "duplicate_class_count": torch.stack([x["duplicate_class_count"] for x in items], dim=0),
+            "is_duplicate_class": torch.stack([x["is_duplicate_class"] for x in items], dim=0),
+            "span_sec": torch.stack([x["span_sec"] for x in items], dim=0),
         }

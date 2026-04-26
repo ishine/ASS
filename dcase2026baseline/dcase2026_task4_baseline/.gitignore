@@ -2,10 +2,12 @@
 *.ckpt
 .ipynb_checkpoints
 *.pth
+*.pt
 *.pdf
 *.png
 
 external_data/
+external/
 data/
 .venv/
 workspace/

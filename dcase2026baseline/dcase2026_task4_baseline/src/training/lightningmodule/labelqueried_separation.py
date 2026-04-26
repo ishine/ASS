@@ -22,6 +22,8 @@ class LabelQueriedSeparationLightning(BaseLightningModule):
         target_dict = {'waveform': batch_data_dict['dry_sources'],
                        'label_vector': copylb
                        }
+        if 'span_sec' in batch_data_dict:
+            target_dict['span_sec'] = batch_data_dict['span_sec']
         loss_dict = self.loss_func(output_dict, target_dict)
 
         return batchsize, loss_dict
@@ -47,6 +49,8 @@ class LabelQueriedSeparationLightning(BaseLightningModule):
         target_dict = {'waveform': batch_data_dict['dry_sources'],
                        'label_vector': copylb
                        }
+        if 'span_sec' in batch_data_dict:
+            target_dict['span_sec'] = batch_data_dict['span_sec']
         loss_dict = self.loss_func(output_dict, target_dict)
 
         loss_dict = {k: v.item() for k,v in loss_dict.items()}

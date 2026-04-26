@@ -3,17 +3,24 @@ from .base_lightningmodule import BaseLightningModule
 
 class TSELightning(BaseLightningModule):
     def _get_input_dict(self, batch_data_dict):
-        return {
+        input_dict = {
             "mixture": batch_data_dict["mixture"],
             "enrollment": batch_data_dict["enrollment"],
             "label_vector": batch_data_dict["label_vector"],
         }
+        if "span_sec" in batch_data_dict:
+            input_dict["span_sec"] = batch_data_dict["span_sec"]
+        return input_dict
 
     def _get_target_dict(self, batch_data_dict):
-        return {
+        target_dict = {
             "waveform": batch_data_dict["waveform"],
+            "label_vector": batch_data_dict["label_vector"],
             "active_mask": batch_data_dict["active_mask"],
         }
+        if "span_sec" in batch_data_dict:
+            target_dict["span_sec"] = batch_data_dict["span_sec"]
+        return target_dict
 
     def training_step_processing(self, batch_data_dict, batch_idx):
         batchsize = batch_data_dict["mixture"].shape[0]

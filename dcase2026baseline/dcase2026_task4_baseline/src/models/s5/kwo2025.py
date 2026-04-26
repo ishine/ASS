@@ -13,6 +13,9 @@ class Kwon2025S5(torch.nn.Module):
         uss_ckpt=None,
         sc_ckpt=None,
         tse_ckpt=None,
+        duplicate_recall_enabled=False,
+        duplicate_recall_min_probability=0.35,
+        duplicate_recall_min_waveform_rms=1e-4,
     ):
         super().__init__()
         self.uss = initialize_config(uss_config)
@@ -21,6 +24,9 @@ class Kwon2025S5(torch.nn.Module):
         self.label_set = label_set
         self.labels = LABELS[label_set].copy()
         self.onehots = torch.eye(len(self.labels), requires_grad=False).float()
+        self.duplicate_recall_enabled = duplicate_recall_enabled
+        self.duplicate_recall_min_probability = float(duplicate_recall_min_probability)
+        self.duplicate_recall_min_waveform_rms = float(duplicate_recall_min_waveform_rms)
 
         if uss_ckpt is not None:
             self._load_ckpt(uss_ckpt, self.uss)
@@ -57,8 +63,39 @@ class Kwon2025S5(torch.nn.Module):
         out = self.sc.predict({"waveform": flat})
         label_vector = out["label_vector"].view(batch_size, n_sources, -1)
         probs = out["probabilities"].view(batch_size, n_sources)
+        if getattr(self, "duplicate_recall_enabled", False):
+            raw_label_vector = out.get("raw_label_vector")
+            if raw_label_vector is not None:
+                raw_label_vector = raw_label_vector.view(batch_size, n_sources, -1)
+                label_vector = self._recover_silenced_duplicates(waveforms, label_vector, raw_label_vector, probs)
         labels = [self._vector_to_label(label_vector[i]) for i in range(batch_size)]
         return labels, probs, label_vector
+
+    def _recover_silenced_duplicates(self, waveforms, label_vector, raw_label_vector, probs):
+        label_vector = label_vector.clone()
+        min_probability = getattr(self, "duplicate_recall_min_probability", 0.35)
+        min_waveform_rms = getattr(self, "duplicate_recall_min_waveform_rms", 1e-4)
+        rms = waveforms[:, :, 0].pow(2).mean(dim=-1).sqrt()
+        active = label_vector.abs().sum(dim=-1) > 0
+        raw_active = raw_label_vector.abs().sum(dim=-1) > 0
+        raw_class = torch.argmax(raw_label_vector, dim=-1)
+
+        for batch_idx in range(label_vector.shape[0]):
+            active_classes = set(raw_class[batch_idx, active[batch_idx]].tolist())
+            if not active_classes:
+                continue
+            for source_idx in torch.nonzero(~active[batch_idx], as_tuple=False).flatten().tolist():
+                candidate_class = int(raw_class[batch_idx, source_idx].item())
+                if candidate_class not in active_classes:
+                    continue
+                if not bool(raw_active[batch_idx, source_idx]):
+                    continue
+                if probs[batch_idx, source_idx] < min_probability:
+                    continue
+                if rms[batch_idx, source_idx] < min_waveform_rms:
+                    continue
+                label_vector[batch_idx, source_idx] = raw_label_vector[batch_idx, source_idx]
+        return label_vector
 
     def _run_tse(self, mixture, enroll, label_vector):
         return self.tse({
@@ -67,17 +104,54 @@ class Kwon2025S5(torch.nn.Module):
             "label_vector": label_vector,
         })["waveform"]
 
+    def _slot_silence_mask(self, label_vector):
+        return label_vector.abs().sum(dim=-1) == 0
+
+    def _force_silent_slots(self, waveforms, labels, probs, label_vector, silent_mask):
+        if not silent_mask.any().item():
+            return waveforms, labels, probs, label_vector
+        silent_mask = silent_mask.to(device=waveforms.device, dtype=torch.bool)
+        waveforms = waveforms.clone()
+        probs = probs.clone()
+        label_vector = label_vector.clone()
+        labels = [list(batch_labels) for batch_labels in labels]
+        waveforms[silent_mask] = 0.0
+        probs[silent_mask] = 0.0
+        label_vector[silent_mask] = 0.0
+        for batch_idx, source_idx in torch.nonzero(silent_mask.cpu(), as_tuple=False).tolist():
+            labels[batch_idx][source_idx] = "silence"
+        return waveforms, labels, probs, label_vector
+
     def predict_label_separate(self, mixture):
         with torch.no_grad():
             uss_out = self.uss({"mixture": mixture})
             stage1_waveform = uss_out["foreground_waveform"]
             stage1_labels, stage1_probs, stage1_vector = self._classify_sources(stage1_waveform)
+            silent_slots = self._slot_silence_mask(stage1_vector)
+            stage1_waveform, stage1_labels, stage1_probs, stage1_vector = self._force_silent_slots(
+                stage1_waveform, stage1_labels, stage1_probs, stage1_vector, silent_slots
+            )
+            if silent_slots.all().item():
+                zero_waveform = torch.zeros_like(stage1_waveform)
+                return {
+                    "label": [["silence"] * stage1_waveform.shape[1] for _ in range(stage1_waveform.shape[0])],
+                    "probabilities": torch.zeros_like(stage1_probs),
+                    "waveform": zero_waveform,
+                }
 
             stage2_waveform = self._run_tse(mixture, stage1_waveform, stage1_vector)
             stage2_labels, stage2_probs, stage2_vector = self._classify_sources(stage2_waveform)
+            silent_slots = silent_slots | self._slot_silence_mask(stage2_vector)
+            stage2_waveform, stage2_labels, stage2_probs, stage2_vector = self._force_silent_slots(
+                stage2_waveform, stage2_labels, stage2_probs, stage2_vector, silent_slots
+            )
 
             stage3_waveform = self._run_tse(mixture, stage2_waveform, stage2_vector)
-            stage3_labels, stage3_probs, _ = self._classify_sources(stage3_waveform)
+            stage3_labels, stage3_probs, stage3_vector = self._classify_sources(stage3_waveform)
+            silent_slots = silent_slots | self._slot_silence_mask(stage3_vector)
+            stage3_waveform, stage3_labels, stage3_probs, _ = self._force_silent_slots(
+                stage3_waveform, stage3_labels, stage3_probs, stage3_vector, silent_slots
+            )
 
             return {
                 "label": stage3_labels,

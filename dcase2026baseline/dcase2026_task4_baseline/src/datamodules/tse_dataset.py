@@ -29,4 +29,6 @@ class TSEDataset(torch.utils.data.Dataset):
         item["enrollment"] = item["dry_sources"].clone()
         item["waveform"] = item["dry_sources"]
         item["active_mask"] = torch.tensor(active_mask, dtype=torch.bool)
+        if "span_sec" not in item:
+            item["span_sec"] = torch.full((self.base_dataset.n_sources, 2), -1.0, dtype=torch.float32)
         return item

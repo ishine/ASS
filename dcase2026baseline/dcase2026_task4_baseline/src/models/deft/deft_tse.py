@@ -338,3 +338,85 @@ class DeFTTSELikeSpatial(DeFTTSELike):
         x = x.reshape(batch_size * self.target_sources_num, x.shape[2], x.shape[3], x.shape[4])
 
         return {"waveform": self._spatial_mask_to_waveform(x, real, imag, samples)}
+
+
+class DeFTTSELikeTemporal(DeFTTSELike):
+    """DeFT-TSE-like model with per-query temporal activity prediction."""
+
+    def __init__(self, *args, base_channels=96, sample_rate=32000, **kwargs):
+        super().__init__(*args, base_channels=base_channels, **kwargs)
+        self.sample_rate = sample_rate
+        self.activity_head = nn.Conv2d(base_channels, 1, kernel_size=1)
+
+    def forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        label_vector = _reshape_label_vector(input_dict["label_vector"], self.target_sources_num)
+        batch_size, _, samples = mixture.shape
+
+        log_mag, intensity, ref_real, ref_imag = self._stft_features(mixture)
+        features = torch.cat([log_mag, intensity], dim=1)
+        x = self.input_proj(features)
+        for block in self.blocks:
+            x = block(x)
+
+        gamma, beta = self.clue_encoder(label_vector)
+        x = x.unsqueeze(1).expand(-1, self.target_sources_num, -1, -1, -1)
+        x = x * (1.0 + gamma) + beta
+        x = x.reshape(batch_size * self.target_sources_num, x.shape[2], x.shape[3], x.shape[4])
+        mask = self.mask_head(x)
+        mask = torch.tanh(mask)
+        mask = mask.view(batch_size, self.target_sources_num, 2, mask.shape[-2], mask.shape[-1])
+
+        ref_real = ref_real[:, None, :, :]
+        ref_imag = ref_imag[:, None, :, :]
+        est_real = mask[:, :, 0] * ref_real - mask[:, :, 1] * ref_imag
+        est_imag = mask[:, :, 0] * ref_imag + mask[:, :, 1] * ref_real
+
+        waveform = self.istft(
+            est_real.reshape(batch_size * self.target_sources_num, 1, est_real.shape[-2], est_real.shape[-1]),
+            est_imag.reshape(batch_size * self.target_sources_num, 1, est_imag.shape[-2], est_imag.shape[-1]),
+            samples,
+        )
+        waveform = waveform.view(batch_size, self.target_sources_num, 1, samples)
+        activity_logits = self.activity_head(x).mean(dim=-1).squeeze(1)
+        activity_logits = activity_logits.view(batch_size, self.target_sources_num, -1)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": waveform,
+            "activity_logits": activity_logits,
+            "duration_sec": duration_sec,
+        }
+
+
+class DeFTTSELikeSpatialTemporal(DeFTTSELikeSpatial):
+    """Spatial DeFT-TSE-like model with per-query temporal activity prediction."""
+
+    def __init__(self, *args, base_channels=96, sample_rate=32000, **kwargs):
+        super().__init__(*args, base_channels=base_channels, **kwargs)
+        self.sample_rate = sample_rate
+        self.activity_head = nn.Conv2d(base_channels, 1, kernel_size=1)
+
+    def forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        label_vector = _reshape_label_vector(input_dict["label_vector"], self.target_sources_num)
+        batch_size, _, samples = mixture.shape
+
+        log_mag, intensity, real, imag = self._stft_features(mixture)
+        features = torch.cat([log_mag, intensity], dim=1)
+        x = self.input_proj(features)
+        for block in self.blocks:
+            x = block(x)
+
+        gamma, beta = self.clue_encoder(label_vector)
+        x = x.unsqueeze(1).expand(-1, self.target_sources_num, -1, -1, -1)
+        x = x * (1.0 + gamma) + beta
+        x = x.reshape(batch_size * self.target_sources_num, x.shape[2], x.shape[3], x.shape[4])
+
+        activity_logits = self.activity_head(x).mean(dim=-1).squeeze(1)
+        activity_logits = activity_logits.view(batch_size, self.target_sources_num, -1)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": self._spatial_mask_to_waveform(x, real, imag, samples),
+            "activity_logits": activity_logits,
+            "duration_sec": duration_sec,
+        }

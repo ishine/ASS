@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 from src.datamodules.dataset import DatasetS3
+from src.temporal import event_to_span_sec, pad_spans
 
 
 def _extract_waveforms(events, n_expected, length):
@@ -17,6 +18,10 @@ def _extract_waveforms(events, n_expected, length):
     while len(waveforms) < n_expected:
         waveforms.append(np.zeros((1, length), dtype=np.float32))
     return torch.from_numpy(np.stack(waveforms, axis=0))
+
+
+def _extract_spans(events, n_expected):
+    return pad_spans([event_to_span_sec(event) for event in events[:n_expected]], n_expected)
 
 
 class USSDataset(torch.utils.data.Dataset):
@@ -49,6 +54,9 @@ class USSDataset(torch.utils.data.Dataset):
         item["foreground_waveform"] = item["dry_sources"]
         item["interference_waveform"] = _extract_waveforms(int_events, 2, length)
         item["noise_waveform"] = _extract_waveforms(background_events, 1, length)
+        item["foreground_span_sec"] = item.get("span_sec", torch.full((self.base_dataset.n_sources, 2), -1.0, dtype=torch.float32))
+        item["interference_span_sec"] = _extract_spans(int_events, 2)
+        item["noise_span_sec"] = _extract_spans(background_events, 1)
         item["class_index"] = torch.tensor(class_index, dtype=torch.long)
         item["is_silence"] = torch.tensor(is_silence, dtype=torch.bool)
         return item

@@ -8,6 +8,35 @@ def _stack_complex(real, imag):
     return torch.cat([real, imag], dim=1)
 
 
+def _temporal_film_from_conditioning(
+    temporal_conditioner,
+    temporal_conditioning,
+    batch_size,
+    n_queries,
+    time_steps,
+    device,
+    dtype,
+):
+    if temporal_conditioning is None:
+        return None, None
+    cond = temporal_conditioning.to(device=device, dtype=dtype)
+    if cond.dim() == 2:
+        cond = cond.unsqueeze(1).expand(-1, n_queries, -1)
+    if cond.dim() != 3:
+        raise ValueError("temporal_conditioning must have shape [B, T] or [B, Q, T]")
+    if cond.shape[0] != batch_size or cond.shape[1] != n_queries:
+        raise ValueError("temporal_conditioning batch/query dimensions do not match TSE input")
+    cond = F.interpolate(
+        cond.reshape(batch_size * n_queries, 1, cond.shape[-1]),
+        size=time_steps,
+        mode="linear",
+        align_corners=False,
+    )
+    beta_gamma = temporal_conditioner(cond)
+    beta, gamma = beta_gamma.chunk(2, dim=1)
+    return beta.unsqueeze(-1), gamma.unsqueeze(-1)
+
+
 class ResFiLM(nn.Module):
     def __init__(self, channels):
         super().__init__()
@@ -441,6 +470,130 @@ class ModifiedDeFTUSSSpatial(ModifiedDeFTUSS):
         }
 
 
+class ModifiedDeFTUSSTemporal(ModifiedDeFTUSS):
+    """Original modified DeFT USS with per-object temporal activity heads."""
+
+    def __init__(self, *args, hidden_channels=96, sample_rate=32000, **kwargs):
+        super().__init__(*args, hidden_channels=hidden_channels, **kwargs)
+        self.sample_rate = sample_rate
+        self.activity_head = nn.Conv2d(hidden_channels, 1, kernel_size=1)
+
+    def _activity_logits(self, object_features):
+        batch_size, n_objects, channels, time_steps, freq_bins = object_features.shape
+        logits = self.activity_head(
+            object_features.reshape(batch_size * n_objects, channels, time_steps, freq_bins)
+        )
+        logits = logits.mean(dim=-1).squeeze(1)
+        return logits.view(batch_size, n_objects, time_steps)
+
+    def forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        batch_size, _, samples = mixture.shape
+        real, imag = self.waveform_to_complex(mixture.reshape(-1, samples))
+        _, _, time_steps, freq_bins = real.shape
+        real = real.view(batch_size, self.input_channels, time_steps, freq_bins)
+        imag = imag.view(batch_size, self.input_channels, time_steps, freq_bins)
+
+        x = self.encoder(_stack_complex(real, imag))
+        for block in self.blocks:
+            x = block(x)
+        x = self.object_conv(x)
+        x = x.view(batch_size, self.n_objects, -1, time_steps, freq_bins)
+        activity_logits = self._activity_logits(x)
+
+        audio_mask = self.audio_head(x.reshape(batch_size * self.n_objects, -1, time_steps, freq_bins))
+        audio_mask = torch.tanh(audio_mask)
+        audio_mask = audio_mask.view(batch_size, self.n_objects, 2, time_steps, freq_bins)
+
+        ref_real = real[:, :1].expand(-1, self.n_objects, -1, -1)
+        ref_imag = imag[:, :1].expand(-1, self.n_objects, -1, -1)
+        est_real = audio_mask[:, :, 0] * ref_real - audio_mask[:, :, 1] * ref_imag
+        est_imag = audio_mask[:, :, 0] * ref_imag + audio_mask[:, :, 1] * ref_real
+
+        waveform = self.complex_to_waveform(
+            est_real.reshape(batch_size * self.n_objects, 1, time_steps, freq_bins),
+            est_imag.reshape(batch_size * self.n_objects, 1, time_steps, freq_bins),
+            samples,
+        ).view(batch_size, self.n_objects, 1, samples)
+
+        fg_features = x[:, : self.n_foreground]
+        class_logits = self.class_head(fg_features.reshape(batch_size * self.n_foreground, -1, time_steps, freq_bins))
+        class_logits = class_logits.view(batch_size, self.n_foreground, self.n_classes)
+        silence_logits = self.silence_head(fg_features.reshape(batch_size * self.n_foreground, -1, time_steps, freq_bins))
+        silence_logits = silence_logits.view(batch_size, self.n_foreground)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+
+        return {
+            "waveform": waveform,
+            "foreground_waveform": waveform[:, : self.n_foreground],
+            "interference_waveform": waveform[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_waveform": waveform[:, -1:],
+            "class_logits": class_logits,
+            "silence_logits": silence_logits,
+            "foreground_activity_logits": activity_logits[:, : self.n_foreground],
+            "interference_activity_logits": activity_logits[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_activity_logits": activity_logits[:, -1:],
+            "duration_sec": duration_sec,
+        }
+
+
+class ModifiedDeFTUSSSpatialTemporal(ModifiedDeFTUSSSpatial):
+    """Spatial modified DeFT USS with per-object temporal activity heads."""
+
+    def __init__(self, *args, hidden_channels=96, sample_rate=32000, **kwargs):
+        super().__init__(*args, hidden_channels=hidden_channels, **kwargs)
+        self.sample_rate = sample_rate
+        self.activity_head = nn.Conv2d(hidden_channels, 1, kernel_size=1)
+
+    def _activity_logits(self, object_features):
+        batch_size, n_objects, channels, time_steps, freq_bins = object_features.shape
+        logits = self.activity_head(
+            object_features.reshape(batch_size * n_objects, channels, time_steps, freq_bins)
+        )
+        logits = logits.mean(dim=-1).squeeze(1)
+        return logits.view(batch_size, n_objects, time_steps)
+
+    def _forward_full(self, input_dict):
+        mixture = input_dict["mixture"]
+        batch_size, _, samples = mixture.shape
+        real, imag = self.waveform_to_complex(mixture.reshape(-1, samples))
+        _, _, time_steps, freq_bins = real.shape
+        real = real.view(batch_size, self.input_channels, time_steps, freq_bins)
+        imag = imag.view(batch_size, self.input_channels, time_steps, freq_bins)
+
+        x = self.encoder(_stack_complex(real, imag))
+        for block in self.blocks:
+            x = block(x)
+        x = self.object_conv(x)
+        x = x.view(batch_size, self.n_objects, -1, time_steps, freq_bins)
+
+        waveform = self._spatial_mask_to_waveform(x, real, imag, samples)
+        activity_logits = self._activity_logits(x)
+
+        fg_features = x[:, : self.n_foreground]
+        class_logits = self.class_head(fg_features.reshape(batch_size * self.n_foreground, -1, time_steps, freq_bins))
+        class_logits = class_logits.view(batch_size, self.n_foreground, self.n_classes)
+        silence_logits = self.silence_head(fg_features.reshape(batch_size * self.n_foreground, -1, time_steps, freq_bins))
+        silence_logits = silence_logits.view(batch_size, self.n_foreground)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+
+        return {
+            "waveform": waveform,
+            "foreground_waveform": waveform[:, : self.n_foreground],
+            "interference_waveform": waveform[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_waveform": waveform[:, -1:],
+            "class_logits": class_logits,
+            "silence_logits": silence_logits,
+            "foreground_activity_logits": activity_logits[:, : self.n_foreground],
+            "interference_activity_logits": activity_logits[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_activity_logits": activity_logits[:, -1:],
+            "duration_sec": duration_sec,
+        }
+
+    def forward(self, input_dict):
+        return self._forward_full(input_dict)
+
+
 class ChunkedModifiedDeFTUSSSpatial(ModifiedDeFTUSSSpatial):
     """Spatial USS with eval-time chunking for long fixed-length mixtures.
 
@@ -537,6 +690,87 @@ class ChunkedModifiedDeFTUSSSpatial(ModifiedDeFTUSSSpatial):
         return self._chunked_forward(input_dict)
 
 
+class ChunkedModifiedDeFTUSSSpatialTemporal(ModifiedDeFTUSSSpatialTemporal):
+    """Chunked spatial USS with per-object temporal activity heads."""
+
+    def __init__(
+        self,
+        *args,
+        inference_chunk_seconds=6.0,
+        inference_chunk_hop_seconds=5.0,
+        sample_rate=32000,
+        **kwargs,
+    ):
+        super().__init__(*args, sample_rate=sample_rate, **kwargs)
+        self.inference_chunk_seconds = inference_chunk_seconds
+        self.inference_chunk_hop_seconds = inference_chunk_hop_seconds
+        self.sample_rate = sample_rate
+
+    def _iter_chunk_starts(self, samples, chunk_samples, hop_samples):
+        return ChunkedModifiedDeFTUSSSpatial._iter_chunk_starts(self, samples, chunk_samples, hop_samples)
+
+    def _chunk_weight(self, chunk_samples, device, dtype):
+        return ChunkedModifiedDeFTUSSSpatial._chunk_weight(self, chunk_samples, device, dtype)
+
+    def _chunked_forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        batch_size, _, samples = mixture.shape
+        chunk_samples = int(round(float(self.inference_chunk_seconds) * self.sample_rate))
+        hop_samples = int(round(float(self.inference_chunk_hop_seconds) * self.sample_rate))
+        if chunk_samples <= 0 or hop_samples <= 0:
+            raise ValueError("inference_chunk_seconds and inference_chunk_hop_seconds must be positive")
+        if samples <= chunk_samples:
+            return self._forward_full(input_dict)
+
+        starts = self._iter_chunk_starts(samples, chunk_samples, hop_samples)
+        weight = self._chunk_weight(chunk_samples, mixture.device, mixture.dtype)
+        weight = weight.view(1, 1, 1, chunk_samples)
+
+        waveform_sum = mixture.new_zeros(batch_size, self.n_objects, self.output_channels, samples)
+        weight_sum = mixture.new_zeros(1, 1, 1, samples)
+        class_logits = []
+        silence_logits = []
+        fg_activity = []
+        int_activity = []
+        noise_activity = []
+
+        for start in starts:
+            end = start + chunk_samples
+            chunk = mixture[..., start:end]
+            if chunk.shape[-1] < chunk_samples:
+                chunk = F.pad(chunk, (0, chunk_samples - chunk.shape[-1]))
+
+            out = self._forward_full({"mixture": chunk})
+            valid = min(chunk_samples, samples - start)
+            waveform_sum[..., start : start + valid] += out["waveform"][..., :valid] * weight[..., :valid]
+            weight_sum[..., start : start + valid] += weight[..., :valid]
+            class_logits.append(out["class_logits"])
+            silence_logits.append(out["silence_logits"])
+            fg_activity.append(out["foreground_activity_logits"])
+            int_activity.append(out["interference_activity_logits"])
+            noise_activity.append(out["noise_activity_logits"])
+
+        waveform = waveform_sum / torch.clamp(weight_sum, min=1e-6)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": waveform,
+            "foreground_waveform": waveform[:, : self.n_foreground],
+            "interference_waveform": waveform[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_waveform": waveform[:, -1:],
+            "class_logits": torch.stack(class_logits, dim=0).mean(dim=0),
+            "silence_logits": torch.stack(silence_logits, dim=0).mean(dim=0),
+            "foreground_activity_logits": torch.cat(fg_activity, dim=-1),
+            "interference_activity_logits": torch.cat(int_activity, dim=-1),
+            "noise_activity_logits": torch.cat(noise_activity, dim=-1),
+            "duration_sec": duration_sec,
+        }
+
+    def forward(self, input_dict):
+        if self.training or self.inference_chunk_seconds is None:
+            return self._forward_full(input_dict)
+        return self._chunked_forward(input_dict)
+
+
 class ModifiedDeFTUSSSpatialLite(ChunkedModifiedDeFTUSSSpatial):
     """Memory-reduced spatial USS using local DeFT attention windows.
 
@@ -600,6 +834,178 @@ class ModifiedDeFTUSSSpatialLite(ChunkedModifiedDeFTUSSSpatial):
 
 class ModifiedDeFTUSSMemoryEfficient(ModifiedDeFTUSSSpatialLite):
     """Alias class for the memory-efficient spatial USS recipe."""
+
+
+class ModifiedDeFTUSSSpatialLiteTemporal(ChunkedModifiedDeFTUSSSpatialTemporal):
+    """Temporal counterpart of ``ModifiedDeFTUSSSpatialLite``."""
+
+    def __init__(
+        self,
+        input_channels=4,
+        output_channels=1,
+        hidden_channels=96,
+        n_deft_blocks=6,
+        n_heads=4,
+        n_foreground=3,
+        n_interference=2,
+        n_classes=18,
+        window_size=1024,
+        hop_size=320,
+        time_window_size=128,
+        freq_group_size=64,
+        shift_windows=True,
+        inference_chunk_seconds=10.0,
+        inference_chunk_hop_seconds=8.0,
+        sample_rate=32000,
+    ):
+        super().__init__(
+            input_channels=input_channels,
+            output_channels=output_channels,
+            hidden_channels=hidden_channels,
+            n_deft_blocks=n_deft_blocks,
+            n_heads=n_heads,
+            n_foreground=n_foreground,
+            n_interference=n_interference,
+            n_classes=n_classes,
+            window_size=window_size,
+            hop_size=hop_size,
+            inference_chunk_seconds=inference_chunk_seconds,
+            inference_chunk_hop_seconds=inference_chunk_hop_seconds,
+            sample_rate=sample_rate,
+        )
+        self.time_window_size = int(time_window_size)
+        self.freq_group_size = int(freq_group_size)
+        self.shift_windows = bool(shift_windows)
+        self.blocks = nn.ModuleList()
+        for block_idx in range(n_deft_blocks):
+            use_shift = self.shift_windows and block_idx % 2 == 1
+            self.blocks.append(
+                MemoryEfficientDeFTBlock(
+                    hidden_channels,
+                    n_heads=n_heads,
+                    time_window_size=self.time_window_size,
+                    freq_group_size=self.freq_group_size,
+                    time_shift=self.time_window_size // 2 if use_shift else 0,
+                    freq_shift=self.freq_group_size // 2 if use_shift else 0,
+                )
+            )
+
+
+class ModifiedDeFTUSSMemoryEfficientTemporal(ModifiedDeFTUSSMemoryEfficient):
+    """Memory-efficient USS with per-object temporal activity heads."""
+
+    def __init__(self, *args, hidden_channels=96, n_foreground=3, n_interference=2, **kwargs):
+        super().__init__(
+            *args,
+            hidden_channels=hidden_channels,
+            n_foreground=n_foreground,
+            n_interference=n_interference,
+            **kwargs,
+        )
+        self.activity_head = nn.Conv2d(hidden_channels, 1, kernel_size=1)
+
+    def _activity_logits(self, object_features):
+        batch_size, n_objects, channels, time_steps, freq_bins = object_features.shape
+        logits = self.activity_head(
+            object_features.reshape(batch_size * n_objects, channels, time_steps, freq_bins)
+        )
+        logits = logits.mean(dim=-1).squeeze(1)
+        return logits.view(batch_size, n_objects, time_steps)
+
+    def _forward_full(self, input_dict):
+        mixture = input_dict["mixture"]
+        batch_size, _, samples = mixture.shape
+        real, imag = self.waveform_to_complex(mixture.reshape(-1, samples))
+        _, _, time_steps, freq_bins = real.shape
+        real = real.view(batch_size, self.input_channels, time_steps, freq_bins)
+        imag = imag.view(batch_size, self.input_channels, time_steps, freq_bins)
+
+        x = self.encoder(_stack_complex(real, imag))
+        for block in self.blocks:
+            x = block(x)
+        x = self.object_conv(x)
+        x = x.view(batch_size, self.n_objects, -1, time_steps, freq_bins)
+
+        waveform = self._spatial_mask_to_waveform(x, real, imag, samples)
+        activity_logits = self._activity_logits(x)
+
+        fg_features = x[:, : self.n_foreground]
+        class_logits = self.class_head(fg_features.reshape(batch_size * self.n_foreground, -1, time_steps, freq_bins))
+        class_logits = class_logits.view(batch_size, self.n_foreground, self.n_classes)
+        silence_logits = self.silence_head(fg_features.reshape(batch_size * self.n_foreground, -1, time_steps, freq_bins))
+        silence_logits = silence_logits.view(batch_size, self.n_foreground)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+
+        return {
+            "waveform": waveform,
+            "foreground_waveform": waveform[:, : self.n_foreground],
+            "interference_waveform": waveform[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_waveform": waveform[:, -1:],
+            "class_logits": class_logits,
+            "silence_logits": silence_logits,
+            "foreground_activity_logits": activity_logits[:, : self.n_foreground],
+            "interference_activity_logits": activity_logits[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_activity_logits": activity_logits[:, -1:],
+            "duration_sec": duration_sec,
+        }
+
+    def _chunked_forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        batch_size, _, samples = mixture.shape
+        chunk_samples = int(round(float(self.inference_chunk_seconds) * self.sample_rate))
+        hop_samples = int(round(float(self.inference_chunk_hop_seconds) * self.sample_rate))
+        if chunk_samples <= 0 or hop_samples <= 0:
+            raise ValueError("inference_chunk_seconds and inference_chunk_hop_seconds must be positive")
+        if samples <= chunk_samples:
+            return self._forward_full(input_dict)
+
+        starts = self._iter_chunk_starts(samples, chunk_samples, hop_samples)
+        weight = self._chunk_weight(chunk_samples, mixture.device, mixture.dtype)
+        weight = weight.view(1, 1, 1, chunk_samples)
+
+        waveform_sum = mixture.new_zeros(batch_size, self.n_objects, self.output_channels, samples)
+        weight_sum = mixture.new_zeros(1, 1, 1, samples)
+        class_logits = []
+        silence_logits = []
+        fg_activity = []
+        int_activity = []
+        noise_activity = []
+
+        for start in starts:
+            end = start + chunk_samples
+            chunk = mixture[..., start:end]
+            if chunk.shape[-1] < chunk_samples:
+                chunk = F.pad(chunk, (0, chunk_samples - chunk.shape[-1]))
+
+            out = self._forward_full({"mixture": chunk})
+            valid = min(chunk_samples, samples - start)
+            waveform_sum[..., start : start + valid] += out["waveform"][..., :valid] * weight[..., :valid]
+            weight_sum[..., start : start + valid] += weight[..., :valid]
+            class_logits.append(out["class_logits"])
+            silence_logits.append(out["silence_logits"])
+            fg_activity.append(out["foreground_activity_logits"])
+            int_activity.append(out["interference_activity_logits"])
+            noise_activity.append(out["noise_activity_logits"])
+
+        waveform = waveform_sum / torch.clamp(weight_sum, min=1e-6)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": waveform,
+            "foreground_waveform": waveform[:, : self.n_foreground],
+            "interference_waveform": waveform[:, self.n_foreground : self.n_foreground + self.n_interference],
+            "noise_waveform": waveform[:, -1:],
+            "class_logits": torch.stack(class_logits, dim=0).mean(dim=0),
+            "silence_logits": torch.stack(silence_logits, dim=0).mean(dim=0),
+            "foreground_activity_logits": torch.cat(fg_activity, dim=-1),
+            "interference_activity_logits": torch.cat(int_activity, dim=-1),
+            "noise_activity_logits": torch.cat(noise_activity, dim=-1),
+            "duration_sec": duration_sec,
+        }
+
+    def forward(self, input_dict):
+        if self.training or self.inference_chunk_seconds is None:
+            return self._forward_full(input_dict)
+        return self._chunked_forward(input_dict)
 
 
 class ModifiedDeFTTSE(_BaseSpectralModel):
@@ -668,6 +1074,75 @@ class ModifiedDeFTTSE(_BaseSpectralModel):
         waveform = self.complex_to_waveform(est_real, est_imag, samples)
         waveform = waveform.view(batch_size, n_queries, 1, samples)
         return {"waveform": waveform}
+
+
+class ModifiedDeFTTSETemporal(ModifiedDeFTTSE):
+    """Original modified DeFT TSE with per-query temporal activity prediction."""
+
+    def __init__(self, *args, hidden_channels=96, sample_rate=32000, **kwargs):
+        super().__init__(*args, hidden_channels=hidden_channels, **kwargs)
+        self.sample_rate = sample_rate
+        self.activity_head = nn.Conv2d(hidden_channels, 1, kernel_size=1)
+        self.temporal_conditioner = nn.Conv1d(1, hidden_channels * 2, kernel_size=3, padding=1)
+
+    def forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        enroll = input_dict["enrollment"]
+        label_vector = input_dict["label_vector"]
+        temporal_conditioning = input_dict.get("temporal_conditioning")
+        batch_size, n_queries, _, samples = enroll.shape
+
+        mix_real, mix_imag = self.waveform_to_complex(mixture.reshape(-1, samples))
+        _, _, time_steps, freq_bins = mix_real.shape
+        mix_real = mix_real.view(batch_size, self.mixture_channels, time_steps, freq_bins)
+        mix_imag = mix_imag.view(batch_size, self.mixture_channels, time_steps, freq_bins)
+
+        enr_real, enr_imag = self.waveform_to_complex(enroll.reshape(-1, samples))
+        enr_real = enr_real.view(batch_size, n_queries, self.enrollment_channels, time_steps, freq_bins)
+        enr_imag = enr_imag.view(batch_size, n_queries, self.enrollment_channels, time_steps, freq_bins)
+
+        mix_real = mix_real[:, None].expand(-1, n_queries, -1, -1, -1)
+        mix_imag = mix_imag[:, None].expand(-1, n_queries, -1, -1, -1)
+        joint_real = torch.cat([mix_real, enr_real], dim=2)
+        joint_imag = torch.cat([mix_imag, enr_imag], dim=2)
+        features = _stack_complex(
+            joint_real.reshape(batch_size * n_queries, -1, time_steps, freq_bins),
+            joint_imag.reshape(batch_size * n_queries, -1, time_steps, freq_bins),
+        )
+
+        x = self.encoder(features)
+        beta, gamma = self.class_conditioner(label_vector.reshape(batch_size * n_queries, -1))
+        time_beta, time_gamma = _temporal_film_from_conditioning(
+            self.temporal_conditioner,
+            temporal_conditioning,
+            batch_size,
+            n_queries,
+            time_steps,
+            x.device,
+            x.dtype,
+        )
+        if time_beta is not None:
+            beta = beta + time_beta
+            gamma = gamma + time_gamma
+        for block in self.blocks:
+            x = block(x, beta=beta, gamma=gamma)
+
+        mask = torch.tanh(self.audio_head(x))
+        mix_ref_real = mix_real[:, :, 0].reshape(batch_size * n_queries, 1, time_steps, freq_bins)
+        mix_ref_imag = mix_imag[:, :, 0].reshape(batch_size * n_queries, 1, time_steps, freq_bins)
+        est_real = mask[:, 0:1] * mix_ref_real - mask[:, 1:2] * mix_ref_imag
+        est_imag = mask[:, 0:1] * mix_ref_imag + mask[:, 1:2] * mix_ref_real
+
+        waveform = self.complex_to_waveform(est_real, est_imag, samples)
+        waveform = waveform.view(batch_size, n_queries, 1, samples)
+        activity_logits = self.activity_head(x).mean(dim=-1).squeeze(1)
+        activity_logits = activity_logits.view(batch_size, n_queries, time_steps)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": waveform,
+            "activity_logits": activity_logits,
+            "duration_sec": duration_sec,
+        }
 
 
 class ModifiedDeFTTSEMemoryEfficient(ModifiedDeFTTSE):
@@ -779,3 +1254,164 @@ class ModifiedDeFTTSEMemoryEfficient(ModifiedDeFTTSE):
         if self.training or self.inference_chunk_seconds is None:
             return super().forward(input_dict)
         return self._chunked_forward(input_dict)
+
+
+class ModifiedDeFTTSEMemoryEfficientTemporal(ModifiedDeFTTSEMemoryEfficient):
+    """Memory-efficient TSE with per-query temporal activity prediction."""
+
+    def __init__(self, *args, hidden_channels=96, **kwargs):
+        super().__init__(*args, hidden_channels=hidden_channels, **kwargs)
+        self.activity_head = nn.Conv2d(hidden_channels, 1, kernel_size=1)
+        self.temporal_conditioner = nn.Conv1d(1, hidden_channels * 2, kernel_size=3, padding=1)
+
+    def _temporal_film(self, temporal_conditioning, batch_size, n_queries, time_steps, device, dtype):
+        return _temporal_film_from_conditioning(
+            self.temporal_conditioner,
+            temporal_conditioning,
+            batch_size,
+            n_queries,
+            time_steps,
+            device,
+            dtype,
+        )
+
+    def _forward_full(self, input_dict):
+        mixture = input_dict["mixture"]
+        enroll = input_dict["enrollment"]
+        label_vector = input_dict["label_vector"]
+        temporal_conditioning = input_dict.get("temporal_conditioning")
+        batch_size, n_queries, _, samples = enroll.shape
+
+        mix_real, mix_imag = self.waveform_to_complex(mixture.reshape(-1, samples))
+        _, _, time_steps, freq_bins = mix_real.shape
+        mix_real = mix_real.view(batch_size, self.mixture_channels, time_steps, freq_bins)
+        mix_imag = mix_imag.view(batch_size, self.mixture_channels, time_steps, freq_bins)
+
+        enr_real, enr_imag = self.waveform_to_complex(enroll.reshape(-1, samples))
+        enr_real = enr_real.view(batch_size, n_queries, self.enrollment_channels, time_steps, freq_bins)
+        enr_imag = enr_imag.view(batch_size, n_queries, self.enrollment_channels, time_steps, freq_bins)
+
+        mix_real = mix_real[:, None].expand(-1, n_queries, -1, -1, -1)
+        mix_imag = mix_imag[:, None].expand(-1, n_queries, -1, -1, -1)
+        joint_real = torch.cat([mix_real, enr_real], dim=2)
+        joint_imag = torch.cat([mix_imag, enr_imag], dim=2)
+        features = _stack_complex(
+            joint_real.reshape(batch_size * n_queries, -1, time_steps, freq_bins),
+            joint_imag.reshape(batch_size * n_queries, -1, time_steps, freq_bins),
+        )
+
+        x = self.encoder(features)
+        beta, gamma = self.class_conditioner(label_vector.reshape(batch_size * n_queries, -1))
+        time_beta, time_gamma = self._temporal_film(
+            temporal_conditioning,
+            batch_size,
+            n_queries,
+            time_steps,
+            x.device,
+            x.dtype,
+        )
+        if time_beta is not None:
+            beta = beta + time_beta
+            gamma = gamma + time_gamma
+        for block in self.blocks:
+            x = block(x, beta=beta, gamma=gamma)
+
+        mask = torch.tanh(self.audio_head(x))
+        mix_ref_real = mix_real[:, :, 0].reshape(batch_size * n_queries, 1, time_steps, freq_bins)
+        mix_ref_imag = mix_imag[:, :, 0].reshape(batch_size * n_queries, 1, time_steps, freq_bins)
+        est_real = mask[:, 0:1] * mix_ref_real - mask[:, 1:2] * mix_ref_imag
+        est_imag = mask[:, 0:1] * mix_ref_imag + mask[:, 1:2] * mix_ref_real
+
+        waveform = self.complex_to_waveform(est_real, est_imag, samples)
+        waveform = waveform.view(batch_size, n_queries, 1, samples)
+        activity_logits = self.activity_head(x).mean(dim=-1).squeeze(1)
+        activity_logits = activity_logits.view(batch_size, n_queries, time_steps)
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": waveform,
+            "activity_logits": activity_logits,
+            "duration_sec": duration_sec,
+        }
+
+    def _chunked_forward(self, input_dict):
+        mixture = input_dict["mixture"]
+        enrollment = input_dict["enrollment"]
+        label_vector = input_dict["label_vector"]
+        temporal_conditioning = input_dict.get("temporal_conditioning")
+        batch_size, n_queries, _, samples = enrollment.shape
+
+        chunk_samples = int(round(float(self.inference_chunk_seconds) * self.sample_rate))
+        hop_samples = int(round(float(self.inference_chunk_hop_seconds) * self.sample_rate))
+        if chunk_samples <= 0 or hop_samples <= 0:
+            raise ValueError("inference_chunk_seconds and inference_chunk_hop_seconds must be positive")
+        if samples <= chunk_samples:
+            return self._forward_full(input_dict)
+
+        starts = self._iter_chunk_starts(samples, chunk_samples, hop_samples)
+        weight = self._chunk_weight(chunk_samples, mixture.device, mixture.dtype)
+        weight = weight.view(1, 1, 1, chunk_samples)
+        waveform_sum = mixture.new_zeros(batch_size, n_queries, 1, samples)
+        weight_sum = mixture.new_zeros(1, 1, 1, samples)
+        activity_logits = []
+        temporal_conditioning_samples = self._activity_to_samples_for_chunking(
+            temporal_conditioning,
+            batch_size,
+            n_queries,
+            samples,
+            mixture.device,
+            mixture.dtype,
+        )
+
+        for start in starts:
+            valid = min(chunk_samples, samples - start)
+            mixture_chunk = mixture[..., start : start + valid]
+            enrollment_chunk = enrollment[..., start : start + valid]
+            temporal_conditioning_chunk = None
+            if temporal_conditioning_samples is not None:
+                temporal_conditioning_chunk = temporal_conditioning_samples[..., start : start + valid]
+            if valid < chunk_samples:
+                mixture_chunk = F.pad(mixture_chunk, (0, chunk_samples - valid))
+                enrollment_chunk = F.pad(enrollment_chunk, (0, chunk_samples - valid))
+                if temporal_conditioning_chunk is not None:
+                    temporal_conditioning_chunk = F.pad(temporal_conditioning_chunk, (0, chunk_samples - valid))
+
+            out = self._forward_full(
+                {
+                    "mixture": mixture_chunk,
+                    "enrollment": enrollment_chunk,
+                    "label_vector": label_vector,
+                    "temporal_conditioning": temporal_conditioning_chunk,
+                }
+            )
+            waveform_sum[..., start : start + valid] += out["waveform"][..., :valid] * weight[..., :valid]
+            weight_sum[..., start : start + valid] += weight[..., :valid]
+            activity_logits.append(out["activity_logits"])
+
+        duration_sec = mixture.new_full((batch_size,), float(samples) / float(self.sample_rate))
+        return {
+            "waveform": waveform_sum / torch.clamp(weight_sum, min=1e-6),
+            "activity_logits": torch.cat(activity_logits, dim=-1),
+            "duration_sec": duration_sec,
+        }
+
+    def forward(self, input_dict):
+        if self.training or self.inference_chunk_seconds is None:
+            return self._forward_full(input_dict)
+        return self._chunked_forward(input_dict)
+
+    def _activity_to_samples_for_chunking(self, activity, batch_size, n_queries, samples, device, dtype):
+        if activity is None:
+            return None
+        activity = activity.to(device=device, dtype=dtype)
+        if activity.dim() == 2:
+            activity = activity.unsqueeze(1).expand(-1, n_queries, -1)
+        if activity.dim() != 3:
+            raise ValueError("temporal_conditioning must have shape [B, T] or [B, Q, T]")
+        if activity.shape[0] != batch_size or activity.shape[1] != n_queries:
+            raise ValueError("temporal_conditioning batch/query dimensions do not match TSE input")
+        return F.interpolate(
+            activity.reshape(batch_size * n_queries, 1, activity.shape[-1]),
+            size=samples,
+            mode="linear",
+            align_corners=False,
+        ).view(batch_size, n_queries, samples)

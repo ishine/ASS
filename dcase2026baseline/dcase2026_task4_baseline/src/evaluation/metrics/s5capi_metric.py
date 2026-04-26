@@ -143,3 +143,109 @@ class S5ClassAwareMetric():
         metric_i = torch.cat(metric_i)
 
         return  metric_i.mean().item()
+
+
+class S5ClassAwareMetricSDRiAssignment(S5ClassAwareMetric):
+    """CAPI-SDRi metric variant that selects assignments by SDR improvement."""
+
+    def _pi_metric(self,
+                   est_wf, # nevent, wlen
+                    ref_wf, # nevent, wlen
+                    mixture, # 1, wlen
+                  ):
+        assert est_wf.shape[0] != 0 and ref_wf.shape[0] != 0
+        TP = min(est_wf.shape[0], ref_wf.shape[0])
+
+        perms = []
+        perm_est_wfs = []
+        perm_ref_wfs = []
+        for rp in combinations(range(ref_wf.shape[0]), TP):
+            for ep in permutations(range(est_wf.shape[0]), TP):
+                rp = list(rp)
+                ep = list(ep)
+                perms.append((rp, ep))
+                perm_ref_wfs.append(ref_wf[rp, :])
+                perm_est_wfs.append(est_wf[ep, :])
+
+        perm_est_wfs_stack = torch.stack(perm_est_wfs, dim=0)
+        perm_ref_wfs_stack = torch.stack(perm_ref_wfs, dim=0)
+
+        mixture_repeat = mixture.view(1, 1, -1).expand(perm_est_wfs_stack.shape[0], perm_est_wfs_stack.shape[1], -1)
+        metrics = self.metric_func(perm_est_wfs_stack, perm_ref_wfs_stack)
+        metrics_mixture = self.metric_func(mixture_repeat, perm_ref_wfs_stack)
+        metrics_i = metrics - metrics_mixture
+
+        metrics_i_mean = metrics_i.mean(dim=tuple(range(1, metrics_i.dim())))
+        if self.min_max == 'max':   best_i = torch.argmax(metrics_i_mean).item()
+        elif self.min_max == 'min': best_i = torch.argmin(metrics_i_mean).item()
+        else: raise NotImplementedError(f"min_max '{self.min_max}' has not been implemented.")
+
+        best_metric = metrics[best_i]
+        best_metric_i = metrics_i[best_i]
+        best_ref_perm, best_est_perm = perms[best_i]
+
+        if est_wf.shape[0] != ref_wf.shape[0]:
+            fnfp = abs(est_wf.shape[0] - ref_wf.shape[0])
+            best_metric = torch.cat((best_metric, best_metric.new_zeros(fnfp)))
+            best_metric_i = torch.cat((best_metric_i, best_metric_i.new_zeros(fnfp)))
+
+        return {
+            'metric': best_metric,
+            'metric_i': best_metric_i,
+            'est_perm': best_est_perm,
+            'ref_perm': best_ref_perm,
+        }
+
+
+class S5ClassAwareMetricAssignmentComparison(S5ClassAwareMetric):
+    """Compare raw-SDR and SDR-improvement assignment objectives.
+
+    The default metric class preserves the historical assignment objective. This
+    comparison class is meant for validation: it reports both CAPI-SDRi values
+    so we can see whether unequal same-class counts change the score.
+    """
+
+    def __init__(self, metricfunc='sdr'):
+        super().__init__(metricfunc=metricfunc)
+        self.metric_name = 'CAPI-SDRi assignment comparison'
+
+    def compute(self, is_print=False):
+        if not self.metric_values:
+            return None
+        values = [v for v in self.metric_values if v is not None]
+        if not values:
+            return None
+        reobj = {
+            'raw_sdr_assignment_mean': sum(v['raw_sdr_assignment'] for v in values) / len(values),
+            'sdri_assignment_mean': sum(v['sdri_assignment'] for v in values) / len(values),
+        }
+        reobj['delta_sdri_minus_raw'] = reobj['sdri_assignment_mean'] - reobj['raw_sdr_assignment_mean']
+        if is_print:
+            print('CAPI-SDRi raw-SDR assignment: %.3f'%(reobj['raw_sdr_assignment_mean']))
+            print('CAPI-SDRi SDRi assignment   : %.3f'%(reobj['sdri_assignment_mean']))
+            print('CAPI-SDRi delta             : %.3f'%(reobj['delta_sdri_minus_raw']))
+        return reobj
+
+    def compute_sample(self,
+                  est_lb,
+                  est_wf,
+                  ref_lb,
+                  ref_wf,
+                  mixture,
+                  ):
+        raw_metric = S5ClassAwareMetric()
+        raw_metric.metric_func = self.metric_func
+        raw_metric.min_max = self.min_max
+        sdri_metric = S5ClassAwareMetricSDRiAssignment()
+        sdri_metric.metric_func = self.metric_func
+        sdri_metric.min_max = self.min_max
+
+        raw_value = raw_metric.compute_sample(est_lb, est_wf, ref_lb, ref_wf, mixture)
+        sdri_value = sdri_metric.compute_sample(est_lb, est_wf, ref_lb, ref_wf, mixture)
+        if raw_value is None and sdri_value is None:
+            return None
+        return {
+            'raw_sdr_assignment': raw_value,
+            'sdri_assignment': sdri_value,
+            'delta_sdri_minus_raw': sdri_value - raw_value,
+        }
