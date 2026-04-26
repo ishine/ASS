@@ -396,6 +396,52 @@ They use `bf16-mixed` by default. If your GPU does not support bf16 well, change
 the trainer precision to `16-mixed` or `32-true` in the YAML. `32-true` is
 safer numerically but much heavier.
 
+After the bootstrap S5 system can export estimated slots, fine-tune TSE on the
+same enrollment distribution it will see at inference:
+
+```bash
+python -m src.evaluation.export_sc_finetune_cache \
+  -c src/evaluation/eval_configs/kwo2025_top1_like_lite_strong_sc.yaml \
+  --output_root workspace/sc_finetune \
+  --mode pseudo_s5 \
+  --batchsize 1
+
+python -m src.train \
+  -c config/separation/modified_deft_tse_lite_6s_estimated_enrollment.yaml \
+  -w workspace/separation
+```
+
+This fine-tune uses `workspace/sc_finetune/estimate_target` as TSE enrollment,
+`workspace/sc_finetune/oracle_target` as the target waveform, and random 6s
+crops so the training length remains aligned with the lite TSE recipe. Active
+oracle targets without an estimated enrollment are masked out by default, so the
+model is not trained to hallucinate missing USS slots from class labels alone.
+The config loads model weights from `checkpoint/modified_deft_tse_lite_6s.ckpt`
+through `pretrained_model_ckpt`; do not use `train.py -r` for this fine-tune
+unless you intentionally want to resume the full trainer state.
+For final 10s alignment before the official-style S5 evaluation, copy the best
+6s estimated-enrollment checkpoint to
+`checkpoint/modified_deft_tse_lite_6s_estimated_enrollment.ckpt`, then run:
+
+```bash
+python -m src.train \
+  -c config/separation/modified_deft_tse_lite_10s_estimated_enrollment.yaml \
+  -w workspace/separation
+```
+
+This final alignment config keeps the full cached 10s waveforms
+(`crop_seconds: null`), uses `batch_size: 1`, a lower learning rate, and a short
+10-epoch schedule. The validation dataloader remains the existing oracle
+validation sanity check; use full S5 evaluation as the real promotion gate for
+the aligned TSE checkpoint.
+For the temporal TSE variant, use
+`config/separation/modified_deft_tse_lite_6s_temporal_estimated_enrollment.yaml`
+after placing the temporal bootstrap weights at
+`checkpoint/modified_deft_tse_lite_6s_temporal.ckpt`, then use
+`config/separation/modified_deft_tse_lite_10s_temporal_estimated_enrollment.yaml`
+after placing the temporal 6s estimated-enrollment checkpoint at
+`checkpoint/modified_deft_tse_lite_6s_temporal_estimated_enrollment.ckpt`.
+
 ### BEATs + M2D Fusion Classifier
 
 Use this when the strong M2D classifier is stable and you want a higher-rank

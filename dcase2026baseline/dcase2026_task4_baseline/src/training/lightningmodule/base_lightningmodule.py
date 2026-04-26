@@ -15,11 +15,15 @@ class BaseLightningModule(pl.LightningModule, PyTorchModelHubMixin):
         lr_scheduler:Dict=None,
         is_validation=False,
         metric:Dict=None,
+        pretrained_model_ckpt=None,
+        pretrained_model_strict=True,
     ):
 
         super().__init__()
         self.model_config = model
         self.model = initialize_config(self.model_config)
+        if pretrained_model_ckpt:
+            self._load_pretrained_model(pretrained_model_ckpt, strict=pretrained_model_strict)
 
         self.loss_config = loss
         self.loss_func = initialize_config(self.loss_config)
@@ -47,6 +51,21 @@ class BaseLightningModule(pl.LightningModule, PyTorchModelHubMixin):
                 self.metric_func = None
         
         self.is_validation = is_validation
+
+    def _load_pretrained_model(self, path, strict=True):
+        ckpt = torch.load(path, map_location="cpu", weights_only=False)
+        state_dict = ckpt.get("state_dict", ckpt) if isinstance(ckpt, dict) else ckpt
+        model_state = self.model.state_dict()
+        if set(state_dict.keys()) != set(model_state.keys()):
+            model_prefix = "model."
+            stripped = {
+                k[len(model_prefix):]: v
+                for k, v in state_dict.items()
+                if isinstance(k, str) and k.startswith(model_prefix)
+            }
+            if stripped:
+                state_dict = stripped
+        self.model.load_state_dict(state_dict, strict=bool(strict))
 
     def forward(self, x):
         pass

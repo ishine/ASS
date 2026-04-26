@@ -19,6 +19,7 @@ from src.models.deft.modified_deft import (
 )
 from src.models.deft.deft_tse import DeFTTSELikeSpatialTemporal
 from src.datamodules.source_classifier_dataset import SourceClassifierDataset
+from src.datamodules.tse_dataset import EstimatedEnrollmentTSEDataset
 from src.temporal import event_to_span_sec, spans_to_frame_targets
 from src.training.loss.class_aware_pit import class_aware_pit_loss
 from src.training.loss.m2d_sc_arcface import get_loss_func as get_sc_loss_func
@@ -425,6 +426,41 @@ class FakeDuplicateSCBaseDataset(FakeSCBaseDataset):
         }
 
 
+class FakeEstimatedEnrollmentBaseDataset(torch.utils.data.Dataset):
+    n_sources = 3
+    sr = 4
+    collate_fn = None
+
+    def __len__(self):
+        return 1
+
+    def __getitem__(self, idx):
+        label_vector = torch.zeros(3, 4)
+        label_vector[0, 1] = 1.0
+        label_vector[1, 1] = 1.0
+        est_label_vector = label_vector.clone()
+        est_label_vector[1] = 0.0
+        return {
+            "mixture": torch.arange(40, dtype=torch.float32).view(1, 40),
+            "dry_sources": torch.stack([
+                torch.ones(1, 40),
+                torch.ones(1, 40) * 2.0,
+                torch.zeros(1, 40),
+            ]),
+            "est_dry_sources": torch.stack([
+                torch.ones(1, 40) * 10.0,
+                torch.zeros(1, 40),
+                torch.zeros(1, 40),
+            ]),
+            "label": ["dog", "dog", "silence"],
+            "est_label": ["dog", "silence", "silence"],
+            "label_vector": label_vector,
+            "est_label_vector": est_label_vector,
+            "span_sec": torch.tensor([[0.0, 5.0], [2.0, 8.0], [-1.0, -1.0]]),
+            "est_span_sec": torch.tensor([[0.0, 5.0], [-1.0, -1.0], [-1.0, -1.0]]),
+        }
+
+
 def test_source_classifier_dataset_emits_span_sec():
     dataset = SourceClassifierDataset(FakeSCBaseDataset())
     batch = dataset._collate_fn([dataset[0], dataset[1]])
@@ -439,6 +475,27 @@ def test_source_classifier_dataset_marks_duplicate_classes():
 
     assert batch["duplicate_class_count"].tolist() == [2, 2, 0]
     assert batch["is_duplicate_class"].tolist() == [True, True, False]
+
+
+def test_estimated_enrollment_tse_dataset_uses_estimates_as_enrollment_and_masks_missing_slots():
+    dataset = EstimatedEnrollmentTSEDataset(
+        FakeEstimatedEnrollmentBaseDataset(),
+        crop_seconds=6.0,
+        random_crop=False,
+        require_estimate_for_active=True,
+    )
+
+    item = dataset[0]
+
+    assert item["mixture"].shape[-1] == 24
+    assert torch.allclose(item["enrollment"][0], torch.ones(1, 24) * 10.0)
+    assert torch.allclose(item["waveform"][0], torch.ones(1, 24))
+    assert item["active_mask"].tolist() == [True, False, False]
+    assert item["label_vector"][0, 1].item() == 1.0
+    assert item["label_vector"][1].sum().item() == 0.0
+    assert item["waveform"][1].sum().item() == 0.0
+    assert torch.allclose(item["span_sec"][0], torch.tensor([0.0, 3.0]))
+    assert torch.allclose(item["span_sec"][1], torch.tensor([0.0, 6.0]))
 
 
 def test_previous_sc_loss_ignores_new_span_field_by_default():
@@ -741,6 +798,7 @@ if __name__ == "__main__":
     test_event_span_targets_keep_silence_inactive()
     test_source_classifier_dataset_emits_span_sec()
     test_source_classifier_dataset_marks_duplicate_classes()
+    test_estimated_enrollment_tse_dataset_uses_estimates_as_enrollment_and_masks_missing_slots()
     test_previous_sc_loss_ignores_new_span_field_by_default()
     test_sc_duplicate_recall_loss_pushes_duplicate_active_energy()
     test_temporal_sc_forward_and_activity_loss()
