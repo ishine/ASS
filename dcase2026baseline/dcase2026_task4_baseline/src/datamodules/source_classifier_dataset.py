@@ -28,7 +28,7 @@ class SourceClassifierDataset(torch.utils.data.Dataset):
         else:
             span_sec = span_sec[source_idx]
         return {
-            "waveform": item["dry_sources"][source_idx],
+            "waveform": item["dry_sources"][source_idx].to(torch.float32),
             "class_index": torch.tensor(class_index, dtype=torch.long),
             "is_silence": torch.tensor(is_silence, dtype=torch.bool),
             "duplicate_class_count": torch.tensor(duplicate_class_count, dtype=torch.long),
@@ -99,7 +99,7 @@ class EstimatedSourceClassifierDataset(torch.utils.data.Dataset):
         else:
             span_sec = span_sec[source_idx]
         return {
-            "waveform": item[self.source_key][source_idx],
+            "waveform": item[self.source_key][source_idx].to(torch.float32),
             "class_index": torch.tensor(class_index, dtype=torch.long),
             "is_silence": torch.tensor(is_silence, dtype=torch.bool),
             "duplicate_class_count": torch.tensor(duplicate_class_count, dtype=torch.long),

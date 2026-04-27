@@ -240,7 +240,7 @@ class DatasetS3(torch.utils.data.Dataset):
                 source.extend([np.zeros((1, mixture.shape[-1]), dtype=mixture.dtype) for _ in range(npad)])
             assert len(return_obj['label']) == len(source)
 
-            return_obj['dry_sources'] = torch.from_numpy(np.stack(source)) # nsources, 1ch, wlen
+            return_obj['dry_sources'] = torch.from_numpy(np.stack(source)).to(torch.float32) # nsources, 1ch, wlen
         if self.return_meta: return_obj['metadata'] = output
 
         return return_obj

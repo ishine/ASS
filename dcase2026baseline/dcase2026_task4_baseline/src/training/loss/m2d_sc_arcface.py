@@ -67,14 +67,23 @@ def get_loss_func(
         loss = output["plain_logits"].new_tensor(0.0)
         metrics = {}
         sample_weights = torch.ones_like(is_silence, dtype=output["plain_logits"].dtype)
+        plain_logits = output["plain_logits"].float()
 
         if (~is_silence).any():
             active_losses = F.cross_entropy(
-                output["logits"][~is_silence],
+                output["logits"].float()[~is_silence],
                 class_index[~is_silence],
                 reduction="none",
                 label_smoothing=label_smoothing,
             )
+            plain_ce = F.cross_entropy(
+                plain_logits[~is_silence],
+                class_index[~is_silence],
+                reduction="none",
+            )
+            plain_pred = torch.argmax(plain_logits[~is_silence], dim=-1)
+            metrics["loss_plain_ce"] = plain_ce.mean()
+            metrics["active_top1"] = (plain_pred == class_index[~is_silence]).float().mean() * 100.0
             if robust_active:
                 active_weights = _loss_truncation_weights(
                     active_losses,
@@ -97,20 +106,25 @@ def get_loss_func(
         else:
             metrics["loss_arcface"] = loss
             metrics["loss_arcface_raw"] = loss
+            metrics["loss_plain_ce"] = loss
+            metrics["active_top1"] = loss
             metrics["loss_truncation_weight_mean"] = loss.new_tensor(1.0)
             metrics["loss_truncation_kept_ratio"] = loss.new_tensor(1.0)
 
         if is_silence.any():
-            log_probs = F.log_softmax(output["plain_logits"][is_silence], dim=-1)
+            log_probs = F.log_softmax(plain_logits[is_silence], dim=-1)
             uniform = torch.full_like(log_probs, 1.0 / log_probs.shape[-1])
             loss_kl = F.kl_div(log_probs, uniform, reduction="batchmean")
             loss = loss + loss_kl
             metrics["loss_kl"] = loss_kl
+            silence_confidence = torch.softmax(plain_logits[is_silence], dim=-1).max(dim=-1).values
+            metrics["silence_max_probability"] = silence_confidence.mean() * 100.0
         else:
             metrics["loss_kl"] = loss.new_tensor(0.0)
+            metrics["silence_max_probability"] = loss.new_tensor(0.0)
 
         if lambda_energy > 0.0:
-            energy = output["energy"]
+            energy = output["energy"].float()
             loss_in = energy[~is_silence] - m_in if (~is_silence).any() else energy.new_zeros(1)
             loss_out = m_out - energy[is_silence] if is_silence.any() else energy.new_zeros(1)
             hinge_in = torch.clamp(loss_in, min=0.0).pow(2).mean() if (~is_silence).any() else energy.new_tensor(0.0)

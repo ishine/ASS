@@ -47,3 +47,79 @@ class SingleLabelClassificationLightning(BaseLightningModule):
                 loss_dict[k] = v.mean().item()
 
         return batchsize, loss_dict
+
+    def training_step(self, batch_data_dict, batch_idx):
+        self.set_train_mode()
+        batchsize, loss_dict = self.training_step_processing(batch_data_dict, batch_idx)
+        loss = loss_dict["loss"]
+
+        step_dict = {f"step_train/{name}": val.item() for name, val in loss_dict.items()}
+        self.log_dict(step_dict, prog_bar=False, logger=True, on_epoch=False, on_step=True, sync_dist=True, batch_size=batchsize)
+        epoch_dict = {f"epoch_train/{name}": val.item() for name, val in loss_dict.items()}
+        self.log_dict(epoch_dict, prog_bar=True, logger=True, on_epoch=True, on_step=False, sync_dist=True, batch_size=batchsize)
+
+        active_count = int((~batch_data_dict["is_silence"].bool()).sum().item())
+        active_ratio = float(active_count / max(batchsize, 1))
+        self.log("epoch_train/active_ratio", active_ratio, prog_bar=False, logger=True, on_epoch=True, on_step=False, sync_dist=True, batch_size=batchsize)
+        if active_count > 0:
+            if "loss_arcface" in loss_dict:
+                self.log(
+                    "epoch_train/loss_arcface_active_weighted",
+                    loss_dict["loss_arcface"].item(),
+                    prog_bar=True,
+                    logger=True,
+                    on_epoch=True,
+                    on_step=False,
+                    sync_dist=True,
+                    batch_size=active_count,
+                )
+            if "loss_plain_ce" in loss_dict:
+                self.log(
+                    "epoch_train/loss_plain_ce_active_weighted",
+                    loss_dict["loss_plain_ce"].item(),
+                    prog_bar=False,
+                    logger=True,
+                    on_epoch=True,
+                    on_step=False,
+                    sync_dist=True,
+                    batch_size=active_count,
+                )
+
+        self.log_dict({"epoch/lr": self.optimizer.param_groups[0]["lr"]})
+        return loss
+
+    def _validation_step(self, batch_data_dict, batch_idx):
+        self.model.eval()
+        batchsize, loss_dict = self.validation_step_processing(batch_data_dict, batch_idx)
+
+        step_dict = {f"step_val/{name}": metric for name, metric in loss_dict.items()}
+        self.log_dict(step_dict, prog_bar=False, logger=True, on_epoch=False, on_step=True, sync_dist=True, batch_size=batchsize)
+        epoch_dict = {f"epoch_val/{name}": metric for name, metric in loss_dict.items()}
+        self.log_dict(epoch_dict, prog_bar=True, logger=True, on_epoch=True, on_step=False, sync_dist=True, batch_size=batchsize)
+
+        active_count = int((~batch_data_dict["is_silence"].bool()).sum().item())
+        active_ratio = float(active_count / max(batchsize, 1))
+        self.log("epoch_val/active_ratio", active_ratio, prog_bar=False, logger=True, on_epoch=True, on_step=False, sync_dist=True, batch_size=batchsize)
+        if active_count > 0:
+            if "loss_arcface" in loss_dict:
+                self.log(
+                    "epoch_val/loss_arcface_active_weighted",
+                    float(loss_dict["loss_arcface"]),
+                    prog_bar=True,
+                    logger=True,
+                    on_epoch=True,
+                    on_step=False,
+                    sync_dist=True,
+                    batch_size=active_count,
+                )
+            if "loss_plain_ce" in loss_dict:
+                self.log(
+                    "epoch_val/loss_plain_ce_active_weighted",
+                    float(loss_dict["loss_plain_ce"]),
+                    prog_bar=False,
+                    logger=True,
+                    on_epoch=True,
+                    on_step=False,
+                    sync_dist=True,
+                    batch_size=active_count,
+                )

@@ -17,12 +17,12 @@ def infer_active_mask_from_label(label: Tensor) -> Tensor:
 
 
 def source_activity_mask(waveform: Tensor, energy_eps: float = 1e-8) -> Tensor:
-    flat = _flatten_sources(waveform)
+    flat = _flatten_sources(waveform).float()
     return flat.pow(2).sum(dim=-1) > energy_eps
 
 
 def source_energy_loss(waveform: Tensor) -> Tensor:
-    flat = _flatten_sources(waveform)
+    flat = _flatten_sources(waveform).float()
     return flat.pow(2).mean(dim=-1)
 
 
@@ -31,7 +31,7 @@ def inactive_source_energy_loss(waveform: Tensor, inactive_mask: Tensor) -> Tens
     energy = source_energy_loss(waveform)
     if inactive_mask.any():
         return (energy * inactive_mask.float()).sum() / inactive_mask.float().sum().clamp_min(1.0)
-    return energy.sum() * 0.0
+    return energy.new_zeros(())
 
 
 def pairwise_sa_sdr_loss(waveform_pred: Tensor, waveform_target: Tensor, eps: float = 1e-8) -> Tensor:
@@ -41,12 +41,13 @@ def pairwise_sa_sdr_loss(waveform_pred: Tensor, waveform_target: Tensor, eps: fl
     references; zero references are handled by explicit inactive-energy losses.
     """
 
-    pred = _flatten_sources(waveform_pred)
-    target = _flatten_sources(waveform_target)
+    pred = _flatten_sources(waveform_pred).float()
+    target = _flatten_sources(waveform_target).float()
     err = pred.unsqueeze(1) - target.unsqueeze(2)
     target_power = target.pow(2).sum(dim=-1).unsqueeze(2).clamp_min(eps)
     noise_power = err.pow(2).sum(dim=-1).clamp_min(eps)
-    return -10.0 * torch.log10(target_power / noise_power)
+    ratio = (target_power / noise_power).clamp_min(eps)
+    return -10.0 * torch.log10(ratio)
 
 
 def snr_loss_return_batch(preds: Tensor, target: Tensor) -> Tensor:
@@ -93,7 +94,7 @@ def pit_from_pairwise_loss(
     for batch_idx in range(batch_size):
         active_idx = torch.nonzero(active_mask[batch_idx], as_tuple=False).flatten()
         if active_idx.numel() == 0:
-            batch_losses.append(pairwise_loss[batch_idx].sum() * 0.0)
+            batch_losses.append(pairwise_loss.new_zeros(()))
             best_perms.append(identity)
             continue
 
@@ -125,7 +126,7 @@ def matched_pairwise_mean(pairwise_loss: Tensor, best_perm: Tensor, active_mask:
     for batch_idx in range(pairwise_loss.shape[0]):
         active_idx = torch.nonzero(active_mask[batch_idx], as_tuple=False).flatten()
         if active_idx.numel() == 0:
-            values.append(pairwise_loss[batch_idx].sum() * 0.0)
+            values.append(pairwise_loss.new_zeros(()))
             continue
         pred_idx = best_perm[batch_idx, active_idx]
         values.append(pairwise_loss[batch_idx, active_idx, pred_idx].mean())

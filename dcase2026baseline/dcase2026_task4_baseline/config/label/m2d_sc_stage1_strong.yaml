@@ -92,7 +92,9 @@ lightning_module:
         pooling_hidden_dim: 512
         projection_hidden_dim: 1024
         dropout: 0.2
-        finetuning_layers: 2_blocks
+        finetuning_layers: head
+        eval_crop_seconds: 5.0
+        eval_crop_hop_seconds: 2.5
     loss:
       module: src.training.loss.m2d_sc_arcface
       main: get_loss_func

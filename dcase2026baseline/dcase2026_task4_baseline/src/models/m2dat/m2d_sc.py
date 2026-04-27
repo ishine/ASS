@@ -509,7 +509,7 @@ class M2DSingleClassifier(PortableM2D):
             else:
                 assert self.ref_channel is not None
                 waveform = waveform[:, self.ref_channel]
-        return waveform
+        return waveform.float()
 
     def forward(self, input_dict):
         waveform = self._prepare_audio(input_dict["waveform"])
@@ -637,7 +637,7 @@ class M2DSingleClassifierStrong(PortableM2D):
             else:
                 assert self.ref_channel is not None
                 waveform = waveform[:, self.ref_channel]
-        return waveform
+        return waveform.float()
 
     def _embed_waveform(self, waveform):
         features = self.encode(waveform, average_per_time_frame=False)
@@ -650,7 +650,17 @@ class M2DSingleClassifierStrong(PortableM2D):
 
     def forward(self, input_dict):
         waveform = self._prepare_audio(input_dict["waveform"])
-        embedding, plain_logits = self._plain_logits_from_waveform(waveform)
+        if (not self.training) and (self.eval_crop_seconds is not None):
+            embeddings = []
+            plain_logits_all = []
+            for crop in self._iter_eval_crops(waveform):
+                crop_embedding, crop_plain_logits = self._plain_logits_from_waveform(crop)
+                embeddings.append(crop_embedding)
+                plain_logits_all.append(crop_plain_logits)
+            embedding = torch.stack(embeddings, dim=0).mean(dim=0)
+            plain_logits = torch.stack(plain_logits_all, dim=0).mean(dim=0)
+        else:
+            embedding, plain_logits = self._plain_logits_from_waveform(waveform)
         logits = self.arc_head(embedding, input_dict.get("class_index"))
         energy = -torch.logsumexp(plain_logits, dim=-1)
         return {
@@ -769,9 +779,22 @@ class M2DSingleClassifierTemporalStrong(M2DSingleClassifierStrong):
 
     def forward(self, input_dict):
         waveform = self._prepare_audio(input_dict["waveform"])
-        embedding, activity_logits = self._embed_waveform_with_activity(waveform)
+        if (not self.training) and (self.eval_crop_seconds is not None):
+            embeddings = []
+            activity_logits_all = []
+            plain_logits_all = []
+            for crop in self._iter_eval_crops(waveform):
+                crop_embedding, crop_activity_logits = self._embed_waveform_with_activity(crop)
+                embeddings.append(crop_embedding)
+                activity_logits_all.append(crop_activity_logits)
+                plain_logits_all.append(self.arc_head(crop_embedding, None))
+            embedding = torch.stack(embeddings, dim=0).mean(dim=0)
+            activity_logits = torch.stack(activity_logits_all, dim=0).mean(dim=0)
+            plain_logits = torch.stack(plain_logits_all, dim=0).mean(dim=0)
+        else:
+            embedding, activity_logits = self._embed_waveform_with_activity(waveform)
+            plain_logits = self.arc_head(embedding, None)
         logits = self.arc_head(embedding, input_dict.get("class_index"))
-        plain_logits = self.arc_head(embedding, None)
         energy = -torch.logsumexp(plain_logits, dim=-1)
         duration_sec = waveform.new_full((waveform.shape[0],), float(waveform.shape[-1]) / float(getattr(self.cfg, "sample_rate", 32000)))
         return {

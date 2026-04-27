@@ -80,6 +80,36 @@ python -m src.evaluation.evaluate \
   --result_dir workspace/evaluation
 ```
 
+To isolate one stage while keeping the same evaluation dataset and checkpoint
+paths from an S5 eval config, use `evaluate_stage.py`:
+
+```bash
+# USS only: mixture -> USS foreground slots, scored against oracle sources.
+python -m src.evaluation.evaluate_stage \
+  -c src/evaluation/eval_configs/kwo2025_top1_like_lite_estimated_sc.yaml \
+  --stage uss \
+  --result_dir workspace/evaluation_stage \
+  --waveform_output_dir workspace/evaluation_stage_waveforms
+
+# SC only: oracle source waveforms -> source labels.
+python -m src.evaluation.evaluate_stage \
+  -c src/evaluation/eval_configs/kwo2025_top1_like_lite_estimated_sc.yaml \
+  --stage sc \
+  --result_dir workspace/evaluation_stage
+
+# TSE only: oracle enrollment and oracle labels -> extracted targets.
+python -m src.evaluation.evaluate_stage \
+  -c src/evaluation/eval_configs/kwo2025_top1_like_lite_estimated_sc.yaml \
+  --stage tse \
+  --result_dir workspace/evaluation_stage \
+  --waveform_output_dir workspace/evaluation_stage_waveforms
+```
+
+USS and TSE report CAPI-SDRi plus label metrics. SC reports mixture/source
+label metrics plus source-level top-1, active-source top-1, and silence
+accuracy. Each run writes both per-soundscape results and a summary JSON when
+`--result_dir` is provided.
+
 Use `src/evaluation/eval_configs/kwo2025_top1_like_lite_beats_fusion_sc.yaml`
 for the BEATs-fusion classifier checkpoint, or
 `src/evaluation/eval_configs/kwo2025_top1_like_lite_fpasst_fusion_sc.yaml`

@@ -102,6 +102,14 @@ def train(args) -> NoReturn:
     else:
         resume_checkpoint_path = None
 
+    # optionally load only model weights from checkpoint
+    if args.resume_weights_only and resume_checkpoint_path:
+        logger.info(f'Load model weights only from checkpoint: {resume_checkpoint_path}')
+        ckpt = torch.load(resume_checkpoint_path, map_location='cpu')
+        state_dict = ckpt['state_dict'] if isinstance(ckpt, dict) and 'state_dict' in ckpt else ckpt
+        pl_model.load_state_dict(state_dict, strict=True)
+        resume_checkpoint_path = None
+
     if configs['deterministic']: torch.use_deterministic_algorithms(True, warn_only=True)
     
     # Fit, evaluate, and save checkpoints.
@@ -168,6 +176,13 @@ if __name__ == "__main__":
         action='store_true',
         required=False,
         help="Resume the last.ckpt",
+    )
+
+    parser.add_argument(
+        "--resume_weights_only",
+        action='store_true',
+        required=False,
+        help="When resuming, load only model weights (skip optimizer/scheduler/trainer states).",
     )
 
     parser.add_argument(

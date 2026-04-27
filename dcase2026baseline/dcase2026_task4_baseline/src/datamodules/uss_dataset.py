@@ -51,7 +51,7 @@ class USSDataset(torch.utils.data.Dataset):
             is_silence.append(label == "silence")
             class_index.append(0 if label == "silence" else self.labels.index(label))
 
-        item["foreground_waveform"] = item["dry_sources"]
+        item["foreground_waveform"] = item["dry_sources"].to(torch.float32)
         item["interference_waveform"] = _extract_waveforms(int_events, 2, length)
         item["noise_waveform"] = _extract_waveforms(background_events, 1, length)
         item["foreground_span_sec"] = item.get("span_sec", torch.full((self.base_dataset.n_sources, 2), -1.0, dtype=torch.float32))

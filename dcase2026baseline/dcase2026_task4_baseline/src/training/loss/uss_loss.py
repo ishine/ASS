@@ -14,18 +14,23 @@ from src.training.loss.temporal import temporal_activity_loss
 
 
 def _safe_energy(x):
+    x = x.float()
     return torch.sum(x**2, dim=-1) + 1e-8
 
 
 def _si_snr_loss_per_source(est, target):
+    est = est.float()
+    target = target.float()
     target_energy = torch.sum(target**2, dim=-1, keepdim=True) + 1e-8
     scale = torch.sum(est * target, dim=-1, keepdim=True) / target_energy
     target_proj = scale * target
     noise = est - target_proj
-    return -10.0 * torch.log10(_safe_energy(target_proj) / (_safe_energy(noise) + 1e-8))
+    ratio = (_safe_energy(target_proj) / (_safe_energy(noise) + 1e-8)).clamp_min(1e-8)
+    return -10.0 * torch.log10(ratio)
 
 
 def _class_pair_loss(class_logits, class_index):
+    class_logits = class_logits.float()
     batch_size, n_pred, n_classes = class_logits.shape
     n_target = class_index.shape[1]
     neg_log_probs = -F.log_softmax(class_logits, dim=-1)
@@ -38,16 +43,16 @@ def _safe_active_mean(values, active_mask):
     active_mask = active_mask.to(device=values.device, dtype=torch.bool)
     if active_mask.any():
         return (values * active_mask.float()).sum() / active_mask.float().sum().clamp_min(1.0)
-    return values.sum() * 0.0
+    return values.new_zeros(())
 
 
 def _residual_consistency_loss(output, target):
     if "mixture" not in target:
-        return output["foreground_waveform"].sum() * 0.0
-    mixture_ref = target["mixture"][:, 0]
-    recon = output["foreground_waveform"][:, :, 0].sum(dim=1)
-    recon = recon + output["interference_waveform"][:, :, 0].sum(dim=1)
-    recon = recon + output["noise_waveform"][:, 0, 0]
+        return output["foreground_waveform"].new_zeros(())
+    mixture_ref = target["mixture"][:, 0].float()
+    recon = output["foreground_waveform"][:, :, 0].float().sum(dim=1)
+    recon = recon + output["interference_waveform"][:, :, 0].float().sum(dim=1)
+    recon = recon + output["noise_waveform"][:, 0, 0].float()
     return F.mse_loss(recon, mixture_ref)
 
 
@@ -56,13 +61,14 @@ def _source_activity_loss(output, target, output_key, span_key, active_mask=None
         ref = output.get(output_key)
         if ref is None:
             ref = next(iter(output.values()))
-        return ref.sum() * 0.0
-    span_sec = target[span_key].to(device=output[output_key].device, dtype=output[output_key].dtype)
+        return ref.float().new_zeros(())
+    activity_logits = output[output_key].float()
+    span_sec = target[span_key].to(device=activity_logits.device, dtype=activity_logits.dtype)
     if best_perm is not None and active_mask is not None:
-        span_sec = align_spans_to_predictions(best_perm, span_sec, active_mask, output[output_key].shape[1])
+        span_sec = align_spans_to_predictions(best_perm, span_sec, active_mask, activity_logits.shape[1])
     return temporal_activity_loss(
         {
-            "activity_logits": output[output_key],
+            "activity_logits": activity_logits,
             "duration_sec": output.get("duration_sec"),
         },
         {"span_sec": span_sec},
@@ -86,79 +92,82 @@ def get_loss_func(
     active_energy_eps=1e-8,
 ):
     def loss_func(output, target):
-        fg_est = output["foreground_waveform"]
-        int_est = output["interference_waveform"]
-        noise_est = output["noise_waveform"][:, :, 0]
+        device_type = output["foreground_waveform"].device.type
+        with torch.autocast(device_type=device_type, enabled=False):
+            fg_est = output["foreground_waveform"].float()
+            int_est = output["interference_waveform"].float()
+            noise_est = output["noise_waveform"][:, :, 0].float()
 
-        fg_ref = target["foreground_waveform"]
-        int_ref = target["interference_waveform"]
-        noise_ref = target["noise_waveform"][:, :, 0]
+            fg_ref = target["foreground_waveform"].float()
+            int_ref = target["interference_waveform"].float()
+            noise_ref = target["noise_waveform"][:, :, 0].float()
 
-        class_logits = output["class_logits"]
-        class_index = target["class_index"]
-        fg_active = ~target["is_silence"].bool()
+            class_logits = output["class_logits"].float()
+            silence_logits = output["silence_logits"].float()
+            class_index = target["class_index"]
+            fg_active = ~target["is_silence"].bool()
 
-        fg_pair_wave = pairwise_sa_sdr_loss(fg_est, fg_ref)
-        fg_pair_class = _class_pair_loss(class_logits, class_index)
-        fg_pair_total = fg_pair_wave + lambda_class_match * fg_pair_class
-        loss_fg_match, fg_best_perm = pit_from_pairwise_loss(fg_pair_total, active_mask=fg_active)
-        loss_fg_wave = matched_pairwise_mean(fg_pair_wave, fg_best_perm, fg_active)
-        loss_ce = matched_pairwise_mean(fg_pair_class, fg_best_perm, fg_active)
-        fg_inactive_mask = unmatched_prediction_mask(fg_best_perm, fg_active, fg_est.shape[1])
-        loss_fg_inactive = inactive_source_energy_loss(fg_est, fg_inactive_mask)
+            fg_pair_wave = pairwise_sa_sdr_loss(fg_est, fg_ref)
+            fg_pair_class = _class_pair_loss(class_logits, class_index)
+            fg_pair_total = fg_pair_wave + lambda_class_match * fg_pair_class
+            loss_fg_match, fg_best_perm = pit_from_pairwise_loss(fg_pair_total, active_mask=fg_active)
+            loss_fg_wave = matched_pairwise_mean(fg_pair_wave, fg_best_perm, fg_active)
+            loss_ce = matched_pairwise_mean(fg_pair_class, fg_best_perm, fg_active)
+            fg_inactive_mask = unmatched_prediction_mask(fg_best_perm, fg_active, fg_est.shape[1])
+            loss_fg_inactive = inactive_source_energy_loss(fg_est, fg_inactive_mask)
 
-        fg_pred_active = ~fg_inactive_mask
-        loss_silence = F.binary_cross_entropy_with_logits(output["silence_logits"], fg_pred_active.float())
-        if fg_inactive_mask.any():
-            log_probs = F.log_softmax(class_logits[fg_inactive_mask], dim=-1)
-            uniform = torch.full_like(log_probs, 1.0 / log_probs.shape[-1])
-            loss_kl = F.kl_div(log_probs, uniform, reduction="batchmean")
-        else:
-            loss_kl = class_logits.sum() * 0.0
+            fg_pred_active = ~fg_inactive_mask
+            loss_silence = F.binary_cross_entropy_with_logits(silence_logits, fg_pred_active.float())
+            if fg_inactive_mask.any():
+                log_probs = F.log_softmax(class_logits[fg_inactive_mask], dim=-1)
+                uniform = torch.full_like(log_probs, 1.0 / log_probs.shape[-1])
+                loss_kl = F.kl_div(log_probs, uniform, reduction="batchmean")
+            else:
+                loss_kl = class_logits.new_zeros(())
 
-        loss_fg = loss_fg_wave + lambda_class_match * loss_ce + lambda_inactive_foreground * loss_fg_inactive
-        loss_fg_activity = _source_activity_loss(
-            output,
-            target,
-            "foreground_activity_logits",
-            "foreground_span_sec",
-            active_mask=fg_active,
-            best_perm=fg_best_perm,
-            pos_weight=activity_pos_weight,
-        )
+            loss_fg = loss_fg_wave + lambda_class_match * loss_ce + lambda_inactive_foreground * loss_fg_inactive
+            loss_fg_activity = _source_activity_loss(
+                output,
+                target,
+                "foreground_activity_logits",
+                "foreground_span_sec",
+                active_mask=fg_active,
+                best_perm=fg_best_perm,
+                pos_weight=activity_pos_weight,
+            )
 
-        int_active = source_activity_mask(int_ref, energy_eps=active_energy_eps)
-        int_pair_wave = pairwise_sa_sdr_loss(int_est, int_ref)
-        loss_int_match, int_best_perm = pit_from_pairwise_loss(int_pair_wave, active_mask=int_active)
-        loss_int_wave = loss_int_match.mean()
-        int_inactive_mask = unmatched_prediction_mask(int_best_perm, int_active, int_est.shape[1])
-        loss_int_inactive = inactive_source_energy_loss(int_est, int_inactive_mask)
-        loss_int = loss_int_wave + lambda_inactive_interference * loss_int_inactive
-        loss_int_activity = _source_activity_loss(
-            output,
-            target,
-            "interference_activity_logits",
-            "interference_span_sec",
-            active_mask=int_active,
-            best_perm=int_best_perm,
-            pos_weight=activity_pos_weight,
-        )
+            int_active = source_activity_mask(int_ref, energy_eps=active_energy_eps)
+            int_pair_wave = pairwise_sa_sdr_loss(int_est, int_ref)
+            loss_int_match, int_best_perm = pit_from_pairwise_loss(int_pair_wave, active_mask=int_active)
+            loss_int_wave = loss_int_match.mean()
+            int_inactive_mask = unmatched_prediction_mask(int_best_perm, int_active, int_est.shape[1])
+            loss_int_inactive = inactive_source_energy_loss(int_est, int_inactive_mask)
+            loss_int = loss_int_wave + lambda_inactive_interference * loss_int_inactive
+            loss_int_activity = _source_activity_loss(
+                output,
+                target,
+                "interference_activity_logits",
+                "interference_span_sec",
+                active_mask=int_active,
+                best_perm=int_best_perm,
+                pos_weight=activity_pos_weight,
+            )
 
-        noise_active = source_activity_mask(noise_ref, energy_eps=active_energy_eps)
-        noise_loss_per_source = _si_snr_loss_per_source(noise_est, noise_ref)
-        loss_noise_wave = _safe_active_mean(noise_loss_per_source, noise_active)
-        loss_noise_inactive = inactive_source_energy_loss(noise_est, ~noise_active)
-        loss_noise = loss_noise_wave + lambda_inactive_noise * loss_noise_inactive
-        loss_noise_activity = _source_activity_loss(
-            output,
-            target,
-            "noise_activity_logits",
-            "noise_span_sec",
-            active_mask=noise_active,
-            pos_weight=activity_pos_weight,
-        )
+            noise_active = source_activity_mask(noise_ref, energy_eps=active_energy_eps)
+            noise_loss_per_source = _si_snr_loss_per_source(noise_est, noise_ref)
+            loss_noise_wave = _safe_active_mean(noise_loss_per_source, noise_active)
+            loss_noise_inactive = inactive_source_energy_loss(noise_est, ~noise_active)
+            loss_noise = loss_noise_wave + lambda_inactive_noise * loss_noise_inactive
+            loss_noise_activity = _source_activity_loss(
+                output,
+                target,
+                "noise_activity_logits",
+                "noise_span_sec",
+                active_mask=noise_active,
+                pos_weight=activity_pos_weight,
+            )
 
-        loss_residual = _residual_consistency_loss(output, target)
+            loss_residual = _residual_consistency_loss(output, target)
         loss = (
             loss_fg
             + lambda_non_foreground * (loss_int + loss_noise)
