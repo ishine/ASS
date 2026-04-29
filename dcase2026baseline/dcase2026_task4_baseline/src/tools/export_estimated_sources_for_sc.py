@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import argparse
 import csv
-import itertools
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import numpy as np
 import torch
@@ -19,6 +18,7 @@ except Exception:  # pragma: no cover
 from scipy.io import wavfile
 
 from src.datamodules.dataset import DatasetS3
+from src.tools.estimated_source_matching import MatchResult, match_batch
 from src.utils import initialize_config, parse_yaml
 
 
@@ -66,69 +66,7 @@ def _build_dataset(args):
 
 
 def _to_device(batch: Dict, device: torch.device) -> Dict:
-    out = {}
-    for key, value in batch.items():
-        out[key] = value.to(device) if torch.is_tensor(value) else value
-    return out
-
-
-def _flatten_sources(x: torch.Tensor) -> torch.Tensor:
-    if x.dim() < 3:
-        raise ValueError(f"Expected source tensor [B,S,...], got {tuple(x.shape)}")
-    return x.flatten(start_dim=2).float()
-
-
-def _pairwise_sa_sdr_score(est: torch.Tensor, ref: torch.Tensor, eps: float = 1e-8) -> torch.Tensor:
-    """Pairwise SA-SDR score in dB, higher is better.
-
-    Args:
-        est: [B, S_est, 1, T] or [B, S_est, T]
-        ref: [B, S_ref, 1, T] or [B, S_ref, T]
-
-    Returns:
-        [B, S_ref, S_est]
-    """
-    est_f = _flatten_sources(est)
-    ref_f = _flatten_sources(ref)
-    err = est_f.unsqueeze(1) - ref_f.unsqueeze(2)
-    ref_power = ref_f.pow(2).sum(dim=-1).unsqueeze(2).clamp_min(eps)
-    err_power = err.pow(2).sum(dim=-1).clamp_min(eps)
-    ratio = (ref_power / err_power).clamp_min(eps)
-    return 10.0 * torch.log10(ratio)
-
-
-def _energy_db(source: torch.Tensor, eps: float = 1e-12) -> float:
-    x = source.float().flatten()
-    rms = torch.sqrt(torch.mean(x * x) + eps)
-    return float(20.0 * torch.log10(rms.clamp_min(1e-8)).item())
-
-
-def _best_assignment(scores: torch.Tensor, active_ref_indices: List[int], n_est: int) -> Tuple[Dict[int, int], Dict[int, float]]:
-    """Brute-force target->estimate assignment for up to three foreground slots."""
-    if not active_ref_indices:
-        return {}, {}
-    n_match = min(len(active_ref_indices), n_est)
-    active_ref_indices = active_ref_indices[:n_match]
-    best_perm = None
-    best_score = None
-    for perm in itertools.permutations(range(n_est), n_match):
-        vals = [scores[ref_idx, est_idx] for ref_idx, est_idx in zip(active_ref_indices, perm)]
-        mean_score = torch.stack(vals).mean()
-        if best_score is None or mean_score > best_score:
-            best_score = mean_score
-            best_perm = perm
-    assignment = {ref_idx: int(est_idx) for ref_idx, est_idx in zip(active_ref_indices, best_perm)}
-    matched_scores = {ref_idx: float(scores[ref_idx, est_idx].item()) for ref_idx, est_idx in assignment.items()}
-    return assignment, matched_scores
-
-
-def _match_margin(scores: torch.Tensor, ref_idx: int, est_idx: int) -> float:
-    row = scores[ref_idx]
-    if row.numel() <= 1:
-        return float("inf")
-    best = row[est_idx]
-    others = torch.cat([row[:est_idx], row[est_idx + 1 :]])
-    return float((best - others.max()).item())
+    return {key: value.to(device) if torch.is_tensor(value) else value for key, value in batch.items()}
 
 
 def _write_wav(path: str, waveform: np.ndarray, sample_rate: int) -> None:
@@ -137,7 +75,7 @@ def _write_wav(path: str, waveform: np.ndarray, sample_rate: int) -> None:
     waveform = np.clip(waveform, -1.0, 1.0)
     if sf is not None:
         sf.write(path, waveform, sample_rate)
-    else:  # fallback; scipy expects int or float accepted in recent versions
+    else:
         wavfile.write(path, sample_rate, waveform)
 
 
@@ -145,70 +83,7 @@ def _safe_label(label: str) -> str:
     return str(label).replace("/", "_").replace(" ", "")
 
 
-def _export_batch(output, batch, args, manifest_rows):
-    est = output[args.output_key].detach().cpu().float()
-    if est.dim() == 4 and est.shape[2] != 1:
-        est = est[:, :, :1]
-    ref = batch["dry_sources"].detach().cpu().float()
-    labels = batch["label"]
-    soundscapes = batch["soundscape"]
-    scores = _pairwise_sa_sdr_score(est, ref).cpu()
-
-    for b, soundscape in enumerate(soundscapes):
-        active_ref = [i for i, label in enumerate(labels[b]) if label != "silence"]
-        assignment, matched_scores = _best_assignment(scores[b], active_ref, est.shape[1])
-        used_est = set()
-        output_slot = 0
-        for ref_idx in active_ref:
-            if ref_idx not in assignment:
-                continue
-            est_idx = assignment[ref_idx]
-            used_est.add(est_idx)
-            label = labels[b][ref_idx]
-            score = matched_scores[ref_idx]
-            margin = _match_margin(scores[b], ref_idx, est_idx)
-            energy = _energy_db(est[b, est_idx])
-            keep = True
-            if score < args.min_match_sdr:
-                keep = False
-            if margin < args.min_match_margin:
-                keep = False
-            if energy < args.min_energy_db:
-                keep = False
-            quality = "clean" if keep else "uncertain"
-            if keep or args.save_uncertain:
-                filename = f"{soundscape}_{output_slot:02d}_{_safe_label(label)}.wav"
-                wav_path = os.path.join(args.output_dir, filename)
-                _write_wav(wav_path, est[b, est_idx, 0].numpy(), args.sample_rate)
-                output_slot += 1
-            manifest_rows.append({
-                "soundscape": soundscape,
-                "oracle_slot": ref_idx,
-                "estimate_slot": est_idx,
-                "label": label,
-                "match_sa_sdr": score,
-                "match_margin": margin,
-                "energy_db": energy,
-                "quality_group": quality,
-                "saved": bool(keep or args.save_uncertain),
-            })
-        if args.save_unmatched_manifest:
-            for est_idx in range(est.shape[1]):
-                if est_idx not in used_est:
-                    manifest_rows.append({
-                        "soundscape": soundscape,
-                        "oracle_slot": -1,
-                        "estimate_slot": est_idx,
-                        "label": "silence",
-                        "match_sa_sdr": "",
-                        "match_margin": "",
-                        "energy_db": _energy_db(est[b, est_idx]),
-                        "quality_group": "unmatched",
-                        "saved": False,
-                    })
-
-
-def _write_manifest(rows: List[Dict], path: str) -> None:
+def _write_manifest(rows: List[MatchResult], path: str) -> None:
     if not path:
         return
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
@@ -217,17 +92,51 @@ def _write_manifest(rows: List[Dict], path: str) -> None:
         "oracle_slot",
         "estimate_slot",
         "label",
-        "match_sa_sdr",
+        "metric",
+        "match_score",
+        "second_best_score",
         "match_margin",
         "energy_db",
         "quality_group",
+        "sample_weight",
         "saved",
     ]
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
-            writer.writerow(row)
+            writer.writerow(row.to_dict())
+
+
+def _export_batch(output, batch, args, manifest_rows: List[MatchResult]):
+    est = output[args.output_key].detach().cpu().float()
+    if est.dim() == 4 and est.shape[2] != 1:
+        est = est[:, :, :1]
+    ref = batch["dry_sources"].detach().cpu().float()
+    batch_results = match_batch(
+        est_sources=est,
+        ref_sources=ref,
+        labels=batch["label"],
+        soundscapes=batch["soundscape"],
+        metric=args.match_metric,
+        min_match_score=args.min_match_score,
+        min_match_margin=args.min_match_margin,
+        min_energy_db=args.min_energy_db,
+        clean_match_score=args.clean_match_score,
+        clean_match_margin=args.clean_match_margin,
+        uncertain_weight=args.uncertain_weight,
+        save_uncertain=args.save_uncertain,
+        include_unmatched=args.save_unmatched_manifest,
+    )
+    for batch_idx, rows in enumerate(batch_results):
+        output_slot = 0
+        for row in rows:
+            if row.saved and row.label != "silence":
+                filename = f"{row.soundscape}_{output_slot:02d}_{_safe_label(row.label)}.wav"
+                wav_path = os.path.join(args.output_dir, filename)
+                _write_wav(wav_path, est[batch_idx, row.estimate_slot, 0].numpy(), args.sample_rate)
+                output_slot += 1
+            manifest_rows.append(row)
 
 
 def main():
@@ -237,7 +146,7 @@ def main():
     parser.add_argument("--soundscape_dir", required=True, help="Directory of mixture wav files")
     parser.add_argument("--oracle_target_dir", required=True, help="Directory of oracle target wav files with labels in filenames")
     parser.add_argument("--output_dir", required=True, help="Output estimate_target_dir for EstimatedSourceClassifierDataset")
-    parser.add_argument("--manifest_path", default=None, help="Optional CSV manifest for match quality")
+    parser.add_argument("--manifest_path", default=None, help="Optional CSV manifest for match quality and sample weights")
     parser.add_argument("--sample_rate", type=int, default=32000)
     parser.add_argument("--n_sources", type=int, default=3)
     parser.add_argument("--label_set", default="dcase2026t4")
@@ -245,10 +154,14 @@ def main():
     parser.add_argument("--num_workers", type=int, default=2)
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--output_key", default="foreground_waveform", help="Model output key to export")
-    parser.add_argument("--min_match_sdr", type=float, default=-10.0, help="Reject matches below this SA-SDR")
+    parser.add_argument("--match_metric", default="sa_sdr", choices=["sa_sdr", "si_sdr"], help="Metric used for oracle-estimate matching")
+    parser.add_argument("--min_match_score", type=float, default=-10.0, help="Reject matches below this score")
     parser.add_argument("--min_match_margin", type=float, default=-1000000000.0, help="Reject ambiguous matches below this margin")
     parser.add_argument("--min_energy_db", type=float, default=-60.0, help="Reject estimates below this RMS dB")
-    parser.add_argument("--save_uncertain", action="store_true", help="Also write low-quality matches, but mark them uncertain in manifest")
+    parser.add_argument("--clean_match_score", type=float, default=0.0, help="Clean label threshold for match score")
+    parser.add_argument("--clean_match_margin", type=float, default=2.0, help="Clean label threshold for match margin")
+    parser.add_argument("--uncertain_weight", type=float, default=0.35, help="Sample weight for uncertain saved matches")
+    parser.add_argument("--save_uncertain", action="store_true", help="Also write uncertain matches for robust SC fine-tuning")
     parser.add_argument("--save_unmatched_manifest", action="store_true", help="Record unmatched estimate slots in manifest")
     args = parser.parse_args()
 
@@ -256,15 +169,9 @@ def main():
     device = torch.device(args.device)
     model = _load_model(args.config, args.checkpoint, device)
     dataset = _build_dataset(args)
-    loader = DataLoader(
-        dataset,
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.num_workers,
-        collate_fn=dataset.collate_fn,
-    )
+    loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, collate_fn=dataset.collate_fn)
 
-    rows: List[Dict] = []
+    rows: List[MatchResult] = []
     with torch.no_grad():
         for batch in tqdm(loader, desc="export estimated sources for SC"):
             device_batch = _to_device(batch, device)
