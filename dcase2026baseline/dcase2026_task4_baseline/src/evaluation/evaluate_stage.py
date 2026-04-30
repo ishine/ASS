@@ -2,6 +2,7 @@ import argparse
 import copy
 import json
 import os
+from itertools import combinations, permutations
 
 import soundfile as sf
 import torch
@@ -120,6 +121,81 @@ def _uss_labels(output, labels):
     return batch_labels, probabilities * active_probs
 
 
+def _pairwise_sdr(est_waveforms, ref_waveforms, eps=1e-8):
+    """Pairwise raw SDR/SNR matrix used only for oracle slot assignment.
+
+    Args:
+        est_waveforms: [N_est, T]
+        ref_waveforms: [N_ref, T]
+
+    Returns:
+        Tensor [N_est, N_ref], where larger is better.
+    """
+
+    est = est_waveforms.float()
+    ref = ref_waveforms.float()
+    noise = est[:, None, :] - ref[None, :, :]
+    signal_power = ref.pow(2).sum(dim=-1).clamp_min(eps)
+    noise_power = noise.pow(2).sum(dim=-1).clamp_min(eps)
+    return 10.0 * torch.log10(signal_power[None, :] / noise_power)
+
+
+def _pit_oracle_labels_for_sample(est_waveforms, ref_waveforms, ref_labels):
+    """Assign oracle labels to estimated USS slots after waveform-level PIT.
+
+    This is intended for measuring the separation upper bound of USS outputs:
+    classification, silence gating, and slot ordering are made oracle.  The
+    estimated waveforms themselves are not reordered; instead, each estimated
+    slot receives the label of the reference slot it best matches.  Unmatched
+    estimated slots are labelled as silence.
+    """
+
+    n_est = int(est_waveforms.shape[0])
+    est_labels = ["silence"] * n_est
+    probabilities = torch.zeros(n_est, dtype=torch.float32)
+
+    active_ref_indices = [idx for idx, label in enumerate(ref_labels) if label != "silence"]
+    if n_est == 0 or len(active_ref_indices) == 0:
+        return est_labels, probabilities
+
+    n_match = min(n_est, len(active_ref_indices))
+    active_ref_waveforms = ref_waveforms[active_ref_indices]
+    pair_scores = _pairwise_sdr(est_waveforms, active_ref_waveforms)
+
+    best_score = None
+    best_assignment = None
+    active_ref_local_indices = range(len(active_ref_indices))
+
+    for ref_subset in combinations(active_ref_local_indices, n_match):
+        ref_subset = list(ref_subset)
+        for est_perm in permutations(range(n_est), n_match):
+            scores = [pair_scores[est_idx, ref_idx] for est_idx, ref_idx in zip(est_perm, ref_subset)]
+            score = torch.stack(scores).mean()
+            if best_score is None or score > best_score:
+                best_score = score
+                best_assignment = list(zip(est_perm, ref_subset))
+
+    if best_assignment is None:
+        return est_labels, probabilities
+
+    for est_idx, ref_local_idx in best_assignment:
+        ref_idx = active_ref_indices[ref_local_idx]
+        est_labels[int(est_idx)] = ref_labels[int(ref_idx)]
+        probabilities[int(est_idx)] = 1.0
+
+    return est_labels, probabilities
+
+
+def _pit_oracle_labels(est_waveforms, ref_waveforms, ref_labels):
+    batch_labels = []
+    batch_probabilities = []
+    for sample_est, sample_ref, sample_labels in zip(est_waveforms, ref_waveforms, ref_labels):
+        labels, probabilities = _pit_oracle_labels_for_sample(sample_est, sample_ref, sample_labels)
+        batch_labels.append(labels)
+        batch_probabilities.append(probabilities)
+    return batch_labels, torch.stack(batch_probabilities, dim=0)
+
+
 def _classification_counts(est_labels, ref_labels):
     total = 0
     correct = 0
@@ -186,6 +262,7 @@ class StageEvaluator:
         batch_size=2,
         use_cpu=False,
         num_workers=None,
+        uss_oracle_labels=False,
     ):
         self.config_path = config_path
         self.config_dir = os.path.dirname(os.path.abspath(config_path))
@@ -194,6 +271,7 @@ class StageEvaluator:
         self.filename = os.path.basename(config_path)[:-5]
         self.batch_size = batch_size
         self.result_dir = result_dir
+        self.uss_oracle_labels = bool(uss_oracle_labels)
         self.waveform_output_dir = (
             os.path.join(waveform_output_dir, self.filename, stage)
             if waveform_output_dir
@@ -248,8 +326,17 @@ class StageEvaluator:
         with torch.no_grad():
             output = self.model({"mixture": mixture})
         est_waveforms = output["foreground_waveform"][:, :, 0, :].detach().cpu()
-        est_labels, probabilities = _uss_labels(output, self.labels)
-        return est_labels, est_waveforms, probabilities.detach().cpu(), batch["label"]
+        if self.uss_oracle_labels:
+            ref_waveforms = batch["dry_sources"][:, :, 0, :].detach().cpu()
+            est_labels, probabilities = _pit_oracle_labels(
+                est_waveforms=est_waveforms,
+                ref_waveforms=ref_waveforms,
+                ref_labels=batch["label"],
+            )
+        else:
+            est_labels, probabilities = _uss_labels(output, self.labels)
+            probabilities = probabilities.detach().cpu()
+        return est_labels, est_waveforms, probabilities, batch["label"]
 
     def _evaluate_sc_batch(self, batch):
         if "dry_sources" in batch:
@@ -338,6 +425,7 @@ class StageEvaluator:
                     reobj = {
                         "soundscape": soundscape,
                         "stage": self.stage,
+                        "oracle_labels": bool(self.uss_oracle_labels and self.stage == "uss"),
                         "ref_labels": ref_labels[i],
                         "est_labels": est_labels[i],
                         "probabilities": _as_list(probabilities[i]),
@@ -366,6 +454,8 @@ class StageEvaluator:
         if self.result_dir:
             os.makedirs(self.result_dir, exist_ok=True)
             stem = f"{self.filename}_{self.stage}"
+            if self.uss_oracle_labels and self.stage == "uss":
+                stem = f"{stem}_oracle_labels"
             with open(os.path.join(self.result_dir, f"{stem}_results.json"), "w") as outfile:
                 json.dump(results, outfile, indent=4)
             with open(os.path.join(self.result_dir, f"{stem}_summary.json"), "w") as outfile:
@@ -383,6 +473,7 @@ def main(args):
         batch_size=args.batchsize,
         use_cpu=args.cpu,
         num_workers=args.num_workers,
+        uss_oracle_labels=args.uss_oracle_labels,
     )
     evaluator.evaluate()
 
@@ -398,6 +489,16 @@ if __name__ == "__main__":
     parser.add_argument("--cpu", action="store_true")
     parser.add_argument("--batchsize", "-b", type=int, default=2)
     parser.add_argument("--num_workers", type=int, default=None)
+    parser.add_argument(
+        "--uss_oracle_labels",
+        action="store_true",
+        help=(
+            "For --stage uss only: assign oracle class labels to estimated USS "
+            "slots after waveform-level PIT against reference dry sources. This "
+            "evaluates separation upper bound independent of class/silence heads "
+            "and slot ordering."
+        ),
+    )
     args = parser.parse_args()
     print("START")
     main(args)
