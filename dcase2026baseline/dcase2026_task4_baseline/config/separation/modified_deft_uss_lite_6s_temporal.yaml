@@ -89,7 +89,7 @@ lightning_module:
   main: USSLightning
   args:
     model:
-      module: src.models.deft.modified_deft
+      module: src.models.deft.modified_deft_bf16_safe
       main: ModifiedDeFTUSSMemoryEfficientTemporal
       args:
         input_channels: 4
