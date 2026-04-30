@@ -12,27 +12,68 @@ class S5ClassAwareMetric():
         else: raise ValueError(f"metricfunc of '{metricfunc}' is not implemented!!")
         self.metric_values = []
         self.reset()
+
     def update(self, batch_est_labels, batch_est_waveforms, batch_ref_labels, batch_ref_waveforms, batch_mixture):
         mvalues = self.compute_batch(batch_est_labels, batch_est_waveforms, batch_ref_labels, batch_ref_waveforms, batch_mixture)
         self.metric_values.extend(mvalues)
         return mvalues
+
+    def _diagnostic_mean(self, key):
+        values = [v[key] for v in self.diagnostic_values if key in v]
+        if not values:
+            return None
+        return sum(values) / len(values)
         
     def compute(self, is_print=False):
-        if not self.metric_values: return None
+        if not self.metric_values:
+            return None
         non_None_metric_values = [v for v in self.metric_values if v is not None]
+        if not non_None_metric_values:
+            return None
         reobj = {
             'mean': sum(non_None_metric_values)/len(non_None_metric_values)
         }
+
+        raw_sdr_mean = self._diagnostic_mean('raw_sdr')
+        mix_sdr_mean = self._diagnostic_mean('mix_sdr')
+        sdri_mean = self._diagnostic_mean('sdri')
+        if raw_sdr_mean is not None:
+            reobj['raw_sdr'] = raw_sdr_mean
+        if mix_sdr_mean is not None:
+            reobj['mix_sdr'] = mix_sdr_mean
+        if sdri_mean is not None:
+            reobj['sdri'] = sdri_mean
+
         if is_print:
             print('%s: %.3f'%(self.metric_name, reobj['mean']))
-        return 
+            if raw_sdr_mean is not None:
+                print('raw_sdr: %.3f'%raw_sdr_mean)
+            if mix_sdr_mean is not None:
+                print('mix_sdr: %.3f'%mix_sdr_mean)
+            if sdri_mean is not None:
+                print('sdri: %.3f'%sdri_mean)
+        return reobj
         
-    def reset(self): self.metric_values = []
+    def reset(self):
+        self.metric_values = []
+        self.diagnostic_values = []
     
     def compute_batch(self, batch_est_labels, batch_est_waveforms, batch_ref_labels, batch_ref_waveforms, batch_mixture):
         return [self.compute_sample(est_lb, est_wf, ref_lb, ref_wf, mixture)
                 for est_lb, est_wf, ref_lb, ref_wf, mixture in
                 zip(batch_est_labels,  batch_est_waveforms, batch_ref_labels, batch_ref_waveforms, batch_mixture)]
+
+
+    def _record_best_permutation_diagnostics(self, metrics, metrics_mixture, metrics_i, best_i):
+        raw_sdr = metrics[best_i].mean().item()
+        mix_sdr = metrics_mixture[best_i].mean().item()
+        sdri = metrics_i[best_i].mean().item()
+        self.diagnostic_values.append({
+            'raw_sdr': raw_sdr,
+            'mix_sdr': mix_sdr,
+            'sdri': sdri,
+        })
+        return raw_sdr, mix_sdr, sdri
 
 
     def _pi_metric(self,
@@ -70,6 +111,8 @@ class S5ClassAwareMetric():
         if self.min_max == 'max':   best_i = torch.argmax(metrics_mean).item()
         elif self.min_max == 'min': best_i = torch.argmin(metrics_mean).item()
         else: raise NotImplementedError(f"min_max '{self.min_max}' has not been implemented.")
+
+        self._record_best_permutation_diagnostics(metrics, metrics_mixture, metrics_i, best_i)
     
         # extract the best permutation results
         best_metric = metrics[best_i] # n_tp
@@ -179,6 +222,8 @@ class S5ClassAwareMetricSDRiAssignment(S5ClassAwareMetric):
         if self.min_max == 'max':   best_i = torch.argmax(metrics_i_mean).item()
         elif self.min_max == 'min': best_i = torch.argmin(metrics_i_mean).item()
         else: raise NotImplementedError(f"min_max '{self.min_max}' has not been implemented.")
+
+        self._record_best_permutation_diagnostics(metrics, metrics_mixture, metrics_i, best_i)
 
         best_metric = metrics[best_i]
         best_metric_i = metrics_i[best_i]
