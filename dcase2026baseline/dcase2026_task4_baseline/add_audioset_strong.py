@@ -54,6 +54,7 @@ except Exception:  # pragma: no cover
 
 
 TARGET_SR = 32000
+AUDIOSET_SEGMENT_DURATION = 10.0
 AUDIO_EXTENSIONS = (".wav", ".flac", ".ogg", ".mp3", ".m4a", ".aac")
 
 DCASE2026_LABELS = [
@@ -88,6 +89,7 @@ AUDIOSET_TO_DCASE: Dict[str, str] = {
     "alarm clock": "AlarmClock",
     "bicycle bell": "BicycleBell",
     "blender": "Blender",
+    "blender, food processor": "Blender",
     "buzzer": "Buzzer",
     "buzz": "Buzzer",
     "beep, bleep": "Buzzer",
@@ -287,25 +289,48 @@ def discover_annotation_files(annotations_dir: Path) -> List[Path]:
     )
 
 
+def looks_like_mid_to_display_path(path: Path) -> bool:
+    name = path.name.lower()
+    return "mid_to_display" in name or "class_labels_indices" in name
+
+
 def collect_mid_to_display_name(files: Sequence[Path]) -> Dict[str, str]:
     out: Dict[str, str] = {}
     for path in files:
         try:
-            rows = list(read_table(path))
+            delimiter = choose_delimiter(path)
+            with path.open("r", encoding="utf-8", errors="replace", newline="") as f:
+                reader = csv.reader(f, delimiter=delimiter)
+                first_row = next((row for row in reader if row and any(c.strip() for c in row)), None)
+                if first_row is None:
+                    continue
+                header = [norm_key(c) for c in first_row]
+                if "mid" in header and "display_name" in header:
+                    mid_idx = header.index("mid")
+                    name_idx = header.index("display_name")
+                elif looks_like_mid_to_display_path(path) and len(first_row) >= 2:
+                    mid_idx = 0
+                    name_idx = 1
+                    mid = first_row[mid_idx].strip()
+                    name = first_row[name_idx].strip()
+                    if mid and name:
+                        out[mid] = name
+                else:
+                    continue
+                for row in reader:
+                    if len(row) <= max(mid_idx, name_idx):
+                        continue
+                    mid = row[mid_idx].strip()
+                    name = row[name_idx].strip()
+                    if mid and name:
+                        out[mid] = name
         except Exception:
             continue
-        if not any("mid" in row and "display_name" in row for _, row in rows[:5]):
-            continue
-        for _, row in rows:
-            mid = row.get("mid", "").strip()
-            name = row.get("display_name", "").strip()
-            if mid and name:
-                out[mid] = name
     return out
 
 
 def is_mapping_file(path: Path, preview: Sequence[Tuple[int, Dict[str, str]]]) -> bool:
-    if "class_labels_indices" in path.name.lower():
+    if looks_like_mid_to_display_path(path):
         return True
     return any("mid" in row and "display_name" in row and "start_time_seconds" not in row for _, row in preview)
 
@@ -336,11 +361,24 @@ def split_label_values(raw: str, column_name: str) -> List[str]:
     return [raw]
 
 
+def parse_audioset_time_token(token: str) -> float:
+    value = float(token)
+    return value / 1000.0 if abs(value) >= 1000.0 else value
+
+
 def parse_segment_offsets(segment_id: str) -> Tuple[str, Optional[float], Optional[float]]:
     stem = Path(str(segment_id)).stem.strip()
+    if len(stem) > 12 and stem[11] in "_-":
+        ytid = stem[:11]
+        suffix = stem[12:]
+        if re.fullmatch(r"[0-9]+(?:\.[0-9]+)?(?:[_\-][0-9]+(?:\.[0-9]+)?)?", suffix):
+            parts = re.split(r"[_\-]", suffix)
+            clip_start = parse_audioset_time_token(parts[0])
+            clip_end = parse_audioset_time_token(parts[1]) if len(parts) > 1 else clip_start + AUDIOSET_SEGMENT_DURATION
+            return ytid, clip_start, clip_end
     m = re.match(r"^(.+?)[_\-]([0-9]+(?:\.[0-9]+)?)[_\-]([0-9]+(?:\.[0-9]+)?)$", stem)
     if m:
-        return m.group(1), float(m.group(2)), float(m.group(3))
+        return m.group(1), parse_audioset_time_token(m.group(2)), parse_audioset_time_token(m.group(3))
     return (stem[:11], None, None) if len(stem) >= 11 else (stem, None, None)
 
 
@@ -359,6 +397,8 @@ def audio_key_candidates(identifier: str) -> List[Tuple[str, str]]:
         add(f"{ytid}_{clip_start:g}_{clip_end:g}", "segment")
         add(f"{ytid}_{int(round(clip_start)):06d}_{int(round(clip_end)):06d}", "segment")
         add(f"{ytid}-{int(round(clip_start)):06d}-{int(round(clip_end)):06d}", "segment")
+        add(f"{ytid}_{int(round(clip_start * 1000)):d}", "segment")
+        add(f"{ytid}-{int(round(clip_start * 1000)):d}", "segment")
     add(ytid, "ytid")
     if len(stem) >= 11:
         add(stem[:11], "ytid")
@@ -376,6 +416,9 @@ def parse_strong_annotations(
     events: List[StrongEvent] = []
 
     for path in files:
+        if "framed_posneg" in path.name.lower():
+            status[f"skip_framed_posneg:{path.name}"] += 1
+            continue
         try:
             rows = list(read_table(path))
         except Exception as exc:
@@ -391,6 +434,10 @@ def parse_strong_annotations(
         split = infer_split(path, train_keywords, valid_keywords)
         parsed = 0
         for line_no, row in rows:
+            present = norm_key(row.get("present", ""))
+            if present and present not in {"present", "positive", "true", "yes", "1"}:
+                status[f"skip_non_present_frame:{path.name}"] += 1
+                continue
             segment_id = first(row, ["segment_id", "ytid", "youtube_id", "video_id", "file_name", "filename", "audio_id", "wav"])
             start = parse_float(first(row, ["start_time_seconds", "start_seconds", "onset_seconds", "onset", "start"]))
             end = parse_float(first(row, ["end_time_seconds", "end_seconds", "offset_seconds", "offset", "end"]))
