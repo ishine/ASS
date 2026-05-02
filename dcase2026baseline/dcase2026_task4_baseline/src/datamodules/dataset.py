@@ -1,4 +1,5 @@
 import os
+import copy
 import torch
 import re
 import numpy as np
@@ -10,6 +11,19 @@ import json
 from src.modules.spatial_audio_synthesizer.spatial_audio_synthesizer import SpAudSyn
 from src.temporal import event_to_span_sec, pad_spans, waveform_to_span_sec
 from src.utils import LABELS
+
+SPATIAL_SOUND_SCENE_KEYS = {
+    'duration',
+    'sr',
+    'max_event_overlap',
+    'max_event_dur',
+    'ref_db',
+    'foreground_dir',
+    'background_dir',
+    'interference_dir',
+    'room_config',
+    'verbose',
+}
 
 def collate_fn(list_data_dict):
     data = {k: [] for k in list_data_dict[0].keys()}
@@ -74,6 +88,9 @@ class DatasetS3(torch.utils.data.Dataset):
             self.dupse_exclusion_folder_depth = self.config['dupse_exclusion_folder_depth'] # check subfolder_level in source_file_filter function
 
             self.spatial_sound_scene = self.config['spatial_sound_scene']
+            self.spatial_sound_scene_sources = self._build_spatial_sound_scene_sources(
+                self.config.get('spatial_sound_scene_sources')
+            )
             self.sr = self.config['spatial_sound_scene']['sr']
             self.snr_range = self.config['snr_range']
             self.nevent_range = self.config['nevent_range']
@@ -200,6 +217,76 @@ class DatasetS3(torch.utils.data.Dataset):
     #=====================================================
     # Utilizations for generate mode
     #=====================================================
+    def _build_spatial_sound_scene_sources(self, source_config):
+        if source_config is None:
+            return None
+
+        sampling_mode = source_config.get('sampling_mode', 'scene_weighted')
+        if sampling_mode != 'scene_weighted':
+            raise ValueError(
+                "DatasetS3 currently supports only "
+                "spatial_sound_scene_sources.sampling_mode='scene_weighted'"
+            )
+
+        pools = source_config.get('pools', [])
+        if not pools:
+            raise ValueError("spatial_sound_scene_sources.pools must contain at least one pool")
+
+        active_pools = []
+        for idx, pool in enumerate(pools):
+            name = pool.get('name', f'pool_{idx}')
+            weight = float(pool.get('weight', 1.0))
+            if weight < 0:
+                raise ValueError(f"Source pool '{name}' has negative weight: {weight}")
+            if weight == 0:
+                continue
+
+            pool_scene_config = copy.deepcopy(self.spatial_sound_scene)
+            overrides = {}
+            overrides.update(pool.get('spatial_sound_scene', {}))
+            for key, value in pool.items():
+                if key in {'name', 'weight', 'spatial_sound_scene'}:
+                    continue
+                overrides[key] = value
+
+            unknown_keys = sorted(set(overrides) - SPATIAL_SOUND_SCENE_KEYS)
+            if unknown_keys:
+                raise ValueError(
+                    f"Source pool '{name}' has unsupported spatial_sound_scene override keys: {unknown_keys}"
+                )
+            pool_scene_config.update(overrides)
+            active_pools.append({
+                'name': name,
+                'weight': weight,
+                'spatial_sound_scene': pool_scene_config,
+            })
+
+        if not active_pools:
+            raise ValueError("spatial_sound_scene_sources must contain at least one pool with weight > 0")
+
+        weights = [pool['weight'] for pool in active_pools]
+        print(
+            "DatasetS3 source pools: "
+            + ", ".join(f"{pool['name']}={pool['weight']}" for pool in active_pools),
+            flush=True,
+        )
+        return {
+            'sampling_mode': sampling_mode,
+            'pools': active_pools,
+            'weights': weights,
+        }
+
+    def _select_spatial_sound_scene(self):
+        if self.spatial_sound_scene_sources is None:
+            return copy.deepcopy(self.spatial_sound_scene), None
+
+        pool = random.choices(
+            self.spatial_sound_scene_sources['pools'],
+            weights=self.spatial_sound_scene_sources['weights'],
+            k=1,
+        )[0]
+        return copy.deepcopy(pool['spatial_sound_scene']), pool['name']
+
     def _get_position(self,
                       ref_pos, # [3,] or [nrefpos, 3]     x,y,z
                       all_pos): # [npos, 3]
@@ -241,13 +328,21 @@ class DatasetS3(torch.utils.data.Dataset):
             assert len(return_obj['label']) == len(source)
 
             return_obj['dry_sources'] = torch.from_numpy(np.stack(source)).to(torch.float32) # nsources, 1ch, wlen
-        if self.return_meta: return_obj['metadata'] = output
+        if self.return_meta:
+            if 'source_pool' in s3.config:
+                output['source_pool'] = s3.config['source_pool']
+                output['source_pool_sampling_mode'] = s3.config.get('source_pool_sampling_mode')
+            return_obj['metadata'] = output
 
         return return_obj
 
 
     def _get_item_generate(self, idx):
-        s3 = SpAudSyn(**self.spatial_sound_scene)
+        spatial_sound_scene, source_pool_name = self._select_spatial_sound_scene()
+        s3 = SpAudSyn(**spatial_sound_scene)
+        if source_pool_name is not None:
+            s3.config['source_pool'] = source_pool_name
+            s3.config['source_pool_sampling_mode'] = self.spatial_sound_scene_sources['sampling_mode']
         # s3.set_room(('choose', [])) # room has been set in __init__ if room is not None
 
         # add events
@@ -294,7 +389,7 @@ class DatasetS3(torch.utils.data.Dataset):
         assert self.nevent_range[0] <= len(s3.fg_events) <=self.nevent_range[1]
         assert len(s3.fg_events) == nevents
         # import pdb; pdb.set_trace()
-        if 'interference_dir' in self.config['spatial_sound_scene']:
+        if spatial_sound_scene.get('interference_dir'):
             ninteferences = random.randint(self.config['ninterference_range'][0], self.config['ninterference_range'][1])
             for _ in range(ninteferences):
                 s3.add_interference(
@@ -306,7 +401,7 @@ class DatasetS3(torch.utils.data.Dataset):
                     snr={'method': 'uniform', 'range': self.config['inteference_snr_range']},
                 )
         # add background, make sure it is consistent with room
-        if self.spatial_sound_scene['background_dir']: # only add noise if there is background_dir
+        if spatial_sound_scene.get('background_dir'): # only add noise if there is background_dir
             s3.add_background(source_file={'method': 'choose'},);
         return self._generate(s3)
 

@@ -315,16 +315,149 @@ After extraction, the AudioSet-Strong WAVs live inside those same pools, so they
 are automatically available to `DatasetS3(mode=generate)` as long as the config
 points to `data/dev_set`. No default config has to be changed.
 
-For a controlled ablation, keep separate data roots instead:
+This direct merge is simple, but the AudioSet/DCASE ratio is then controlled
+only by file counts. For a controlled ablation or curriculum, keep separate
+data roots instead:
 
 ```text
 data/dev_set                 official/current pool
 data/dev_set_audioset_strong  AudioSet-Strong augmented pool
 ```
 
-Then create a sibling config that points `foreground_dir`, `background_dir`,
-and `interference_dir` to the augmented root. This keeps the baseline and the
-AudioSet-Strong experiment comparable.
+Then use the opt-in weighted scene-pool sampler in `DatasetS3`. The base
+`spatial_sound_scene` remains the fallback/default official pool. Add
+`spatial_sound_scene_sources` beside it:
+
+```yaml
+spatial_sound_scene:
+  duration: 10.0
+  sr: 32000
+  max_event_overlap: 3
+  max_event_dur: 10.0
+  ref_db: -55
+  foreground_dir: data/dev_set/sound_event/train
+  background_dir: data/dev_set/noise/train
+  interference_dir: data/dev_set/interference/train
+  room_config:
+    module: src.modules.spatial_audio_synthesizer.room
+    main: SofaRoom
+    args:
+      path: data/dev_set/room_ir/train
+      direct_range_ms: [6, 50]
+
+spatial_sound_scene_sources:
+  sampling_mode: scene_weighted
+  pools:
+    - name: official
+      weight: 0.5
+      foreground_dir: data/dev_set/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set/interference/train
+    - name: audioset_strong
+      weight: 0.5
+      foreground_dir: data/dev_set_audioset_strong/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set_audioset_strong/interference/train
+```
+
+The sampler chooses one pool per generated mixture. A 0.5/0.5 setting means
+about half of generated scenes use official DCASE dry sources, and about half
+use AudioSet-Strong dry sources. The room RIR remains official because the
+`room_config` comes from the base `spatial_sound_scene` unless a pool overrides
+it.
+
+Prefer official background noise for AudioSet-Strong foreground scenes at first.
+That keeps the validation/train acoustic domain closer to DCASE while still
+using AudioSet-Strong for foreground/interference diversity.
+
+The selected source pool is included in returned metadata when `return_meta:
+true`:
+
+```python
+item["metadata"]["source_pool"]
+```
+
+This is useful for debugging whether the dataloader is sampling the expected
+ratio.
+
+### Suggested Curriculum
+
+Create three sibling configs that differ only in the pool weights:
+
+Stage 1, broad augmentation:
+
+```yaml
+spatial_sound_scene_sources:
+  sampling_mode: scene_weighted
+  pools:
+    - name: official
+      weight: 0.5
+      foreground_dir: data/dev_set/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set/interference/train
+    - name: audioset_strong
+      weight: 0.5
+      foreground_dir: data/dev_set_audioset_strong/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set_audioset_strong/interference/train
+```
+
+Stage 2, reduce AudioSet-Strong:
+
+```yaml
+spatial_sound_scene_sources:
+  sampling_mode: scene_weighted
+  pools:
+    - name: official
+      weight: 0.8
+      foreground_dir: data/dev_set/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set/interference/train
+    - name: audioset_strong
+      weight: 0.2
+      foreground_dir: data/dev_set_audioset_strong/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set_audioset_strong/interference/train
+```
+
+Stage 3, official-only fine-tune:
+
+```yaml
+spatial_sound_scene_sources:
+  sampling_mode: scene_weighted
+  pools:
+    - name: official
+      weight: 1.0
+      foreground_dir: data/dev_set/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set/interference/train
+    - name: audioset_strong
+      weight: 0.0
+      foreground_dir: data/dev_set_audioset_strong/sound_event/train
+      background_dir: data/dev_set/noise/train
+      interference_dir: data/dev_set_audioset_strong/interference/train
+```
+
+The existing official-only configs do not need `spatial_sound_scene_sources`;
+omitting the key preserves the old behavior exactly.
+
+Recommended training sequence:
+
+```bash
+# Stage 1
+python -m src.train -c config/separation/<mixed_50_config>.yaml -w workspace/stage1_mixed50
+
+# Stage 2
+python -m src.train -c config/separation/<mixed_20_config>.yaml -w workspace/stage2_mixed20 \
+  --ckpt_path workspace/stage1_mixed50/checkpoints/last.ckpt
+
+# Stage 3
+python -m src.train -c config/separation/<official_only_config>.yaml -w workspace/stage3_official \
+  --ckpt_path workspace/stage2_mixed20/checkpoints/last.ckpt
+```
+
+Use the same pattern for SC, USS, or TSE configs because the sampler lives in
+the shared `DatasetS3(mode=generate)` base dataset.
 
 ## 8. Use AudioSet-Strong in Validation
 
