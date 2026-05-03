@@ -14,9 +14,89 @@ from src.utils import initialize_config
 from .metrics import label_metric, s5capi_metric
 
 
-def _load_yaml(path):
-    with open(path) as f:
-        return yaml.safe_load(f)
+def _load_yaml(path, base_dir=None):
+    candidate = path
+    if not os.path.isabs(candidate) and not os.path.exists(candidate) and base_dir:
+        candidate = os.path.join(base_dir, candidate)
+    with open(candidate) as f:
+        return yaml.safe_load(f), candidate
+
+
+def _get_by_path(obj, dotted_path):
+    cur = obj
+    for part in dotted_path.split("."):
+        if isinstance(cur, dict):
+            cur = cur[part]
+        elif isinstance(cur, list):
+            cur = cur[int(part)]
+        else:
+            raise KeyError(
+                f"Cannot descend into {type(cur)} at '{part}' for path '{dotted_path}'"
+            )
+    return cur
+
+
+def _deep_update(base, updates):
+    base = copy.deepcopy(base)
+    for key, value in updates.items():
+        if isinstance(value, dict) and isinstance(base.get(key), dict):
+            base[key] = _deep_update(base[key], value)
+        else:
+            base[key] = copy.deepcopy(value)
+    return base
+
+
+def _resolve_config_references(obj, base_dir=None):
+    """Resolve opt-in references to model/dataset blocks in training configs.
+
+    This is intentionally backward compatible. Existing stage/eval configs that
+    inline their full configs work unchanged. A dictionary is replaced only when
+    it contains one of these reference keys:
+
+        from_training_config: path/to/train.yaml
+        config_ref: path/to/train.yaml
+
+    Default referenced key:
+
+        lightning_module.args.model
+
+    Example:
+
+        uss_config:
+            from_training_config: ../../../config/separation/modified_deft_uss_temporal_noisylabel_min.yaml
+            key: lightning_module.args.model
+
+    Optional overrides can patch the referenced config after loading:
+
+        sc_config:
+            from_training_config: ../../../config/label/m2d_sc_stage3_estimated_temporal_strong_robust.yaml
+            key: lightning_module.args.model
+            overrides:
+                args:
+                    eval_crop_seconds: 10.0
+    """
+    if isinstance(obj, list):
+        return [_resolve_config_references(x, base_dir=base_dir) for x in obj]
+    if not isinstance(obj, dict):
+        return obj
+
+    ref_path = obj.get("from_training_config", obj.get("config_ref", None))
+    if ref_path is not None:
+        key = obj.get("key", "lightning_module.args.model")
+        ref_cfg, resolved_path = _load_yaml(ref_path, base_dir=base_dir)
+        value = copy.deepcopy(_get_by_path(ref_cfg, key))
+        value = _resolve_config_references(value, base_dir=os.path.dirname(resolved_path))
+        overrides = obj.get("overrides", obj.get("override", None))
+        if overrides:
+            if not isinstance(value, dict) or not isinstance(overrides, dict):
+                raise TypeError(
+                    "override(s) can only be applied when both referenced value "
+                    "and override are dictionaries"
+                )
+            value = _deep_update(value, overrides)
+        return value
+
+    return {k: _resolve_config_references(v, base_dir=base_dir) for k, v in obj.items()}
 
 
 def _as_list(value):
@@ -266,7 +346,11 @@ class StageEvaluator:
     ):
         self.config_path = config_path
         self.config_dir = os.path.dirname(os.path.abspath(config_path))
-        self.config = _load_yaml(config_path)
+        raw_config, resolved_config_path = _load_yaml(config_path)
+        self.config = _resolve_config_references(
+            raw_config,
+            base_dir=os.path.dirname(os.path.abspath(resolved_config_path)),
+        )
         self.stage = stage
         self.filename = os.path.basename(config_path)[:-5]
         self.batch_size = batch_size
