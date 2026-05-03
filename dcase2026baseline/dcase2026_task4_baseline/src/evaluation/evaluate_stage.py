@@ -30,9 +30,7 @@ def _get_by_path(obj, dotted_path):
         elif isinstance(cur, list):
             cur = cur[int(part)]
         else:
-            raise KeyError(
-                f"Cannot descend into {type(cur)} at '{part}' for path '{dotted_path}'"
-            )
+            raise KeyError(f"Cannot descend into {type(cur)} at '{part}' for path '{dotted_path}'")
     return cur
 
 
@@ -47,39 +45,10 @@ def _deep_update(base, updates):
 
 
 def _resolve_config_references(obj, base_dir=None):
-    """Resolve opt-in references to model/dataset blocks in training configs.
-
-    This is intentionally backward compatible. Existing stage/eval configs that
-    inline their full configs work unchanged. A dictionary is replaced only when
-    it contains one of these reference keys:
-
-        from_training_config: path/to/train.yaml
-        config_ref: path/to/train.yaml
-
-    Default referenced key:
-
-        lightning_module.args.model
-
-    Example:
-
-        uss_config:
-            from_training_config: ../../../config/separation/modified_deft_uss_temporal_noisylabel_min.yaml
-            key: lightning_module.args.model
-
-    Optional overrides can patch the referenced config after loading:
-
-        sc_config:
-            from_training_config: ../../../config/label/m2d_sc_stage3_estimated_temporal_strong_robust.yaml
-            key: lightning_module.args.model
-            overrides:
-                args:
-                    eval_crop_seconds: 10.0
-    """
     if isinstance(obj, list):
         return [_resolve_config_references(x, base_dir=base_dir) for x in obj]
     if not isinstance(obj, dict):
         return obj
-
     ref_path = obj.get("from_training_config", obj.get("config_ref", None))
     if ref_path is not None:
         key = obj.get("key", "lightning_module.args.model")
@@ -89,13 +58,9 @@ def _resolve_config_references(obj, base_dir=None):
         overrides = obj.get("overrides", obj.get("override", None))
         if overrides:
             if not isinstance(value, dict) or not isinstance(overrides, dict):
-                raise TypeError(
-                    "override(s) can only be applied when both referenced value "
-                    "and override are dictionaries"
-                )
+                raise TypeError("override(s) can only be applied when both referenced value and override are dictionaries")
             value = _deep_update(value, overrides)
         return value
-
     return {k: _resolve_config_references(v, base_dir=base_dir) for k, v in obj.items()}
 
 
@@ -127,18 +92,10 @@ def _load_checkpoint(model, checkpoint_path):
         suffix_matches = [k for k in state_dict if isinstance(k, str) and k.endswith(one_model_key)]
         if suffix_matches:
             prefix = suffix_matches[0][:-len(one_model_key)]
-            state_dict = {
-                k[len(prefix):]: v
-                for k, v in state_dict.items()
-                if isinstance(k, str) and k.startswith(prefix)
-            }
+            state_dict = {k[len(prefix):]: v for k, v in state_dict.items() if isinstance(k, str) and k.startswith(prefix)}
         else:
             for prefix in ("model.", "module.", "net."):
-                stripped = {
-                    k[len(prefix):]: v
-                    for k, v in state_dict.items()
-                    if isinstance(k, str) and k.startswith(prefix)
-                }
+                stripped = {k[len(prefix):]: v for k, v in state_dict.items() if isinstance(k, str) and k.startswith(prefix)}
                 if stripped and any(k in model_state for k in stripped):
                     state_dict = stripped
                     break
@@ -181,6 +138,10 @@ def _label_from_vectors(label_vectors, labels):
     return batch_labels
 
 
+def _labels_from_indices(indices, labels):
+    return [[labels[int(idx)]] for idx in indices.detach().cpu().tolist()]
+
+
 def _uss_labels(output, labels):
     class_probs = torch.softmax(output["class_logits"], dim=-1)
     probabilities, indices = class_probs.max(dim=-1)
@@ -191,7 +152,6 @@ def _uss_labels(output, labels):
     else:
         active_probs = torch.sigmoid(active_logits)
         active = active_logits > 0.0
-
     batch_labels = []
     for sample_indices, sample_active in zip(indices.detach().cpu(), active.detach().cpu()):
         sample_labels = []
@@ -202,16 +162,6 @@ def _uss_labels(output, labels):
 
 
 def _pairwise_sdr(est_waveforms, ref_waveforms, eps=1e-8):
-    """Pairwise raw SDR/SNR matrix used only for oracle slot assignment.
-
-    Args:
-        est_waveforms: [N_est, T]
-        ref_waveforms: [N_ref, T]
-
-    Returns:
-        Tensor [N_est, N_ref], where larger is better.
-    """
-
     est = est_waveforms.float()
     ref = ref_waveforms.float()
     noise = est[:, None, :] - ref[None, :, :]
@@ -221,32 +171,18 @@ def _pairwise_sdr(est_waveforms, ref_waveforms, eps=1e-8):
 
 
 def _pit_oracle_labels_for_sample(est_waveforms, ref_waveforms, ref_labels):
-    """Assign oracle labels to estimated USS slots after waveform-level PIT.
-
-    This is intended for measuring the separation upper bound of USS outputs:
-    classification, silence gating, and slot ordering are made oracle.  The
-    estimated waveforms themselves are not reordered; instead, each estimated
-    slot receives the label of the reference slot it best matches.  Unmatched
-    estimated slots are labelled as silence.
-    """
-
     n_est = int(est_waveforms.shape[0])
     est_labels = ["silence"] * n_est
     probabilities = torch.zeros(n_est, dtype=torch.float32)
-
     active_ref_indices = [idx for idx, label in enumerate(ref_labels) if label != "silence"]
     if n_est == 0 or len(active_ref_indices) == 0:
         return est_labels, probabilities
-
     n_match = min(n_est, len(active_ref_indices))
     active_ref_waveforms = ref_waveforms[active_ref_indices]
     pair_scores = _pairwise_sdr(est_waveforms, active_ref_waveforms)
-
     best_score = None
     best_assignment = None
-    active_ref_local_indices = range(len(active_ref_indices))
-
-    for ref_subset in combinations(active_ref_local_indices, n_match):
+    for ref_subset in combinations(range(len(active_ref_indices)), n_match):
         ref_subset = list(ref_subset)
         for est_perm in permutations(range(n_est), n_match):
             scores = [pair_scores[est_idx, ref_idx] for est_idx, ref_idx in zip(est_perm, ref_subset)]
@@ -254,15 +190,12 @@ def _pit_oracle_labels_for_sample(est_waveforms, ref_waveforms, ref_labels):
             if best_score is None or score > best_score:
                 best_score = score
                 best_assignment = list(zip(est_perm, ref_subset))
-
     if best_assignment is None:
         return est_labels, probabilities
-
     for est_idx, ref_local_idx in best_assignment:
         ref_idx = active_ref_indices[ref_local_idx]
         est_labels[int(est_idx)] = ref_labels[int(ref_idx)]
         probabilities[int(est_idx)] = 1.0
-
     return est_labels, probabilities
 
 
@@ -343,26 +276,20 @@ class StageEvaluator:
         use_cpu=False,
         num_workers=None,
         uss_oracle_labels=False,
+        sc_prediction_mode="raw",
     ):
         self.config_path = config_path
         self.config_dir = os.path.dirname(os.path.abspath(config_path))
         raw_config, resolved_config_path = _load_yaml(config_path)
-        self.config = _resolve_config_references(
-            raw_config,
-            base_dir=os.path.dirname(os.path.abspath(resolved_config_path)),
-        )
+        self.config = _resolve_config_references(raw_config, base_dir=os.path.dirname(os.path.abspath(resolved_config_path)))
         self.stage = stage
         self.filename = os.path.basename(config_path)[:-5]
         self.batch_size = batch_size
         self.result_dir = result_dir
         self.uss_oracle_labels = bool(uss_oracle_labels)
-        self.waveform_output_dir = (
-            os.path.join(waveform_output_dir, self.filename, stage)
-            if waveform_output_dir
-            else waveform_output_dir
-        )
+        self.sc_prediction_mode = sc_prediction_mode
+        self.waveform_output_dir = os.path.join(waveform_output_dir, self.filename, stage) if waveform_output_dir else waveform_output_dir
         self.device = torch.device("cpu" if use_cpu or not torch.cuda.is_available() else "cuda")
-
         if self.waveform_output_dir:
             os.makedirs(self.waveform_output_dir, exist_ok=True)
 
@@ -399,10 +326,7 @@ class StageEvaluator:
             for source_idx, (label, waveform) in enumerate(zip(sample_labels, sample_waveforms)):
                 if label == "silence":
                     continue
-                wavpath = os.path.join(
-                    self.waveform_output_dir,
-                    f"{soundscape_name}_{source_idx}_{label}.wav",
-                )
+                wavpath = os.path.join(self.waveform_output_dir, f"{soundscape_name}_{source_idx}_{label}.wav")
                 sf.write(wavpath, waveform.detach().cpu().numpy(), self.sr)
 
     def _evaluate_uss_batch(self, batch):
@@ -412,11 +336,7 @@ class StageEvaluator:
         est_waveforms = output["foreground_waveform"][:, :, 0, :].detach().cpu()
         if self.uss_oracle_labels:
             ref_waveforms = batch["dry_sources"][:, :, 0, :].detach().cpu()
-            est_labels, probabilities = _pit_oracle_labels(
-                est_waveforms=est_waveforms,
-                ref_waveforms=ref_waveforms,
-                ref_labels=batch["label"],
-            )
+            est_labels, probabilities = _pit_oracle_labels(est_waveforms, ref_waveforms, batch["label"])
         else:
             est_labels, probabilities = _uss_labels(output, self.labels)
             probabilities = probabilities.detach().cpu()
@@ -436,10 +356,21 @@ class StageEvaluator:
             ref_labels = []
             for class_index, is_silence in zip(batch["class_index"].tolist(), batch["is_silence"].tolist()):
                 ref_labels.append(["silence" if is_silence else self.labels[int(class_index)]])
+
         flat = flat.to(self.device)
         with torch.no_grad():
             output = self.model.predict({"waveform": flat})
-        label_vector = output["label_vector"].view(batch_size, n_sources, -1)
+
+        raw_label_vector = output.get("raw_label_vector", output["label_vector"])
+        gated_label_vector = output["label_vector"]
+        if self.sc_prediction_mode == "raw":
+            selected_vector = raw_label_vector
+        elif self.sc_prediction_mode == "gated":
+            selected_vector = gated_label_vector
+        else:
+            raise ValueError(f"Unsupported sc_prediction_mode: {self.sc_prediction_mode}")
+
+        label_vector = selected_vector.view(batch_size, n_sources, -1)
         probabilities = output["probabilities"].view(batch_size, n_sources)
         est_labels = _label_from_vectors(label_vector, self.labels)
         return est_labels, None, probabilities.detach().cpu(), ref_labels
@@ -453,11 +384,7 @@ class StageEvaluator:
         if label_dim is not None and label_vector.shape[-1] > label_dim:
             label_vector = label_vector[..., :label_dim]
         with torch.no_grad():
-            output = self.model({
-                "mixture": mixture,
-                "enrollment": enrollment,
-                "label_vector": label_vector,
-            })
+            output = self.model({"mixture": mixture, "enrollment": enrollment, "label_vector": label_vector})
         est_waveforms = output["waveform"][:, :, 0, :].detach().cpu()
         probabilities = torch.ones(est_waveforms.shape[:2], dtype=torch.float32)
         return batch["label"], est_waveforms, probabilities, batch["label"]
@@ -486,13 +413,9 @@ class StageEvaluator:
             all_ref_labels.extend(ref_labels)
             ref_waveforms = batch.get("dry_sources")
             mixture = batch.get("mixture")
-
             metric_values = []
             for metric_func in metric_funcs:
-                kwargs = {
-                    "batch_est_labels": est_labels,
-                    "batch_ref_labels": ref_labels,
-                }
+                kwargs = {"batch_est_labels": est_labels, "batch_ref_labels": ref_labels}
                 if metric_func is separation_metric:
                     kwargs.update({
                         "batch_est_waveforms": est_waveforms,
@@ -505,10 +428,12 @@ class StageEvaluator:
                 self._write_waveforms(batch, est_labels, est_waveforms)
 
             if self.result_dir:
-                for i, soundscape in enumerate(batch.get("soundscape", [None] * len(est_labels))):
+                soundscapes = batch.get("soundscape", [None] * len(est_labels))
+                for i, soundscape in enumerate(soundscapes):
                     reobj = {
                         "soundscape": soundscape,
                         "stage": self.stage,
+                        "sc_prediction_mode": self.sc_prediction_mode if self.stage == "sc" else None,
                         "oracle_labels": bool(self.uss_oracle_labels and self.stage == "uss"),
                         "ref_labels": ref_labels[i],
                         "est_labels": est_labels[i],
@@ -516,20 +441,16 @@ class StageEvaluator:
                         "metrics": [],
                     }
                     for mval, mfunc in zip(metric_values, metric_funcs):
-                        reobj["metrics"].append({
-                            "metric": getattr(mfunc, "metric_name", None),
-                            "value": mval[i],
-                        })
+                        reobj["metrics"].append({"metric": getattr(mfunc, "metric_name", None), "value": mval[i]})
                     results.append(reobj)
 
         summary = {}
         for metric_func in metric_funcs:
-            summary[getattr(metric_func, "metric_name", metric_func.__class__.__name__)] = _compute_metric(
-                metric_func,
-                is_print=True,
-            )
+            summary[getattr(metric_func, "metric_name", metric_func.__class__.__name__)] = _compute_metric(metric_func, is_print=True)
         if self.stage == "sc":
+            summary["sc_prediction_mode"] = self.sc_prediction_mode
             summary["source_classification"] = _classification_counts(all_est_labels, all_ref_labels)
+            print(f"SC prediction mode: {self.sc_prediction_mode}")
             print("Source top-1 accuracy: %.3f" % summary["source_classification"]["source_top1_accuracy"])
             print("Active source top-1 accuracy: %.3f" % summary["source_classification"]["active_source_top1_accuracy"])
             print("Silence accuracy: %.3f" % summary["source_classification"]["silence_accuracy"])
@@ -538,6 +459,8 @@ class StageEvaluator:
         if self.result_dir:
             os.makedirs(self.result_dir, exist_ok=True)
             stem = f"{self.filename}_{self.stage}"
+            if self.stage == "sc":
+                stem = f"{stem}_{self.sc_prediction_mode}"
             if self.uss_oracle_labels and self.stage == "uss":
                 stem = f"{stem}_oracle_labels"
             with open(os.path.join(self.result_dir, f"{stem}_results.json"), "w") as outfile:
@@ -558,6 +481,7 @@ def main(args):
         use_cpu=args.cpu,
         num_workers=args.num_workers,
         uss_oracle_labels=args.uss_oracle_labels,
+        sc_prediction_mode=args.sc_prediction_mode,
     )
     evaluator.evaluate()
 
@@ -573,15 +497,11 @@ if __name__ == "__main__":
     parser.add_argument("--cpu", action="store_true")
     parser.add_argument("--batchsize", "-b", type=int, default=2)
     parser.add_argument("--num_workers", type=int, default=None)
+    parser.add_argument("--sc_prediction_mode", choices=["raw", "gated"], default="raw", help="For --stage sc: raw matches training active_top1 from plain logits; gated applies predict() energy/silence thresholds.")
     parser.add_argument(
         "--uss_oracle_labels",
         action="store_true",
-        help=(
-            "For --stage uss only: assign oracle class labels to estimated USS "
-            "slots after waveform-level PIT against reference dry sources. This "
-            "evaluates separation upper bound independent of class/silence heads "
-            "and slot ordering."
-        ),
+        help="For --stage uss only: assign oracle class labels to estimated USS slots after waveform-level PIT against reference dry sources.",
     )
     args = parser.parse_args()
     print("START")
