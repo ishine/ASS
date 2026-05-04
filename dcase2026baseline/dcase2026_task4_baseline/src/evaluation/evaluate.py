@@ -14,12 +14,15 @@ import soundfile as sf
 from torch.utils.data import DataLoader
 from src.utils import LABELS, initialize_config
 from .metrics import label_metric, s5capi_metric
+from .metrics.s5_validation_breakdown import S5ValidationBreakdownMetric
 
 
-def build_metric_funcs(compare_assignment=False):
+def build_metric_funcs(compare_assignment=False, validation_breakdown=False):
     metric_funcs = [s5capi_metric.S5ClassAwareMetric(metricfunc='sdr')]
     if compare_assignment:
         metric_funcs.append(s5capi_metric.S5ClassAwareMetricAssignmentComparison(metricfunc='sdr'))
+    if validation_breakdown:
+        metric_funcs.append(S5ValidationBreakdownMetric(metricfunc='sdr', prefix='valid'))
     metric_funcs.append(label_metric.LabelMetric())
     return metric_funcs
 
@@ -31,14 +34,18 @@ class Evaluator:
                  result_dir = '',
                  batch_size=2,
                  use_cpu=False,
-                 compare_assignment=False):
+                 compare_assignment=False,
+                 validation_breakdown=False):
         self.config_path = config_path
         self.filename = os.path.basename(config_path)[:-5]
         self.batch_size = batch_size
         self.waveform_output_dir = os.path.join(waveform_output_dir, self.filename) if waveform_output_dir else waveform_output_dir
         self.result_dir = result_dir
         self.use_cpu = use_cpu
-        self.metric_funcs = build_metric_funcs(compare_assignment=compare_assignment)
+        self.metric_funcs = build_metric_funcs(
+            compare_assignment=compare_assignment,
+            validation_breakdown=validation_breakdown,
+        )
 
         if self.waveform_output_dir: os.makedirs(self.waveform_output_dir, exist_ok=True)
         
@@ -136,11 +143,17 @@ class Evaluator:
                     results.append(reobj)
                     # import pdb; pdb.set_trace()
 
-        for metric_func in self.metric_funcs: metric_func.compute(is_print=True)
+        summary = {}
+        for metric_func in self.metric_funcs:
+            metric_summary = metric_func.compute(is_print=True)
+            if isinstance(metric_summary, dict):
+                summary[getattr(metric_func, "metric_name", metric_func.__class__.__name__)] = metric_summary
         if self.result_dir:
             os.makedirs(self.result_dir, exist_ok=True)
             with open(os.path.join(self.result_dir, f"{self.filename}_results.json"), "w") as outfile:
                 json.dump(results, outfile, indent=4)
+            with open(os.path.join(self.result_dir, f"{self.filename}_summary.json"), "w") as outfile:
+                json.dump(summary, outfile, indent=4)
 
 def main(args):
     evalobj = Evaluator(
@@ -149,7 +162,8 @@ def main(args):
                  args.result_dir,
                  args.batchsize,
                  args.cpu,
-                 compare_assignment=args.compare_assignment)
+                 compare_assignment=args.compare_assignment,
+                 validation_breakdown=args.validation_breakdown)
     evalobj.evaluate()
 
 if __name__ == '__main__':
@@ -160,6 +174,7 @@ if __name__ == '__main__':
     parser.add_argument("--cpu", action="store_true")
     parser.add_argument("--batchsize","-b", type=int, required=False, default=2)
     parser.add_argument("--compare_assignment", action="store_true", help="Also log official raw-SDR assignment vs paper SDRi-assignment CAPI-SDRi diagnostics.")
+    parser.add_argument("--validation_breakdown", action="store_true", help="Also log CAPI-SDRi, zero-target FP, silence, leakage, and scene-bucket diagnostics.")
 
     args = parser.parse_args()
     print('START')
@@ -167,4 +182,3 @@ if __name__ == '__main__':
 
 # python -m src.evaluation.evaluate -c src/evaluation/eval_configs/m2dat_4c_resunetk.yaml --result_dir workspace/evaluation
 # python -m src.evaluation.evaluate -c src/evaluation/eval_configs/m2dat_1c_resunetk.yaml --result_dir workspace/evaluation
- 

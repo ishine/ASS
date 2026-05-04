@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from src.utils import initialize_config
 from .metrics import label_metric, s5capi_metric
+from .metrics.s5_validation_breakdown import S5ValidationBreakdownMetric
 
 
 def _load_yaml(path, base_dir=None):
@@ -278,6 +279,7 @@ class StageEvaluator:
         uss_oracle_labels=False,
         sc_prediction_mode="raw",
         compare_assignment=False,
+        validation_breakdown=False,
     ):
         self.config_path = config_path
         self.config_dir = os.path.dirname(os.path.abspath(config_path))
@@ -290,6 +292,7 @@ class StageEvaluator:
         self.uss_oracle_labels = bool(uss_oracle_labels)
         self.sc_prediction_mode = sc_prediction_mode
         self.compare_assignment = bool(compare_assignment)
+        self.validation_breakdown = bool(validation_breakdown)
         self.waveform_output_dir = os.path.join(waveform_output_dir, self.filename, stage) if waveform_output_dir else waveform_output_dir
         self.device = torch.device("cpu" if use_cpu or not torch.cuda.is_available() else "cuda")
         if self.waveform_output_dir:
@@ -397,6 +400,8 @@ class StageEvaluator:
         separation_metrics = [s5capi_metric.S5ClassAwareMetric(metricfunc="sdr")]
         if self.compare_assignment:
             separation_metrics.append(s5capi_metric.S5ClassAwareMetricAssignmentComparison(metricfunc="sdr"))
+        if self.validation_breakdown:
+            separation_metrics.append(S5ValidationBreakdownMetric(metricfunc="sdr", prefix="valid"))
         metric_funcs = [label_metrics] if self.stage == "sc" else separation_metrics + [label_metrics]
         for metric_func in metric_funcs:
             metric_func.reset()
@@ -487,6 +492,7 @@ def main(args):
         uss_oracle_labels=args.uss_oracle_labels,
         sc_prediction_mode=args.sc_prediction_mode,
         compare_assignment=args.compare_assignment,
+        validation_breakdown=args.validation_breakdown,
     )
     evaluator.evaluate()
 
@@ -504,6 +510,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers", type=int, default=None)
     parser.add_argument("--sc_prediction_mode", choices=["raw", "gated"], default="raw", help="For --stage sc: raw matches training active_top1 from plain logits; gated applies predict() energy/silence thresholds.")
     parser.add_argument("--compare_assignment", action="store_true", help="For --stage uss/tse: also log official raw-SDR assignment vs paper SDRi-assignment CAPI-SDRi diagnostics.")
+    parser.add_argument("--validation_breakdown", action="store_true", help="For --stage uss/tse: also log CAPI-SDRi, zero-target FP, silence, leakage, and scene-bucket diagnostics.")
     parser.add_argument(
         "--uss_oracle_labels",
         action="store_true",
