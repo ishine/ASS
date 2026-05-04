@@ -277,6 +277,7 @@ class StageEvaluator:
         num_workers=None,
         uss_oracle_labels=False,
         sc_prediction_mode="raw",
+        compare_assignment=False,
     ):
         self.config_path = config_path
         self.config_dir = os.path.dirname(os.path.abspath(config_path))
@@ -288,6 +289,7 @@ class StageEvaluator:
         self.result_dir = result_dir
         self.uss_oracle_labels = bool(uss_oracle_labels)
         self.sc_prediction_mode = sc_prediction_mode
+        self.compare_assignment = bool(compare_assignment)
         self.waveform_output_dir = os.path.join(waveform_output_dir, self.filename, stage) if waveform_output_dir else waveform_output_dir
         self.device = torch.device("cpu" if use_cpu or not torch.cuda.is_available() else "cuda")
         if self.waveform_output_dir:
@@ -392,8 +394,10 @@ class StageEvaluator:
     def evaluate(self):
         results = []
         label_metrics = label_metric.LabelMetric()
-        separation_metric = s5capi_metric.S5ClassAwareMetric(metricfunc="sdr")
-        metric_funcs = [label_metrics] if self.stage == "sc" else [separation_metric, label_metrics]
+        separation_metrics = [s5capi_metric.S5ClassAwareMetric(metricfunc="sdr")]
+        if self.compare_assignment:
+            separation_metrics.append(s5capi_metric.S5ClassAwareMetricAssignmentComparison(metricfunc="sdr"))
+        metric_funcs = [label_metrics] if self.stage == "sc" else separation_metrics + [label_metrics]
         for metric_func in metric_funcs:
             metric_func.reset()
 
@@ -416,7 +420,7 @@ class StageEvaluator:
             metric_values = []
             for metric_func in metric_funcs:
                 kwargs = {"batch_est_labels": est_labels, "batch_ref_labels": ref_labels}
-                if metric_func is separation_metric:
+                if metric_func in separation_metrics:
                     kwargs.update({
                         "batch_est_waveforms": est_waveforms,
                         "batch_ref_waveforms": ref_waveforms[:, :, 0, :],
@@ -482,6 +486,7 @@ def main(args):
         num_workers=args.num_workers,
         uss_oracle_labels=args.uss_oracle_labels,
         sc_prediction_mode=args.sc_prediction_mode,
+        compare_assignment=args.compare_assignment,
     )
     evaluator.evaluate()
 
@@ -498,6 +503,7 @@ if __name__ == "__main__":
     parser.add_argument("--batchsize", "-b", type=int, default=2)
     parser.add_argument("--num_workers", type=int, default=None)
     parser.add_argument("--sc_prediction_mode", choices=["raw", "gated"], default="raw", help="For --stage sc: raw matches training active_top1 from plain logits; gated applies predict() energy/silence thresholds.")
+    parser.add_argument("--compare_assignment", action="store_true", help="For --stage uss/tse: also log official raw-SDR assignment vs paper SDRi-assignment CAPI-SDRi diagnostics.")
     parser.add_argument(
         "--uss_oracle_labels",
         action="store_true",

@@ -4,6 +4,13 @@ import numpy as np
 from itertools import combinations, permutations
 
 class S5ClassAwareMetric():
+    """Official-baseline CAPI-SDRi implementation.
+
+    The public DCASE 2026 Task 4 baseline selects same-class permutations by
+    raw SDR, then reports SDR improvement for the selected assignment. Keep this
+    behavior as the default so local validation stays comparable with the
+    official baseline scorer.
+    """
     def __init__(self, metricfunc='sdr'):
         if metricfunc == 'sdr':
             self.metric_func = snr
@@ -189,7 +196,12 @@ class S5ClassAwareMetric():
 
 
 class S5ClassAwareMetricSDRiAssignment(S5ClassAwareMetric):
-    """CAPI-SDRi metric variant that selects assignments by SDR improvement."""
+    """Paper-definition diagnostic that selects assignments by SDR improvement.
+
+    The DCASE task description writes the permutation objective in terms of
+    SDRi. This class is intentionally separate from ``S5ClassAwareMetric`` so
+    official-baseline compatibility is not changed by diagnostic experiments.
+    """
 
     def _pi_metric(self,
                    est_wf, # nevent, wlen
@@ -243,11 +255,11 @@ class S5ClassAwareMetricSDRiAssignment(S5ClassAwareMetric):
 
 
 class S5ClassAwareMetricAssignmentComparison(S5ClassAwareMetric):
-    """Compare raw-SDR and SDR-improvement assignment objectives.
+    """Compare official raw-SDR and paper-definition SDRi assignments.
 
-    The default metric class preserves the historical assignment objective. This
-    comparison class is meant for validation: it reports both CAPI-SDRi values
-    so we can see whether unequal same-class counts change the score.
+    This diagnostic reports both CAPI-SDRi values so we can see whether
+    same-class assignment choices change the score. It must not be used as the
+    official ranking score unless the task organizers change the evaluator.
     """
 
     def __init__(self, metricfunc='sdr'):
@@ -266,9 +278,9 @@ class S5ClassAwareMetricAssignmentComparison(S5ClassAwareMetric):
         }
         reobj['delta_sdri_minus_raw'] = reobj['sdri_assignment_mean'] - reobj['raw_sdr_assignment_mean']
         if is_print:
-            print('CAPI-SDRi raw-SDR assignment: %.3f'%(reobj['raw_sdr_assignment_mean']))
-            print('CAPI-SDRi SDRi assignment   : %.3f'%(reobj['sdri_assignment_mean']))
-            print('CAPI-SDRi delta             : %.3f'%(reobj['delta_sdri_minus_raw']))
+            print('CAPI-SDRi official raw-SDR assignment: %.3f'%(reobj['raw_sdr_assignment_mean']))
+            print('CAPI-SDRi paper SDRi assignment      : %.3f'%(reobj['sdri_assignment_mean']))
+            print('CAPI-SDRi paper-minus-official delta : %.3f'%(reobj['delta_sdri_minus_raw']))
         return reobj
 
     def compute_sample(self,

@@ -15,9 +15,13 @@ from torch.utils.data import DataLoader
 from src.utils import LABELS, initialize_config
 from .metrics import label_metric, s5capi_metric
 
-casdri = s5capi_metric.S5ClassAwareMetric(metricfunc = 'sdr')
-label_metric = label_metric.LabelMetric()
-metric_funcs = [casdri, label_metric]
+
+def build_metric_funcs(compare_assignment=False):
+    metric_funcs = [s5capi_metric.S5ClassAwareMetric(metricfunc='sdr')]
+    if compare_assignment:
+        metric_funcs.append(s5capi_metric.S5ClassAwareMetricAssignmentComparison(metricfunc='sdr'))
+    metric_funcs.append(label_metric.LabelMetric())
+    return metric_funcs
 
 
 class Evaluator:
@@ -26,13 +30,15 @@ class Evaluator:
                  waveform_output_dir = '',
                  result_dir = '',
                  batch_size=2,
-                use_cpu=False):
+                 use_cpu=False,
+                 compare_assignment=False):
         self.config_path = config_path
         self.filename = os.path.basename(config_path)[:-5]
         self.batch_size = batch_size
         self.waveform_output_dir = os.path.join(waveform_output_dir, self.filename) if waveform_output_dir else waveform_output_dir
         self.result_dir = result_dir
         self.use_cpu = use_cpu
+        self.metric_funcs = build_metric_funcs(compare_assignment=compare_assignment)
 
         if self.waveform_output_dir: os.makedirs(self.waveform_output_dir, exist_ok=True)
         
@@ -78,7 +84,7 @@ class Evaluator:
 
     def evaluate(self):
         if self.result_dir: results = []
-        for metric_func in metric_funcs: metric_func.reset()
+        for metric_func in self.metric_funcs: metric_func.reset()
 
         for batch in tqdm(self.dataloader):
             if self.use_generated_waveform:
@@ -104,7 +110,7 @@ class Evaluator:
                             sf.write(wavpath, waveform.numpy(), self.sr)
 
             metric_values = []
-            for metric_func in metric_funcs:
+            for metric_func in self.metric_funcs:
                 metric_value = metric_func.update(batch_est_labels=batch_est_labels,
                                   batch_est_waveforms=batch_est_waveforms,
                                   batch_ref_labels=batch_ref_labels,
@@ -122,7 +128,7 @@ class Evaluator:
                         'probabilities': batch_est_probabilities[i].tolist(),
                         'metrics': []
                     }
-                    for mval, mfunc in zip(metric_values, metric_funcs):
+                    for mval, mfunc in zip(metric_values, self.metric_funcs):
                         reobj['metrics'].append({
                             'metric': getattr(mfunc, "metric_name", None),
                             'value': mval[i]
@@ -130,7 +136,7 @@ class Evaluator:
                     results.append(reobj)
                     # import pdb; pdb.set_trace()
 
-        for metric_func in metric_funcs: metric_func.compute(is_print=True)
+        for metric_func in self.metric_funcs: metric_func.compute(is_print=True)
         if self.result_dir:
             os.makedirs(self.result_dir, exist_ok=True)
             with open(os.path.join(self.result_dir, f"{self.filename}_results.json"), "w") as outfile:
@@ -142,7 +148,8 @@ def main(args):
                  args.waveform_output_dir,
                  args.result_dir,
                  args.batchsize,
-                 args.cpu)
+                 args.cpu,
+                 compare_assignment=args.compare_assignment)
     evalobj.evaluate()
 
 if __name__ == '__main__':
@@ -152,6 +159,7 @@ if __name__ == '__main__':
     parser.add_argument("--result_dir", type=str, required=False, default='')
     parser.add_argument("--cpu", action="store_true")
     parser.add_argument("--batchsize","-b", type=int, required=False, default=2)
+    parser.add_argument("--compare_assignment", action="store_true", help="Also log official raw-SDR assignment vs paper SDRi-assignment CAPI-SDRi diagnostics.")
 
     args = parser.parse_args()
     print('START')
