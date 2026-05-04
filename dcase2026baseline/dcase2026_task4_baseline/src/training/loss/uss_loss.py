@@ -76,6 +76,31 @@ def _source_activity_loss(output, target, output_key, span_key, active_mask=None
     )
 
 
+def _foreground_count_target(is_silence, max_count):
+    """Return foreground count targets in [0, max_count]."""
+
+    count_target = (~is_silence.bool()).long().sum(dim=1)
+    return count_target.clamp(max=max_count)
+
+
+def _foreground_count_loss(output, target):
+    """Optional 0/1/2/3 foreground count loss.
+
+    The loss is active only when the model returns ``count_logits``. This keeps
+    existing USS models/configs backward compatible while allowing count-aware
+    variants to optimize the zero-target and under/over-detection behavior that
+    matters for CAPI-SDRi.
+    """
+
+    if "count_logits" not in output:
+        return output["foreground_waveform"].float().new_zeros(())
+    count_logits = output["count_logits"].float()
+    max_count = count_logits.shape[-1] - 1
+    count_target = _foreground_count_target(target["is_silence"], max_count=max_count)
+    count_target = count_target.to(device=count_logits.device)
+    return F.cross_entropy(count_logits, count_target)
+
+
 def get_loss_func(
     lambda_non_foreground=0.01,
     # lambda_class_match=1.0,
@@ -83,6 +108,7 @@ def get_loss_func(
     lambda_class_ce=0.1,
     lambda_kl=1.0,
     lambda_silence=1.0,
+    lambda_count=0.0,
     lambda_inactive_foreground=0.05,
     lambda_inactive_interference=0.01,
     lambda_inactive_noise=0.01,
@@ -119,6 +145,8 @@ def get_loss_func(
             loss_fg_inactive = inactive_source_energy_loss(fg_est, fg_inactive_mask)
 
             fg_pred_active = ~fg_inactive_mask
+            # Historical name is ``silence_logits``, but the target here is an
+            # active-slot indicator: high logit means keep the slot active.
             loss_silence = F.binary_cross_entropy_with_logits(silence_logits, fg_pred_active.float())
             if fg_inactive_mask.any():
                 log_probs = F.log_softmax(class_logits[fg_inactive_mask], dim=-1)
@@ -127,6 +155,7 @@ def get_loss_func(
             else:
                 loss_kl = class_logits.new_zeros(())
 
+            loss_count = _foreground_count_loss(output, target)
             loss_fg = loss_fg_wave + lambda_class_ce * loss_ce + lambda_inactive_foreground * loss_fg_inactive
             loss_fg_activity = _source_activity_loss(
                 output,
@@ -175,6 +204,7 @@ def get_loss_func(
             + lambda_non_foreground * (loss_int + loss_noise)
             + lambda_kl * loss_kl
             + lambda_silence * loss_silence
+            + lambda_count * loss_count
             + lambda_residual * loss_residual
             + lambda_activity_foreground * loss_fg_activity
             + lambda_activity_interference * loss_int_activity
@@ -194,6 +224,7 @@ def get_loss_func(
             "loss_ce": loss_ce,
             "loss_kl": loss_kl,
             "loss_silence": loss_silence,
+            "loss_count": loss_count,
             "loss_residual": loss_residual,
             "loss_fg_activity": loss_fg_activity,
             "loss_int_activity": loss_int_activity,

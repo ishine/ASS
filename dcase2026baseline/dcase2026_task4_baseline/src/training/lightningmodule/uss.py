@@ -1,6 +1,12 @@
 from .base_lightningmodule import BaseLightningModule
 
 
+def _to_float(value):
+    if hasattr(value, "item"):
+        return float(value.item())
+    return float(value)
+
+
 class USSLightning(BaseLightningModule):
     def _get_target_dict(self, batch_data_dict):
         target_dict = {
@@ -16,6 +22,62 @@ class USSLightning(BaseLightningModule):
                 target_dict[key] = batch_data_dict[key]
         return target_dict
 
+    def _validation_breakdown(self, output_dict, target_dict):
+        """Validation diagnostics for zero-target and same-class duplicate cases.
+
+        These are deliberately lightweight threshold-free diagnostics. They do
+        not replace CAPI-SDRi, but they expose the 2026 failure modes that the
+        average loss can hide: zero-target scenes, same-class duplicates, and
+        foreground count accuracy.
+        """
+
+        fg_active = ~target_dict["is_silence"].bool()
+        ref_count = fg_active.long().sum(dim=1)
+        zero_target = ref_count == 0
+        multi_target = ref_count > 1
+
+        class_index = target_dict["class_index"]
+        same_class = []
+        for b in range(class_index.shape[0]):
+            active_classes = class_index[b, fg_active[b]]
+            same_class.append(active_classes.unique().numel() < active_classes.numel() if active_classes.numel() > 1 else False)
+        same_class = ref_count.new_tensor(same_class, dtype=fg_active.dtype).bool()
+        distinct_class = multi_target & ~same_class
+
+        diag = {
+            "valid_zero_target_ratio": zero_target.float().mean(),
+            "valid_same_class_ratio": same_class.float().mean(),
+            "valid_distinct_class_ratio": distinct_class.float().mean(),
+        }
+
+        active_prob = output_dict["silence_logits"].float().sigmoid()
+        slot_energy = output_dict["foreground_waveform"][:, :, 0].float().pow(2).mean(dim=-1).sqrt()
+        # Energy-only and active-logit diagnostics are not final inference gates;
+        # they help tune the explicit Kwon2025S5 gate thresholds.
+        pred_active_prob = active_prob > 0.5
+        pred_active_energy = slot_energy > 1e-4
+        pred_active = pred_active_prob & pred_active_energy
+        pred_count = pred_active.long().sum(dim=1)
+
+        diag.update({
+            "valid_count_mae_slot_gate": (pred_count - ref_count).abs().float().mean(),
+            "valid_zero_target_fp_rate_slot_gate": (pred_count[zero_target] > 0).float().mean() if zero_target.any() else ref_count.float().new_zeros(()),
+            "valid_slot_active_rate": pred_active.float().mean(),
+            "valid_slot_energy_mean": slot_energy.mean(),
+        })
+
+        if "count_logits" in output_dict:
+            count_pred = output_dict["count_logits"].float().argmax(dim=-1)
+            diag.update({
+                "valid_count_acc": (count_pred == ref_count.clamp(max=output_dict["count_logits"].shape[-1] - 1)).float().mean(),
+                "valid_count_mae": (count_pred - ref_count).abs().float().mean(),
+                "valid_zero_target_fp_rate_count": (count_pred[zero_target] > 0).float().mean() if zero_target.any() else ref_count.float().new_zeros(()),
+                "valid_same_class_count_mae": (count_pred[same_class] - ref_count[same_class]).abs().float().mean() if same_class.any() else ref_count.float().new_zeros(()),
+                "valid_distinct_class_count_mae": (count_pred[distinct_class] - ref_count[distinct_class]).abs().float().mean() if distinct_class.any() else ref_count.float().new_zeros(()),
+            })
+
+        return diag
+
     def training_step_processing(self, batch_data_dict, batch_idx):
         batchsize = batch_data_dict["mixture"].shape[0]
         output_dict = self.model({"mixture": batch_data_dict["mixture"]})
@@ -29,7 +91,10 @@ class USSLightning(BaseLightningModule):
         target_dict = self._get_target_dict(batch_data_dict)
         loss_dict = self.loss_func(output_dict, target_dict)
 
-        loss_dict = {k: v.item() for k, v in loss_dict.items()}
+        loss_dict = {k: _to_float(v) for k, v in loss_dict.items()}
+        for k, v in self._validation_breakdown(output_dict, target_dict).items():
+            loss_dict[k] = _to_float(v)
+
         if self.metric_func:
             metric = self.metric_func(output_dict, target_dict)
             for k, v in metric.items():
