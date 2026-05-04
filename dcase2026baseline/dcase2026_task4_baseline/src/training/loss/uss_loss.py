@@ -29,6 +29,44 @@ def _si_snr_loss_per_source(est, target):
     return -10.0 * torch.log10(ratio)
 
 
+def pairwise_sa_sdri_loss(waveform_pred, waveform_target, mixture, ref_channel: int = 0, eps: float = 1e-8):
+    """Scale-aware negative SDR improvement for every target/prediction pair.
+
+    Returns [B, S_target, S_pred]. The mixture baseline is computed on the
+    ranking reference channel so the foreground assignment can follow CAPI-SDRi
+    more closely than plain SDR PIT.
+    """
+
+    if waveform_pred.dim() == 4:
+        pred = waveform_pred[:, :, ref_channel, :]
+    else:
+        pred = waveform_pred
+
+    if waveform_target.dim() == 4:
+        target = waveform_target[:, :, ref_channel, :]
+    else:
+        target = waveform_target
+
+    if mixture.dim() == 3:
+        mix = mixture[:, ref_channel, :]
+    else:
+        mix = mixture
+
+    pred = pred.float()
+    target = target.float()
+    mix = mix.float()
+
+    err_pred = pred.unsqueeze(1) - target.unsqueeze(2)
+    target_power = target.pow(2).sum(dim=-1).unsqueeze(2).clamp_min(eps)
+    pred_noise_power = err_pred.pow(2).sum(dim=-1).clamp_min(eps)
+    sdr_pred = 10.0 * torch.log10((target_power / pred_noise_power).clamp_min(eps))
+
+    err_mix = mix.unsqueeze(1) - target
+    mix_noise_power = err_mix.pow(2).sum(dim=-1).unsqueeze(2).clamp_min(eps)
+    sdr_mix = 10.0 * torch.log10((target_power / mix_noise_power).clamp_min(eps))
+    return -(sdr_pred - sdr_mix)
+
+
 def _class_pair_loss(class_logits, class_index):
     class_logits = class_logits.float()
     batch_size, n_pred, n_classes = class_logits.shape
@@ -37,6 +75,71 @@ def _class_pair_loss(class_logits, class_index):
     expanded = neg_log_probs.unsqueeze(1).expand(batch_size, n_target, n_pred, n_classes)
     gather_idx = class_index[:, :, None, None].expand(batch_size, n_target, n_pred, 1)
     return expanded.gather(dim=-1, index=gather_idx).squeeze(-1)
+
+
+def _target_class_probability(class_logits, class_index):
+    """Return p(predicted slot class == reference class) as [B, S_ref, S_pred]."""
+
+    probs = torch.softmax(class_logits.float(), dim=-1)
+    batch_size, n_pred, n_classes = probs.shape
+    n_target = class_index.shape[1]
+    expanded = probs.unsqueeze(1).expand(batch_size, n_target, n_pred, n_classes)
+    gather_idx = class_index[:, :, None, None].expand(batch_size, n_target, n_pred, 1)
+    return expanded.gather(dim=-1, index=gather_idx).squeeze(-1)
+
+
+def _class_confident_valid_pair_mask(class_logits, class_index, active_mask, confidence_threshold: float = 0.35):
+    target_prob = _target_class_probability(class_logits, class_index)
+    valid_pair_mask = target_prob >= confidence_threshold
+    return valid_pair_mask & active_mask[:, :, None].bool()
+
+
+def _capi_foreground_assignment(
+    fg_est,
+    fg_ref,
+    mixture,
+    class_logits,
+    class_index,
+    fg_active,
+    lambda_class_pit: float = 2.0,
+    confidence_threshold: float = 0.35,
+    invalid_class_cost: float = 20.0,
+    use_sdri: bool = True,
+    use_hard_class_mask: bool = False,
+    ref_channel: int = 0,
+):
+    if use_sdri:
+        fg_pair_wave = pairwise_sa_sdri_loss(fg_est, fg_ref, mixture, ref_channel=ref_channel)
+    else:
+        fg_pair_wave = pairwise_sa_sdr_loss(fg_est, fg_ref)
+
+    fg_pair_class = _class_pair_loss(class_logits, class_index)
+    fg_pair_total = fg_pair_wave + lambda_class_pit * fg_pair_class
+
+    valid_pair_mask = _class_confident_valid_pair_mask(
+        class_logits=class_logits,
+        class_index=class_index,
+        active_mask=fg_active,
+        confidence_threshold=confidence_threshold,
+    )
+
+    if use_hard_class_mask:
+        loss_fg_match, fg_best_perm = pit_from_pairwise_loss(
+            fg_pair_total,
+            active_mask=fg_active,
+            valid_pair_mask=valid_pair_mask,
+            eval_func="min",
+        )
+    else:
+        fg_pair_total = fg_pair_total + (~valid_pair_mask).float() * invalid_class_cost
+        loss_fg_match, fg_best_perm = pit_from_pairwise_loss(
+            fg_pair_total,
+            active_mask=fg_active,
+            valid_pair_mask=None,
+            eval_func="min",
+        )
+
+    return loss_fg_match, fg_best_perm, fg_pair_wave, fg_pair_class, fg_pair_total, valid_pair_mask
 
 
 def _safe_active_mean(values, active_mask):
@@ -67,10 +170,7 @@ def _source_activity_loss(output, target, output_key, span_key, active_mask=None
     if best_perm is not None and active_mask is not None:
         span_sec = align_spans_to_predictions(best_perm, span_sec, active_mask, activity_logits.shape[1])
     return temporal_activity_loss(
-        {
-            "activity_logits": activity_logits,
-            "duration_sec": output.get("duration_sec"),
-        },
+        {"activity_logits": activity_logits, "duration_sec": output.get("duration_sec")},
         {"span_sec": span_sec},
         pos_weight=pos_weight,
     )
@@ -84,13 +184,7 @@ def _foreground_count_target(is_silence, max_count):
 
 
 def _foreground_count_loss(output, target):
-    """Optional 0/1/2/3 foreground count loss.
-
-    The loss is active only when the model returns ``count_logits``. This keeps
-    existing USS models/configs backward compatible while allowing count-aware
-    variants to optimize the zero-target and under/over-detection behavior that
-    matters for CAPI-SDRi.
-    """
+    """Optional 0/1/2/3 foreground count loss."""
 
     if "count_logits" not in output:
         return output["foreground_waveform"].float().new_zeros(())
@@ -118,6 +212,11 @@ def get_loss_func(
     lambda_activity_noise=0.0,
     activity_pos_weight=1.0,
     active_energy_eps=1e-8,
+    foreground_assignment="global_pit",
+    capi_use_sdri=True,
+    capi_ref_channel=0,
+    capi_confidence_threshold=0.35,
+    capi_invalid_class_cost=20.0,
 ):
     def loss_func(output, target):
         device_type = output["foreground_waveform"].device.type
@@ -135,10 +234,53 @@ def get_loss_func(
             class_index = target["class_index"]
             fg_active = ~target["is_silence"].bool()
 
-            fg_pair_wave = pairwise_sa_sdr_loss(fg_est, fg_ref)
-            fg_pair_class = _class_pair_loss(class_logits, class_index)
-            fg_pair_total = fg_pair_wave + lambda_class_pit * fg_pair_class
-            loss_fg_match, fg_best_perm = pit_from_pairwise_loss(fg_pair_total, active_mask=fg_active)
+            if foreground_assignment == "global_pit":
+                fg_pair_wave = pairwise_sa_sdr_loss(fg_est, fg_ref)
+                fg_pair_class = _class_pair_loss(class_logits, class_index)
+                fg_pair_total = fg_pair_wave + lambda_class_pit * fg_pair_class
+                loss_fg_match, fg_best_perm = pit_from_pairwise_loss(
+                    fg_pair_total,
+                    active_mask=fg_active,
+                    eval_func="min",
+                )
+                valid_pair_mask = torch.ones_like(fg_pair_total, dtype=torch.bool)
+            elif foreground_assignment == "soft_capi":
+                loss_fg_match, fg_best_perm, fg_pair_wave, fg_pair_class, fg_pair_total, valid_pair_mask = (
+                    _capi_foreground_assignment(
+                        fg_est=fg_est,
+                        fg_ref=fg_ref,
+                        mixture=target["mixture"],
+                        class_logits=class_logits,
+                        class_index=class_index,
+                        fg_active=fg_active,
+                        lambda_class_pit=lambda_class_pit,
+                        confidence_threshold=capi_confidence_threshold,
+                        invalid_class_cost=capi_invalid_class_cost,
+                        use_sdri=capi_use_sdri,
+                        use_hard_class_mask=False,
+                        ref_channel=capi_ref_channel,
+                    )
+                )
+            elif foreground_assignment == "hard_capi":
+                loss_fg_match, fg_best_perm, fg_pair_wave, fg_pair_class, fg_pair_total, valid_pair_mask = (
+                    _capi_foreground_assignment(
+                        fg_est=fg_est,
+                        fg_ref=fg_ref,
+                        mixture=target["mixture"],
+                        class_logits=class_logits,
+                        class_index=class_index,
+                        fg_active=fg_active,
+                        lambda_class_pit=lambda_class_pit,
+                        confidence_threshold=capi_confidence_threshold,
+                        invalid_class_cost=capi_invalid_class_cost,
+                        use_sdri=capi_use_sdri,
+                        use_hard_class_mask=True,
+                        ref_channel=capi_ref_channel,
+                    )
+                )
+            else:
+                raise ValueError(f"Unknown foreground_assignment: {foreground_assignment}")
+
             loss_fg_wave = matched_pairwise_mean(fg_pair_wave, fg_best_perm, fg_active)
             loss_ce = matched_pairwise_mean(fg_pair_class, fg_best_perm, fg_active)
             fg_inactive_mask = unmatched_prediction_mask(fg_best_perm, fg_active, fg_est.shape[1])
@@ -154,6 +296,15 @@ def get_loss_func(
                 loss_kl = F.kl_div(log_probs, uniform, reduction="batchmean")
             else:
                 loss_kl = class_logits.new_zeros(())
+
+            with torch.no_grad():
+                target_prob = _target_class_probability(class_logits, class_index).clamp_min(1e-8)
+                matched_target_class_nll = matched_pairwise_mean(-torch.log(target_prob), fg_best_perm, fg_active)
+                matched_valid_pair_rate = matched_pairwise_mean(
+                    valid_pair_mask.float(),
+                    fg_best_perm,
+                    fg_active,
+                )
 
             loss_count = _foreground_count_loss(output, target)
             loss_fg = loss_fg_wave + lambda_class_ce * loss_ce + lambda_inactive_foreground * loss_fg_inactive
@@ -213,6 +364,7 @@ def get_loss_func(
         return {
             "loss": loss,
             "loss_fg": loss_fg,
+            "loss_fg_match": loss_fg_match.mean(),
             "loss_fg_wave": loss_fg_wave,
             "loss_fg_inactive": loss_fg_inactive,
             "loss_int": loss_int,
@@ -222,6 +374,8 @@ def get_loss_func(
             "loss_noise_wave": loss_noise_wave,
             "loss_noise_inactive": loss_noise_inactive,
             "loss_ce": loss_ce,
+            "loss_matched_target_class_nll": matched_target_class_nll,
+            "loss_matched_valid_pair_rate": matched_valid_pair_rate,
             "loss_kl": loss_kl,
             "loss_silence": loss_silence,
             "loss_count": loss_count,
