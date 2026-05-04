@@ -76,6 +76,21 @@ def _source_activity_loss(output, target, output_key, span_key, active_mask=None
     )
 
 
+def _foreground_count_target(is_silence, max_count):
+    count_target = (~is_silence.bool()).long().sum(dim=1)
+    return count_target.clamp(max=max_count)
+
+
+def _foreground_count_loss(output, target):
+    if "count_logits" not in output:
+        return output["foreground_waveform"].float().new_zeros(())
+    count_logits = output["count_logits"].float()
+    max_count = count_logits.shape[-1] - 1
+    count_target = _foreground_count_target(target["is_silence"], max_count=max_count)
+    count_target = count_target.to(device=count_logits.device)
+    return F.cross_entropy(count_logits, count_target)
+
+
 def get_loss_func(
     lambda_non_foreground=0.01,
     # lambda_class_match=1.0,
@@ -83,6 +98,7 @@ def get_loss_func(
     lambda_class_ce=0.1,
     lambda_kl=1.0,
     lambda_silence=1.0,
+    lambda_count=0.0,
     lambda_inactive_foreground=0.05,
     lambda_inactive_interference=0.01,
     lambda_inactive_noise=0.01,
@@ -127,6 +143,7 @@ def get_loss_func(
             else:
                 loss_kl = class_logits.new_zeros(())
 
+            loss_count = _foreground_count_loss(output, target)
             loss_fg = loss_fg_wave + lambda_class_ce * loss_ce + lambda_inactive_foreground * loss_fg_inactive
             loss_fg_activity = _source_activity_loss(
                 output,
@@ -175,6 +192,7 @@ def get_loss_func(
             + lambda_non_foreground * (loss_int + loss_noise)
             + lambda_kl * loss_kl
             + lambda_silence * loss_silence
+            + lambda_count * loss_count
             + lambda_residual * loss_residual
             + lambda_activity_foreground * loss_fg_activity
             + lambda_activity_interference * loss_int_activity
@@ -194,6 +212,7 @@ def get_loss_func(
             "loss_ce": loss_ce,
             "loss_kl": loss_kl,
             "loss_silence": loss_silence,
+            "loss_count": loss_count,
             "loss_residual": loss_residual,
             "loss_fg_activity": loss_fg_activity,
             "loss_int_activity": loss_int_activity,
