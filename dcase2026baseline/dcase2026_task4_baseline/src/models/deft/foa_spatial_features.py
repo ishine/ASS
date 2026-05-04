@@ -27,6 +27,7 @@ from src.models.deft.modified_deft_bf16_safe import (
     ModifiedDeFTUSSMemoryEfficient as _BF16SafeModifiedDeFTUSSMemoryEfficient,
     ModifiedDeFTUSSMemoryEfficientTemporal as _BF16SafeModifiedDeFTUSSMemoryEfficientTemporal,
 )
+from src.models.deft.uss_count_head import _USSCountHeadMixin
 
 
 class FOASpatialFeatureEncoder(nn.Module):
@@ -226,3 +227,57 @@ class ModifiedDeFTUSSMemoryEfficientTemporalSpatialFeatures(
             include_ipd=include_ipd,
             spatial_feature_eps=spatial_feature_eps,
         )
+
+
+class ModifiedDeFTUSSMemoryEfficientSpatialFeaturesCountHead(
+    _USSCountHeadMixin,
+    ModifiedDeFTUSSMemoryEfficientSpatialFeatures,
+):
+    """Memory-efficient USS with both FOA spatial features and count head."""
+
+    def __init__(
+        self,
+        *args,
+        n_foreground: int = 3,
+        n_classes: int = 18,
+        count_hidden_dim: int = 64,
+        max_count: int = 3,
+        **kwargs,
+    ):
+        super().__init__(*args, n_foreground=n_foreground, n_classes=n_classes, **kwargs)
+        self._init_count_head(
+            n_foreground=n_foreground,
+            n_classes=n_classes,
+            count_hidden_dim=count_hidden_dim,
+            max_count=max_count,
+        )
+
+    def forward(self, input_dict):
+        return self._add_count_logits(super().forward(input_dict))
+
+
+class ModifiedDeFTUSSMemoryEfficientTemporalSpatialFeaturesCountHead(
+    _USSCountHeadMixin,
+    ModifiedDeFTUSSMemoryEfficientTemporalSpatialFeatures,
+):
+    """Temporal USS with both FOA spatial features and count head."""
+
+    def __init__(
+        self,
+        *args,
+        n_foreground: int = 3,
+        n_classes: int = 18,
+        count_hidden_dim: int = 64,
+        max_count: int = 3,
+        **kwargs,
+    ):
+        super().__init__(*args, n_foreground=n_foreground, n_classes=n_classes, **kwargs)
+        self._init_count_head(
+            n_foreground=n_foreground,
+            n_classes=n_classes,
+            count_hidden_dim=count_hidden_dim,
+            max_count=max_count,
+        )
+
+    def forward(self, input_dict):
+        return self._add_count_logits(super().forward(input_dict))
