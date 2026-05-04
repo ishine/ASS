@@ -113,7 +113,9 @@ lightning_module:
       main: get_loss_func
       args:
         lambda_non_foreground: 0.01
-        lambda_class_match: 1.0
+        # lambda_class_match: 1.0
+        lambda_class_pit: 0.1
+        lambda_class_ce: 0.8
         lambda_inactive_foreground: 0.05
         lambda_inactive_interference: 0.01
         lambda_inactive_noise: 0.01

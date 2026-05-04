@@ -78,7 +78,9 @@ def _source_activity_loss(output, target, output_key, span_key, active_mask=None
 
 def get_loss_func(
     lambda_non_foreground=0.01,
-    lambda_class_match=1.0,
+    # lambda_class_match=1.0,
+    lambda_class_pit=0.05,
+    lambda_class_ce=0.1,
     lambda_kl=1.0,
     lambda_silence=1.0,
     lambda_inactive_foreground=0.05,
@@ -109,7 +111,7 @@ def get_loss_func(
 
             fg_pair_wave = pairwise_sa_sdr_loss(fg_est, fg_ref)
             fg_pair_class = _class_pair_loss(class_logits, class_index)
-            fg_pair_total = fg_pair_wave + lambda_class_match * fg_pair_class
+            fg_pair_total = fg_pair_wave + lambda_class_pit * fg_pair_class
             loss_fg_match, fg_best_perm = pit_from_pairwise_loss(fg_pair_total, active_mask=fg_active)
             loss_fg_wave = matched_pairwise_mean(fg_pair_wave, fg_best_perm, fg_active)
             loss_ce = matched_pairwise_mean(fg_pair_class, fg_best_perm, fg_active)
@@ -125,7 +127,7 @@ def get_loss_func(
             else:
                 loss_kl = class_logits.new_zeros(())
 
-            loss_fg = loss_fg_wave + lambda_class_match * loss_ce + lambda_inactive_foreground * loss_fg_inactive
+            loss_fg = loss_fg_wave + lambda_class_ce * loss_ce + lambda_inactive_foreground * loss_fg_inactive
             loss_fg_activity = _source_activity_loss(
                 output,
                 target,
