@@ -69,9 +69,9 @@ class S5ValidationBreakdownMetric:
     def reset(self):
         self.values = defaultdict(list)
         self.sample_values = []
-        self.tp = 0
-        self.fp = 0
-        self.fn = 0
+        self.silence_tp = 0
+        self.silence_fp = 0
+        self.silence_fn = 0
 
     def update(self, batch_est_labels, batch_est_waveforms, batch_ref_labels, batch_ref_waveforms, batch_mixture):
         batch_values = []
@@ -98,20 +98,30 @@ class S5ValidationBreakdownMetric:
         elif bucket == "same_class_duplicate":
             self.values["capi_sdri_same_class_duplicate"].append(float(capi_value))
         elif bucket == "zero_target":
+            # True zero-target silence predictions are undefined/excluded by the
+            # official scorer.  Zero-target false positives receive a 0 dB value.
             self.values["capi_sdri_zero_target_fp"].append(float(capi_value))
 
-    def _add_detection_counts(self, est_active: List[str], ref_active: List[str]):
-        est_counts = defaultdict(int)
-        ref_counts = defaultdict(int)
-        for label in est_active:
-            est_counts[label] += 1
-        for label in ref_active:
-            ref_counts[label] += 1
-        for label in set(est_counts) | set(ref_counts):
-            matched = min(est_counts[label], ref_counts[label])
-            self.tp += matched
-            self.fp += max(est_counts[label] - ref_counts[label], 0)
-            self.fn += max(ref_counts[label] - est_counts[label], 0)
+    def _add_silence_counts(self, est_labels: List[str], ref_labels: List[str]):
+        """Count silence precision/recall by slot counts, not class labels.
+
+        Estimated slots are not guaranteed to be ordered like reference slots, so
+        we compare the number of silent slots.  This makes the diagnostic
+        permutation-insensitive and directly reflects unused-slot/zero-target
+        behavior.
+        """
+
+        n_slots = max(len(est_labels), len(ref_labels), 1)
+        est_silence = sum(label == "silence" for label in est_labels)
+        ref_silence = sum(label == "silence" for label in ref_labels)
+        # Missing padded positions are treated as silence so variable-length
+        # outputs can still be diagnosed consistently.
+        est_silence += max(n_slots - len(est_labels), 0)
+        ref_silence += max(n_slots - len(ref_labels), 0)
+        matched = min(est_silence, ref_silence)
+        self.silence_tp += matched
+        self.silence_fp += max(est_silence - ref_silence, 0)
+        self.silence_fn += max(ref_silence - est_silence, 0)
 
     def compute_sample(self, est_lb, est_wf, ref_lb, ref_wf, mixture):
         est_labels = _as_label_list(est_lb)
@@ -122,9 +132,8 @@ class S5ValidationBreakdownMetric:
 
         capi_value = self.sample_metric.compute_sample(est_labels, est_wf, ref_labels, ref_wf, mixture)
         self._add_capi_value(bucket, capi_value)
-        self._add_detection_counts(est_active, ref_active)
+        self._add_silence_counts(est_labels, ref_labels)
 
-        ref_count = len(ref_active)
         est_count = len(est_active)
         slot_active_rate = est_count / max(len(est_labels), 1)
         self.values["foreground_slot_active_rate"].append(float(slot_active_rate))
@@ -153,20 +162,26 @@ class S5ValidationBreakdownMetric:
             if value is not None:
                 result[f"{self.prefix}/{key}"] = value
 
-        precision = _safe_div(self.tp, self.tp + self.fp)
-        recall = _safe_div(self.tp, self.tp + self.fn)
+        precision = _safe_div(self.silence_tp, self.silence_tp + self.silence_fp)
+        recall = _safe_div(self.silence_tp, self.silence_tp + self.silence_fn)
         if precision is not None:
             result[f"{self.prefix}/silence_precision"] = precision
         if recall is not None:
             result[f"{self.prefix}/silence_recall"] = recall
 
         # Explicit aliases for the four scene buckets requested in experiment logs.
-        if f"{self.prefix}/capi_sdri_1target" not in result:
-            result[f"{self.prefix}/capi_sdri_1target"] = None
-        if f"{self.prefix}/capi_sdri_distinct_class" not in result:
-            result[f"{self.prefix}/capi_sdri_distinct_class"] = None
-        if f"{self.prefix}/capi_sdri_same_class_duplicate" not in result:
-            result[f"{self.prefix}/capi_sdri_same_class_duplicate"] = None
+        for key in (
+            "capi_sdri_all",
+            "capi_sdri_1target",
+            "capi_sdri_distinct_class",
+            "capi_sdri_same_class_duplicate",
+            "capi_sdri_zero_target_fp_rate",
+            "foreground_slot_active_rate",
+            "foreground_leakage_energy",
+            "silence_precision",
+            "silence_recall",
+        ):
+            result.setdefault(f"{self.prefix}/{key}", None)
 
         if is_print:
             for key, value in result.items():
