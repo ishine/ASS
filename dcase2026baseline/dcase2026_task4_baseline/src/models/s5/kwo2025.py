@@ -16,6 +16,10 @@ class Kwon2025S5(torch.nn.Module):
         duplicate_recall_enabled=False,
         duplicate_recall_min_probability=0.35,
         duplicate_recall_min_waveform_rms=1e-4,
+        uss_gate_enabled=False,
+        uss_gate_count0_threshold=0.65,
+        uss_gate_slot_active_threshold=0.45,
+        uss_gate_slot_energy_threshold=1e-4,
     ):
         super().__init__()
         self.uss = initialize_config(uss_config)
@@ -27,6 +31,10 @@ class Kwon2025S5(torch.nn.Module):
         self.duplicate_recall_enabled = duplicate_recall_enabled
         self.duplicate_recall_min_probability = float(duplicate_recall_min_probability)
         self.duplicate_recall_min_waveform_rms = float(duplicate_recall_min_waveform_rms)
+        self.uss_gate_enabled = bool(uss_gate_enabled)
+        self.uss_gate_count0_threshold = float(uss_gate_count0_threshold)
+        self.uss_gate_slot_active_threshold = float(uss_gate_slot_active_threshold)
+        self.uss_gate_slot_energy_threshold = float(uss_gate_slot_energy_threshold)
 
         if uss_ckpt is not None:
             self._load_ckpt(uss_ckpt, self.uss)
@@ -122,11 +130,43 @@ class Kwon2025S5(torch.nn.Module):
             labels[batch_idx][source_idx] = "silence"
         return waveforms, labels, probs, label_vector
 
+    def _apply_uss_gate_to_stage1(self, uss_out, stage1_waveform, stage1_labels, stage1_probs, stage1_vector):
+        """Conservatively gate USS foreground slots before TSE.
+
+        This gate is opt-in and uses only USS-side evidence: count=0
+        probability, per-slot active probability from ``silence_logits``, and
+        per-slot waveform RMS.
+        """
+
+        if not self.uss_gate_enabled:
+            return stage1_waveform, stage1_labels, stage1_probs, stage1_vector
+
+        batch_size, n_sources = stage1_waveform.shape[:2]
+        device = stage1_waveform.device
+        silent_mask = torch.zeros(batch_size, n_sources, dtype=torch.bool, device=device)
+
+        if "silence_logits" in uss_out:
+            active_prob = uss_out["silence_logits"].float().sigmoid().to(device=device)
+            silent_mask |= active_prob < self.uss_gate_slot_active_threshold
+
+        slot_rms = stage1_waveform[:, :, 0].float().pow(2).mean(dim=-1).sqrt()
+        silent_mask |= slot_rms < self.uss_gate_slot_energy_threshold
+
+        if "count_logits" in uss_out:
+            count_prob = uss_out["count_logits"].float().softmax(dim=-1).to(device=device)
+            count0 = count_prob[:, 0] > self.uss_gate_count0_threshold
+            silent_mask[count0] = True
+
+        return self._force_silent_slots(stage1_waveform, stage1_labels, stage1_probs, stage1_vector, silent_mask)
+
     def predict_label_separate(self, mixture):
         with torch.no_grad():
             uss_out = self.uss({"mixture": mixture})
             stage1_waveform = uss_out["foreground_waveform"]
             stage1_labels, stage1_probs, stage1_vector = self._classify_sources(stage1_waveform)
+            stage1_waveform, stage1_labels, stage1_probs, stage1_vector = self._apply_uss_gate_to_stage1(
+                uss_out, stage1_waveform, stage1_labels, stage1_probs, stage1_vector
+            )
             silent_slots = self._slot_silence_mask(stage1_vector)
             stage1_waveform, stage1_labels, stage1_probs, stage1_vector = self._force_silent_slots(
                 stage1_waveform, stage1_labels, stage1_probs, stage1_vector, silent_slots
