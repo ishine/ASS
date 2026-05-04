@@ -48,6 +48,30 @@ def test_uss_loss_accepts_optional_count_logits():
     assert torch.isfinite(loss["loss"])
 
 
+def test_uss_loss_accepts_capi_foreground_assignment_modes():
+    for mode in ("soft_capi", "hard_capi"):
+        output = _dummy_uss_output(samples=128)
+        target = _dummy_uss_target(samples=128)
+        head = ForegroundCountHead(n_foreground=3, n_classes=18, hidden_dim=16, max_count=3)
+        output["count_logits"] = head(output)
+
+        loss_func = get_loss_func(
+            foreground_assignment=mode,
+            capi_use_sdri=True,
+            capi_confidence_threshold=0.0,
+            capi_invalid_class_cost=10.0,
+            lambda_class_pit=1.0,
+            lambda_count=0.2,
+            lambda_inactive_foreground=0.2,
+        )
+        loss = loss_func(output, target)
+
+        assert torch.isfinite(loss["loss"])
+        assert torch.isfinite(loss["loss_fg_match"])
+        assert torch.isfinite(loss["loss_matched_target_class_nll"])
+        assert torch.isfinite(loss["loss_matched_valid_pair_rate"])
+
+
 def test_kwon_uss_gate_suppresses_count_zero_slots():
     obj = object.__new__(Kwon2025S5)
     obj.uss_gate_enabled = True
