@@ -80,3 +80,43 @@ def test_s5_validation_breakdown_zero_target_false_positive_rate():
 
     assert summary["valid/capi_sdri_zero_target_fp_rate"] == 1.0
     assert summary["valid/capi_sdri_all"] == 0.0
+
+
+def test_s5_validation_breakdown_compare_assignment_logs_both_variants():
+    metric = S5ValidationBreakdownMetric(metricfunc="sdr", prefix="valid", assignment_mode="compare")
+    est_waveforms = torch.stack([_waves(3)])
+    ref_waveforms = est_waveforms.clone()
+    mixture = ref_waveforms.sum(dim=1)
+
+    metric.update(
+        batch_est_labels=[["Speech", "Speech", "silence"]],
+        batch_est_waveforms=est_waveforms,
+        batch_ref_labels=[["Speech", "Speech", "silence"]],
+        batch_ref_waveforms=ref_waveforms,
+        batch_mixture=mixture,
+    )
+    summary = metric.compute()
+
+    assert summary["valid/capi_sdri_all"] is not None
+    assert summary["valid/capi_sdri_raw_assignment_all"] is not None
+    assert summary["valid/capi_sdri_sdri_assignment_all"] is not None
+    assert summary["valid/capi_sdri_assignment_delta_all"] is not None
+
+
+def test_s5_validation_breakdown_sdri_assignment_mode_uses_standard_keys():
+    metric = S5ValidationBreakdownMetric(metricfunc="sdr", prefix="valid", assignment_mode="sdri")
+    est_waveforms = torch.stack([_waves(3)])
+    ref_waveforms = est_waveforms.clone()
+    mixture = ref_waveforms.sum(dim=1)
+
+    metric.update(
+        batch_est_labels=[["Speech", "silence", "silence"]],
+        batch_est_waveforms=est_waveforms,
+        batch_ref_labels=[["Speech", "silence", "silence"]],
+        batch_ref_waveforms=ref_waveforms,
+        batch_mixture=mixture,
+    )
+    summary = metric.compute()
+
+    assert summary["valid/capi_sdri_all"] is not None
+    assert summary["valid/capi_sdri_sdri_assignment_all"] is not None
