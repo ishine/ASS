@@ -102,7 +102,8 @@ def _event_position_to_unit_vector(event):
             ],
             dtype=np.float32,
         )
-        return direction / np.linalg.norm(direction).clip(min=1e-8)
+        norm = max(float(np.linalg.norm(direction)), 1e-8)
+        return (direction / norm).astype(np.float32)
     return None
 
 
