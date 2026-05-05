@@ -44,7 +44,13 @@ class USSLightning(BaseLightningModule):
             "class_index": batch_data_dict["class_index"],
             "is_silence": batch_data_dict["is_silence"],
         }
-        for key in ("foreground_span_sec", "interference_span_sec", "noise_span_sec"):
+        for key in (
+            "foreground_span_sec",
+            "interference_span_sec",
+            "noise_span_sec",
+            "foreground_doa",
+            "foreground_doa_mask",
+        ):
             if key in batch_data_dict:
                 target_dict[key] = batch_data_dict[key]
         return target_dict
@@ -129,6 +135,11 @@ class USSLightning(BaseLightningModule):
                 "valid_same_class_count_mae": (count_pred[same_class] - ref_count[same_class]).abs().float().mean() if same_class.any() else ref_count.float().new_zeros(()),
                 "valid_distinct_class_count_mae": (count_pred[distinct_class] - ref_count[distinct_class]).abs().float().mean() if distinct_class.any() else ref_count.float().new_zeros(()),
             })
+
+        if "foreground_doa_mask" in target_dict:
+            doa_mask = target_dict["foreground_doa_mask"].bool()
+            diag["valid_foreground_doa_supervision_rate"] = doa_mask.float().mean()
+            diag["valid_same_class_doa_supervision_rate"] = doa_mask[same_class].float().mean() if same_class.any() else ref_count.float().new_zeros(())
 
         diag.update(self._capi_validation_breakdown(output_dict, target_dict, pred_active))
         return diag
