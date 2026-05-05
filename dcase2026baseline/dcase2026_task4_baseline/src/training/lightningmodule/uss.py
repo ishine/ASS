@@ -55,9 +55,13 @@ class USSLightning(BaseLightningModule):
         We use integer class ids converted to strings because the USS dataloader
         provides class indices, not class names. CAPI-SDRi only needs consistent
         labels between predictions and references, so stringified ids are enough.
+
+        The validation metric logs both official-compatible raw-SDR assignment
+        CAPI-SDRi and paper-definition SDRi assignment diagnostics.  Existing
+        ``valid/capi_sdri_*`` keys remain official-compatible.
         """
 
-        metric = S5ValidationBreakdownMetric(metricfunc="sdr", prefix="valid")
+        metric = S5ValidationBreakdownMetric(metricfunc="sdr", prefix="valid", assignment_mode="compare")
         est_labels = _labels_from_logits_and_mask(output_dict["class_logits"], pred_active)
         ref_active = ~target_dict["is_silence"].bool()
         ref_labels = _labels_from_index_and_mask(target_dict["class_index"], ref_active)
