@@ -143,7 +143,7 @@ class Kwon2025S5(torch.nn.Module):
         or very low waveform energy.  SC/TSE still handle the remaining slots.
         """
 
-        if not self.uss_gate_enabled:
+        if not getattr(self, "uss_gate_enabled", False):
             return stage1_waveform, stage1_labels, stage1_probs, stage1_vector
 
         batch_size, n_sources = stage1_waveform.shape[:2]
