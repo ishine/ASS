@@ -11,6 +11,9 @@ from torch.utils.data import DataLoader
 from src.utils import initialize_config, parse_yaml
 
 
+ENERGY_QUANTILES = (0.0, 0.01, 0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95, 0.99, 1.0)
+
+
 def load_model_state(model, checkpoint_path):
     checkpoint = torch.load(checkpoint_path, weights_only=False, map_location="cpu")
     state_dict = checkpoint.get("state_dict", checkpoint)
@@ -164,12 +167,18 @@ def calibrate_thresholds(records, labels, beta=1.0, max_fpr=None, min_precision=
     return thresholds, stats
 
 
-def collect_records(model, dataloader, device, max_batches=None):
+def _is_estimated_source_dataset(dataset):
+    return dataset.__class__.__name__ == "EstimatedSourceClassifierDataset" or getattr(dataset, "source_prefix", None) == "est"
+
+
+def collect_records(model, dataloader, device, max_batches=None, is_estimated_source=None):
     records = []
     model.eval()
     model.to(device)
     if hasattr(model, "energy_thresholds"):
         model.energy_thresholds = {}
+    if is_estimated_source is None:
+        is_estimated_source = _is_estimated_source_dataset(dataloader.dataset)
 
     with torch.no_grad():
         for batch_idx, batch in enumerate(dataloader):
@@ -188,12 +197,58 @@ def collect_records(model, dataloader, device, max_batches=None):
                         "pred_class": int(pred_class[idx].item()),
                         "target_class": int(target_class[idx].item()),
                         "is_silence": bool(is_silence[idx].item()),
+                        "is_estimated_source": bool(is_estimated_source),
                     }
                 )
     return records
 
 
-def write_outputs(output_dir, thresholds, stats, default_threshold=None):
+def _quantile_summary(name, records):
+    values = [float(record["energy"]) for record in records]
+    row = {"bucket": name, "n": len(values)}
+    for quantile in ENERGY_QUANTILES:
+        row[f"q{int(round(quantile * 100)):02d}"] = None
+    row["mean"] = None
+    row["std"] = None
+    if not values:
+        return row
+
+    tensor = torch.tensor(values, dtype=torch.float32)
+    quantiles = torch.quantile(tensor, torch.tensor(ENERGY_QUANTILES, dtype=torch.float32))
+    for quantile, value in zip(ENERGY_QUANTILES, quantiles.tolist()):
+        row[f"q{int(round(quantile * 100)):02d}"] = float(value)
+    row["mean"] = float(tensor.mean().item())
+    row["std"] = float(tensor.std(unbiased=False).item()) if tensor.numel() > 1 else 0.0
+    return row
+
+
+def energy_diagnostics(records):
+    """Summarize SC logit-energy distributions for calibration debugging."""
+
+    buckets = [
+        (
+            "true_active_correct_predictions",
+            [
+                record
+                for record in records
+                if (not record["is_silence"]) and record["pred_class"] == record["target_class"]
+            ],
+        ),
+        (
+            "true_active_wrong_predictions",
+            [
+                record
+                for record in records
+                if (not record["is_silence"]) and record["pred_class"] != record["target_class"]
+            ],
+        ),
+        ("true_silence_slots", [record for record in records if record["is_silence"]]),
+        ("estimated_source_slots", [record for record in records if record.get("is_estimated_source", False)]),
+    ]
+    return [_quantile_summary(name, bucket_records) for name, bucket_records in buckets]
+
+
+def write_outputs(output_dir, thresholds, stats, default_threshold=None, diagnostics=None):
     output_dir.mkdir(parents=True, exist_ok=True)
     threshold_block = {"energy_thresholds": {int(k): float(v) for k, v in thresholds.items()}}
     if default_threshold is not None:
@@ -202,6 +257,8 @@ def write_outputs(output_dir, thresholds, stats, default_threshold=None):
     yaml_path = output_dir / "energy_thresholds.yaml"
     json_path = output_dir / "energy_thresholds.json"
     csv_path = output_dir / "energy_threshold_stats.csv"
+    diagnostics_csv_path = output_dir / "energy_diagnostics.csv"
+    diagnostics_json_path = output_dir / "energy_diagnostics.json"
     yaml_path.write_text(yaml.safe_dump(threshold_block, sort_keys=False))
     json_path.write_text(json.dumps(threshold_block, indent=2) + "\n")
 
@@ -209,7 +266,17 @@ def write_outputs(output_dir, thresholds, stats, default_threshold=None):
         writer = csv.DictWriter(f, fieldnames=list(stats[0].keys()))
         writer.writeheader()
         writer.writerows(stats)
-    return yaml_path, json_path, csv_path
+
+    diagnostics = diagnostics or []
+    if diagnostics:
+        with diagnostics_csv_path.open("w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=list(diagnostics[0].keys()))
+            writer.writeheader()
+            writer.writerows(diagnostics)
+    else:
+        diagnostics_csv_path.write_text("")
+    diagnostics_json_path.write_text(json.dumps(diagnostics, indent=2) + "\n")
+    return yaml_path, json_path, csv_path, diagnostics_csv_path, diagnostics_json_path
 
 
 def main():
@@ -244,12 +311,28 @@ def main():
         min_precision=args.min_precision,
         fallback_default=args.default_threshold,
     )
-    paths = write_outputs(Path(args.output_dir), thresholds, stats, default_threshold=args.default_threshold)
+    diagnostics = energy_diagnostics(records)
+    paths = write_outputs(
+        Path(args.output_dir),
+        thresholds,
+        stats,
+        default_threshold=args.default_threshold,
+        diagnostics=diagnostics,
+    )
 
     print(f"Collected {len(records)} validation source slots.")
     print("Wrote:")
     for path in paths:
         print(f"  {path}")
+    print("\nEnergy diagnostics:")
+    for row in diagnostics:
+        if row["q50"] is None:
+            print(f"  {row['bucket']}: n=0")
+        else:
+            print(
+                f"  {row['bucket']}: "
+                f"n={row['n']}, q10={row['q10']:.3f}, q50={row['q50']:.3f}, q90={row['q90']:.3f}"
+            )
     print("\nPaste this block under the SC model args in an eval config:")
     print(yaml.safe_dump({"energy_thresholds": {int(k): float(v) for k, v in thresholds.items()}}, sort_keys=False))
 
