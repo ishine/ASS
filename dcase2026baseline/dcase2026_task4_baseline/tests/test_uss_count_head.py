@@ -72,6 +72,37 @@ def test_uss_loss_accepts_capi_foreground_assignment_modes():
         assert torch.isfinite(loss["loss_matched_valid_pair_rate"])
 
 
+def test_uss_loss_accepts_spatial_supervision_and_anticollapse_terms():
+    output = _dummy_uss_output(samples=128)
+    target = _dummy_uss_target(samples=128)
+    target["class_index"] = torch.tensor([[0, 0, 1], [2, 2, 3]])
+    target["is_silence"] = torch.tensor([[False, False, True], [False, False, True]])
+    target["foreground_doa"] = torch.nn.functional.normalize(torch.randn(2, 3, 3), dim=-1)
+    target["foreground_doa_mask"] = ~target["is_silence"]
+    output["spatial_embedding"] = torch.nn.functional.normalize(torch.randn(2, 3, 8), dim=-1)
+    output["doa_vector"] = torch.nn.functional.normalize(torch.randn(2, 3, 3), dim=-1)
+    head = ForegroundCountHead(n_foreground=3, n_classes=18, hidden_dim=16, max_count=3)
+    output["count_logits"] = head(output)
+
+    loss_func = get_loss_func(
+        foreground_assignment="soft_capi",
+        capi_use_sdri=True,
+        capi_confidence_threshold=0.0,
+        capi_invalid_class_cost=10.0,
+        lambda_class_pit=1.0,
+        lambda_count=0.2,
+        lambda_inactive_foreground=0.2,
+        lambda_doa=0.1,
+        lambda_spatial_diversity=0.05,
+        lambda_waveform_anticollapse=0.02,
+    )
+    loss = loss_func(output, target)
+
+    for key in ("loss", "loss_doa", "loss_spatial_diversity", "loss_waveform_anticollapse"):
+        assert key in loss
+        assert torch.isfinite(loss[key])
+
+
 def test_kwon_uss_gate_suppresses_count_zero_slots():
     obj = object.__new__(Kwon2025S5)
     obj.uss_gate_enabled = True

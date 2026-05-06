@@ -195,6 +195,72 @@ def _foreground_count_loss(output, target):
     return F.cross_entropy(count_logits, count_target)
 
 
+def _gather_by_reference(prediction, best_perm):
+    """Gather prediction slots into reference order using PIT assignment."""
+
+    gathered = []
+    for batch_idx in range(prediction.shape[0]):
+        gathered.append(prediction[batch_idx, best_perm[batch_idx]])
+    return torch.stack(gathered, dim=0)
+
+
+def _same_class_pair_mask(class_index, fg_active):
+    same_class = class_index[:, :, None] == class_index[:, None, :]
+    active_pair = fg_active[:, :, None] & fg_active[:, None, :]
+    n_ref = class_index.shape[1]
+    upper = torch.triu(
+        torch.ones(n_ref, n_ref, device=class_index.device, dtype=torch.bool),
+        diagonal=1,
+    )
+    return same_class & active_pair & upper[None]
+
+
+def _matched_doa_loss(output, target, best_perm, fg_active):
+    if "doa_vector" not in output or "foreground_doa" not in target:
+        return output["foreground_waveform"].float().new_zeros(())
+    pred_doa = F.normalize(output["doa_vector"].float(), dim=-1, eps=1e-8)
+    ref_doa = F.normalize(target["foreground_doa"].to(device=pred_doa.device).float(), dim=-1, eps=1e-8)
+    doa_mask = target.get("foreground_doa_mask")
+    if doa_mask is None:
+        doa_mask = torch.ones_like(fg_active, dtype=torch.bool)
+    doa_mask = doa_mask.to(device=pred_doa.device, dtype=torch.bool) & fg_active.to(device=pred_doa.device, dtype=torch.bool)
+    matched_pred = _gather_by_reference(pred_doa, best_perm)
+    cos = (matched_pred * ref_doa).sum(dim=-1)
+    if doa_mask.any():
+        return ((1.0 - cos) * doa_mask.float()).sum() / doa_mask.float().sum().clamp_min(1.0)
+    return pred_doa.new_zeros(())
+
+
+def _spatial_diversity_loss(output, class_index, fg_active, best_perm, margin: float = 0.2):
+    if "spatial_embedding" not in output:
+        return output["foreground_waveform"].float().new_zeros(())
+    emb = F.normalize(output["spatial_embedding"].float(), dim=-1, eps=1e-8)
+    matched_emb = _gather_by_reference(emb, best_perm)
+    pair_mask = _same_class_pair_mask(
+        class_index.to(device=emb.device),
+        fg_active.to(device=emb.device, dtype=torch.bool),
+    )
+    if not pair_mask.any():
+        return emb.new_zeros(())
+    cos = torch.matmul(matched_emb, matched_emb.transpose(1, 2))
+    loss = F.relu(cos - float(margin))
+    return (loss * pair_mask.float()).sum() / pair_mask.float().sum().clamp_min(1.0)
+
+
+def _waveform_anticollapse_loss(fg_est, class_index, fg_active, best_perm, margin: float = 0.3):
+    matched_wave = _gather_by_reference(fg_est.float(), best_perm).flatten(start_dim=2)
+    matched_wave = F.normalize(matched_wave, dim=-1, eps=1e-8)
+    pair_mask = _same_class_pair_mask(
+        class_index.to(device=fg_est.device),
+        fg_active.to(device=fg_est.device, dtype=torch.bool),
+    )
+    if not pair_mask.any():
+        return fg_est.new_zeros(())
+    corr = torch.abs(torch.matmul(matched_wave, matched_wave.transpose(1, 2)))
+    loss = F.relu(corr - float(margin))
+    return (loss * pair_mask.float()).sum() / pair_mask.float().sum().clamp_min(1.0)
+
+
 def get_loss_func(
     lambda_non_foreground=0.01,
     # lambda_class_match=1.0,
@@ -217,6 +283,11 @@ def get_loss_func(
     capi_ref_channel=0,
     capi_confidence_threshold=0.35,
     capi_invalid_class_cost=20.0,
+    lambda_doa=0.0,
+    lambda_spatial_diversity=0.0,
+    lambda_waveform_anticollapse=0.0,
+    spatial_diversity_margin=0.2,
+    waveform_anticollapse_margin=0.3,
 ):
     def loss_func(output, target):
         device_type = output["foreground_waveform"].device.type
@@ -285,6 +356,21 @@ def get_loss_func(
             loss_ce = matched_pairwise_mean(fg_pair_class, fg_best_perm, fg_active)
             fg_inactive_mask = unmatched_prediction_mask(fg_best_perm, fg_active, fg_est.shape[1])
             loss_fg_inactive = inactive_source_energy_loss(fg_est, fg_inactive_mask)
+            loss_doa = _matched_doa_loss(output, target, fg_best_perm, fg_active)
+            loss_spatial_diversity = _spatial_diversity_loss(
+                output,
+                class_index,
+                fg_active,
+                fg_best_perm,
+                margin=spatial_diversity_margin,
+            )
+            loss_waveform_anticollapse = _waveform_anticollapse_loss(
+                fg_est,
+                class_index,
+                fg_active,
+                fg_best_perm,
+                margin=waveform_anticollapse_margin,
+            )
 
             fg_pred_active = ~fg_inactive_mask
             # Historical name is ``silence_logits``, but the target here is an
@@ -307,7 +393,14 @@ def get_loss_func(
                 )
 
             loss_count = _foreground_count_loss(output, target)
-            loss_fg = loss_fg_wave + lambda_class_ce * loss_ce + lambda_inactive_foreground * loss_fg_inactive
+            loss_fg = (
+                loss_fg_wave
+                + lambda_class_ce * loss_ce
+                + lambda_inactive_foreground * loss_fg_inactive
+                + lambda_doa * loss_doa
+                + lambda_spatial_diversity * loss_spatial_diversity
+                + lambda_waveform_anticollapse * loss_waveform_anticollapse
+            )
             loss_fg_activity = _source_activity_loss(
                 output,
                 target,
@@ -367,6 +460,9 @@ def get_loss_func(
             "loss_fg_match": loss_fg_match.mean(),
             "loss_fg_wave": loss_fg_wave,
             "loss_fg_inactive": loss_fg_inactive,
+            "loss_doa": loss_doa,
+            "loss_spatial_diversity": loss_spatial_diversity,
+            "loss_waveform_anticollapse": loss_waveform_anticollapse,
             "loss_int": loss_int,
             "loss_int_wave": loss_int_wave,
             "loss_int_inactive": loss_int_inactive,
